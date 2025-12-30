@@ -289,15 +289,18 @@ frontend:
 
   - task: "Nuclear Course Page"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/frontend/src/pages/NuclearCoursePage.jsx"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
         comment: "NEW - Course modules with certification flow. Needs testing."
+      - working: false
+        agent: "testing"
+        comment: "CRITICAL ISSUE - Course topics not loading (0/5 topics found: Quantum Mechanics, Nuclear Power Plants, Nuclear Waste Management, Nuclear Safety, Radiation Protection). 'Get Certified Now!' button missing. Course content not displaying properly."
 
   - task: "Corporate Dashboard (PowerMech)"
     implemented: true
