@@ -208,6 +208,54 @@ export default function LandingPage() {
         </button>
       </div>
 
+      {/* Quick Access Features */}
+      <div className="px-4 pb-6">
+        <div className="max-w-2xl mx-auto grid grid-cols-3 gap-3">
+          <button
+            onClick={() => navigate("/world-wheel")}
+            className="bg-white/5 backdrop-blur border border-white/10 rounded-xl p-4 text-center hover:bg-white/10 transition-all"
+          >
+            <span className="text-2xl block mb-2">🌍</span>
+            <p className="text-white text-xs font-medium">World Wheel</p>
+            <p className="text-white/50 text-[10px]">1000+ Roles</p>
+          </button>
+          <button
+            onClick={() => navigate("/work-wheel")}
+            className="bg-white/5 backdrop-blur border border-white/10 rounded-xl p-4 text-center hover:bg-white/10 transition-all"
+          >
+            <span className="text-2xl block mb-2">🤖</span>
+            <p className="text-white text-xs font-medium">Work Wheel</p>
+            <p className="text-white/50 text-[10px]">Human-AI-Robo</p>
+          </button>
+          <button
+            onClick={() => navigate("/agents")}
+            className="bg-white/5 backdrop-blur border border-white/10 rounded-xl p-4 text-center hover:bg-white/10 transition-all"
+          >
+            <span className="text-2xl block mb-2">🧠</span>
+            <p className="text-white text-xs font-medium">AI Agents</p>
+            <p className="text-white/50 text-[10px]">TalentON.AI</p>
+          </button>
+        </div>
+      </div>
+
+      {/* Government Program Banner */}
+      <div className="px-4 pb-6">
+        <button
+          onClick={() => navigate("/karnataka-model")}
+          className="w-full max-w-2xl mx-auto block bg-gradient-to-r from-purple-600/20 to-indigo-600/20 border border-purple-500/30 rounded-2xl p-4 text-left hover:bg-purple-600/30 transition-all"
+        >
+          <div className="flex items-center gap-4">
+            <span className="text-3xl">🏛️</span>
+            <div className="flex-1">
+              <p className="text-purple-300 text-xs uppercase tracking-wide">Government Program</p>
+              <p className="text-white font-semibold">Karnataka Talent Pipeline</p>
+              <p className="text-white/50 text-xs">₹9,000 Cr • 500K+ Jobs Target</p>
+            </div>
+            <ArrowRight className="w-5 h-5 text-white/50" />
+          </div>
+        </button>
+      </div>
+
       {/* Footer */}
       <footer className="px-4 py-8 text-center">
         <p className="text-white/40 text-sm">
