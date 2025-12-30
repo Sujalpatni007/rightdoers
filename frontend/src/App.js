@@ -6,15 +6,26 @@ import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
 // Pages
+import SplashScreen from "@/pages/SplashScreen";
 import LandingPage from "@/pages/LandingPage";
 import AuthPage from "@/pages/AuthPage";
 import OnboardingPage from "@/pages/OnboardingPage";
+import PsychometricTest from "@/pages/PsychometricTest";
+import DoersIDCard from "@/pages/DoersIDCard";
 import DoerDashboard from "@/pages/DoerDashboard";
-import EmployerDashboard from "@/pages/EmployerDashboard";
-import AdminDashboard from "@/pages/AdminDashboard";
 import JobsPage from "@/pages/JobsPage";
 import AimeePage from "@/pages/AimeePage";
 import ProfilePage from "@/pages/ProfilePage";
+import LearnPage from "@/pages/LearnPage";
+import ConsumerLanding from "@/pages/ConsumerLanding";
+import ServiceProviders from "@/pages/ServiceProviders";
+import EmployerDashboard from "@/pages/EmployerDashboard";
+import PostJobPage from "@/pages/PostJobPage";
+import ApplicantsPage from "@/pages/ApplicantsPage";
+import GovernmentDashboard from "@/pages/GovernmentDashboard";
+import DistrictDashboard from "@/pages/DistrictDashboard";
+import JunicornLanding from "@/pages/JunicornLanding";
+import JunicornApply from "@/pages/JunicornApply";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
@@ -72,8 +83,11 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse text-primary font-display text-2xl">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-white/30 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white font-display text-xl">Loading...</p>
+        </div>
       </div>
     );
   }
@@ -83,7 +97,9 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    const redirectPath = user.role === "employer" ? "/employer" : user.role === "admin" ? "/admin" : "/dashboard";
+    const redirectPath = user.role === "employer" ? "/employer" : 
+                         user.role === "admin" ? "/government" : 
+                         user.role === "consumer" ? "/services" : "/dashboard";
     return <Navigate to={redirectPath} replace />;
   }
 
@@ -95,69 +111,54 @@ const seedData = async () => {
   try {
     await axios.post(`${API}/seed`);
   } catch (error) {
-    console.log("Seed data already exists or error:", error.message);
+    console.log("Seed data ready");
   }
 };
 
 function AppContent() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     seedData();
   }, []);
 
-  // Redirect based on role after login
-  useEffect(() => {
-    if (user && window.location.pathname === "/auth") {
-      if (!user.division && user.role === "doer") {
-        navigate("/onboarding");
-      } else {
-        const path = user.role === "employer" ? "/employer" : user.role === "admin" ? "/admin" : "/dashboard";
-        navigate(path);
-      }
-    }
-  }, [user, navigate]);
-
   return (
     <Routes>
-      <Route path="/" element={<LandingPage />} />
+      {/* Entry Points */}
+      <Route path="/" element={<SplashScreen />} />
+      <Route path="/welcome" element={<LandingPage />} />
       <Route path="/auth" element={<AuthPage />} />
-      <Route path="/onboarding" element={
-        <ProtectedRoute>
-          <OnboardingPage />
-        </ProtectedRoute>
-      } />
-      <Route path="/dashboard" element={
-        <ProtectedRoute allowedRoles={["doer"]}>
-          <DoerDashboard />
-        </ProtectedRoute>
-      } />
-      <Route path="/jobs" element={
-        <ProtectedRoute allowedRoles={["doer"]}>
-          <JobsPage />
-        </ProtectedRoute>
-      } />
-      <Route path="/aimee" element={
-        <ProtectedRoute allowedRoles={["doer"]}>
-          <AimeePage />
-        </ProtectedRoute>
-      } />
-      <Route path="/profile" element={
-        <ProtectedRoute>
-          <ProfilePage />
-        </ProtectedRoute>
-      } />
-      <Route path="/employer" element={
-        <ProtectedRoute allowedRoles={["employer"]}>
-          <EmployerDashboard />
-        </ProtectedRoute>
-      } />
-      <Route path="/admin" element={
-        <ProtectedRoute allowedRoles={["admin"]}>
-          <AdminDashboard />
-        </ProtectedRoute>
-      } />
+      
+      {/* Candidate/Talent Flow */}
+      <Route path="/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
+      <Route path="/psychometric" element={<ProtectedRoute><PsychometricTest /></ProtectedRoute>} />
+      <Route path="/doersid" element={<ProtectedRoute><DoersIDCard /></ProtectedRoute>} />
+      <Route path="/dashboard" element={<ProtectedRoute allowedRoles={["doer"]}><DoerDashboard /></ProtectedRoute>} />
+      <Route path="/jobs" element={<ProtectedRoute allowedRoles={["doer"]}><JobsPage /></ProtectedRoute>} />
+      <Route path="/aimee" element={<ProtectedRoute><AimeePage /></ProtectedRoute>} />
+      <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+      <Route path="/learn" element={<ProtectedRoute><LearnPage /></ProtectedRoute>} />
+      
+      {/* Consumer Flow */}
+      <Route path="/services" element={<ConsumerLanding />} />
+      <Route path="/providers/:category" element={<ServiceProviders />} />
+      
+      {/* Employer Flow */}
+      <Route path="/employer" element={<ProtectedRoute allowedRoles={["employer"]}><EmployerDashboard /></ProtectedRoute>} />
+      <Route path="/employer/post" element={<ProtectedRoute allowedRoles={["employer"]}><PostJobPage /></ProtectedRoute>} />
+      <Route path="/employer/applicants/:jobId" element={<ProtectedRoute allowedRoles={["employer"]}><ApplicantsPage /></ProtectedRoute>} />
+      
+      {/* Government Flow */}
+      <Route path="/government" element={<ProtectedRoute allowedRoles={["admin"]}><GovernmentDashboard /></ProtectedRoute>} />
+      <Route path="/government/district/:districtId" element={<ProtectedRoute allowedRoles={["admin"]}><DistrictDashboard /></ProtectedRoute>} />
+      
+      {/* Junicorn NET Flow */}
+      <Route path="/junicorn" element={<JunicornLanding />} />
+      <Route path="/junicorn/apply" element={<ProtectedRoute><JunicornApply /></ProtectedRoute>} />
+      
+      {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

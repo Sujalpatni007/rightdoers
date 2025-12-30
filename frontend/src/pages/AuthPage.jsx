@@ -3,9 +3,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
-import { Sparkles, Phone, ArrowLeft, User, Building2, Shield } from "lucide-react";
+import { Sparkles, Phone, ArrowLeft, User, Building2, Shield, Briefcase } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
 import { useAuth, API } from "@/App";
@@ -15,7 +14,7 @@ export default function AuthPage() {
   const [searchParams] = useSearchParams();
   const { login } = useAuth();
   
-  const [step, setStep] = useState("phone"); // phone, otp, register
+  const [step, setStep] = useState("phone");
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [role, setRole] = useState(searchParams.get("role") || "doer");
@@ -23,6 +22,16 @@ export default function AuthPage() {
   const [companyName, setCompanyName] = useState("");
   const [loading, setLoading] = useState(false);
   const [isNewUser, setIsNewUser] = useState(false);
+
+  const roleConfig = {
+    doer: { icon: User, label: "Talent", color: "from-blue-500 to-indigo-600" },
+    consumer: { icon: Briefcase, label: "Consumer", color: "from-green-500 to-emerald-600" },
+    employer: { icon: Building2, label: "Employer", color: "from-orange-500 to-amber-600" },
+    admin: { icon: Shield, label: "Government", color: "from-purple-500 to-violet-600" }
+  };
+
+  const currentRole = roleConfig[role] || roleConfig.doer;
+  const RoleIcon = currentRole.icon;
 
   const handleSendOTP = async () => {
     if (phone.length !== 10) {
@@ -58,15 +67,31 @@ export default function AuthPage() {
       } else {
         login(res.data.user);
         toast.success("Welcome back!");
-        const path = res.data.user.role === "employer" ? "/employer" : 
-                     res.data.user.role === "admin" ? "/admin" : 
-                     res.data.user.division ? "/dashboard" : "/onboarding";
-        navigate(path);
+        navigateByRole(res.data.user);
       }
     } catch (error) {
       toast.error(error.response?.data?.detail || "Invalid OTP");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const navigateByRole = (user) => {
+    if (user.role === "employer") {
+      navigate("/employer");
+    } else if (user.role === "admin") {
+      navigate("/government");
+    } else if (user.role === "consumer") {
+      navigate("/services");
+    } else {
+      // Doer - check if onboarding complete
+      if (!user.division) {
+        navigate("/onboarding");
+      } else if (!user.psy_score || user.psy_score === 0) {
+        navigate("/psychometric");
+      } else {
+        navigate("/dashboard");
+      }
     }
   };
 
@@ -92,12 +117,7 @@ export default function AuthPage() {
       const res = await axios.post(`${API}/users`, userData);
       login(res.data);
       toast.success("Account created successfully!");
-      
-      if (role === "doer") {
-        navigate("/onboarding");
-      } else {
-        navigate(role === "employer" ? "/employer" : "/admin");
-      }
+      navigateByRole(res.data);
     } catch (error) {
       toast.error(error.response?.data?.detail || "Registration failed");
     } finally {
@@ -106,13 +126,14 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 flex flex-col">
       {/* Header */}
       <header className="p-4 flex items-center gap-4">
         <Button 
           variant="ghost" 
           size="icon"
-          onClick={() => step === "phone" ? navigate("/") : setStep(step === "register" ? "otp" : "phone")}
+          className="text-white hover:bg-white/10"
+          onClick={() => step === "phone" ? navigate("/welcome") : setStep(step === "register" ? "otp" : "phone")}
           data-testid="auth-back-btn"
         >
           <ArrowLeft className="w-5 h-5" />
@@ -124,49 +145,39 @@ export default function AuthPage() {
         <div className="w-full max-w-md">
           {/* Logo */}
           <div className="text-center mb-8">
-            <div className="w-16 h-16 gradient-hero rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <Sparkles className="w-8 h-8 text-white" />
+            <div className={`w-20 h-20 bg-gradient-to-br ${currentRole.color} rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-2xl`}>
+              <RoleIcon className="w-10 h-10 text-white" />
             </div>
-            <h1 className="font-display text-2xl font-bold text-slate-900">Right Doers World</h1>
-            <p className="text-slate-500 mt-1">The Future of Work</p>
+            <h1 className="font-display text-2xl font-bold text-white">
+              {currentRole.label} Login
+            </h1>
+            <p className="text-white/50 mt-1">Right Doers World</p>
           </div>
 
           {/* Phone Step */}
           {step === "phone" && (
-            <div className="bg-white rounded-2xl p-6 shadow-sm border animate-fade-in">
-              <h2 className="font-display text-xl font-semibold text-center mb-6">
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 animate-fade-in">
+              <h2 className="font-display text-xl font-semibold text-white text-center mb-6">
                 Enter your phone number
               </h2>
 
-              {/* Role Tabs */}
-              <Tabs value={role} onValueChange={setRole} className="mb-6">
-                <TabsList className="grid grid-cols-3 w-full">
-                  <TabsTrigger value="doer" data-testid="role-doer-tab">
-                    <User className="w-4 h-4 mr-1" /> Doer
-                  </TabsTrigger>
-                  <TabsTrigger value="employer" data-testid="role-employer-tab">
-                    <Building2 className="w-4 h-4 mr-1" /> Employer
-                  </TabsTrigger>
-                  <TabsTrigger value="admin" data-testid="role-admin-tab">
-                    <Shield className="w-4 h-4 mr-1" /> Admin
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-
               <div className="space-y-4">
                 <div className="relative">
-                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-2 text-white/60">
+                    <span className="text-lg">🇮🇳</span>
+                    <span className="text-sm font-medium">+91</span>
+                  </div>
                   <Input
                     type="tel"
-                    placeholder="Enter 10-digit phone number"
+                    placeholder="Enter 10-digit number"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                    className="pl-12 h-14 text-lg"
+                    className="pl-20 h-14 text-lg bg-white/10 border-white/20 text-white placeholder:text-white/40"
                     data-testid="phone-input"
                   />
                 </div>
                 <Button 
-                  className="w-full btn-primary"
+                  className={`w-full h-14 text-lg font-semibold bg-gradient-to-r ${currentRole.color} hover:opacity-90`}
                   onClick={handleSendOTP}
                   disabled={loading || phone.length !== 10}
                   data-testid="send-otp-btn"
@@ -179,11 +190,11 @@ export default function AuthPage() {
 
           {/* OTP Step */}
           {step === "otp" && (
-            <div className="bg-white rounded-2xl p-6 shadow-sm border animate-fade-in">
-              <h2 className="font-display text-xl font-semibold text-center mb-2">
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 animate-fade-in">
+              <h2 className="font-display text-xl font-semibold text-white text-center mb-2">
                 Enter OTP
               </h2>
-              <p className="text-slate-500 text-center text-sm mb-6">
+              <p className="text-white/50 text-center text-sm mb-6">
                 Sent to +91 {phone}
               </p>
 
@@ -194,19 +205,20 @@ export default function AuthPage() {
                   onChange={setOtp}
                   data-testid="otp-input"
                 >
-                  <InputOTPGroup>
-                    <InputOTPSlot index={0} className="w-12 h-14 text-xl" />
-                    <InputOTPSlot index={1} className="w-12 h-14 text-xl" />
-                    <InputOTPSlot index={2} className="w-12 h-14 text-xl" />
-                    <InputOTPSlot index={3} className="w-12 h-14 text-xl" />
-                    <InputOTPSlot index={4} className="w-12 h-14 text-xl" />
-                    <InputOTPSlot index={5} className="w-12 h-14 text-xl" />
+                  <InputOTPGroup className="gap-2">
+                    {[0,1,2,3,4,5].map((i) => (
+                      <InputOTPSlot 
+                        key={i} 
+                        index={i} 
+                        className="w-12 h-14 text-xl bg-white/10 border-white/20 text-white rounded-xl" 
+                      />
+                    ))}
                   </InputOTPGroup>
                 </InputOTP>
               </div>
 
               <Button 
-                className="w-full btn-primary"
+                className={`w-full h-14 text-lg font-semibold bg-gradient-to-r ${currentRole.color} hover:opacity-90`}
                 onClick={handleVerifyOTP}
                 disabled={loading || otp.length !== 6}
                 data-testid="verify-otp-btn"
@@ -215,7 +227,7 @@ export default function AuthPage() {
               </Button>
 
               <button 
-                className="w-full mt-4 text-primary text-sm font-medium hover:underline"
+                className="w-full mt-4 text-white/60 text-sm font-medium hover:text-white/80"
                 onClick={handleSendOTP}
               >
                 Resend OTP
@@ -225,40 +237,38 @@ export default function AuthPage() {
 
           {/* Register Step */}
           {step === "register" && (
-            <div className="bg-white rounded-2xl p-6 shadow-sm border animate-fade-in">
-              <h2 className="font-display text-xl font-semibold text-center mb-6">
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 animate-fade-in">
+              <h2 className="font-display text-xl font-semibold text-white text-center mb-6">
                 Complete Your Profile
               </h2>
 
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="name">Full Name</Label>
+                  <Label className="text-white/70">Full Name</Label>
                   <Input
-                    id="name"
                     placeholder="Enter your name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="h-12 mt-1"
+                    className="h-12 mt-1 bg-white/10 border-white/20 text-white placeholder:text-white/40"
                     data-testid="name-input"
                   />
                 </div>
 
                 {role === "employer" && (
                   <div>
-                    <Label htmlFor="company">Company Name</Label>
+                    <Label className="text-white/70">Company Name</Label>
                     <Input
-                      id="company"
                       placeholder="Enter company name"
                       value={companyName}
                       onChange={(e) => setCompanyName(e.target.value)}
-                      className="h-12 mt-1"
+                      className="h-12 mt-1 bg-white/10 border-white/20 text-white placeholder:text-white/40"
                       data-testid="company-input"
                     />
                   </div>
                 )}
 
                 <Button 
-                  className="w-full btn-primary"
+                  className={`w-full h-14 text-lg font-semibold bg-gradient-to-r ${currentRole.color} hover:opacity-90`}
                   onClick={handleRegister}
                   disabled={loading}
                   data-testid="register-btn"
