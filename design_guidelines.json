@@ -1,0 +1,154 @@
+{
+  "identity": {
+    "name": "Right Doers World",
+    "vision": "Service Amazon for People",
+    "philosophy": "PASS.NET (Personalized Ability & Aspiration + Solutions & Services)",
+    "vibe": "High-Energy, Instant-Gratification, Gamified, Trustworthy",
+    "archetype": "Electric & Neon (Future, Speed) mixed with Indian Vibrancy",
+    "target_audience": "Gen Z (Insta generation), Blue & White Collar, India-centric"
+  },
+  "typography": {
+    "headings": {
+      "family": "Clash Display, sans-serif",
+      "weights": ["500", "600", "700"],
+      "usage": "All section headers, hero text, and major calls to action. Use 'Clash Display' from CDN or local font files. If unavailable, fallback to 'Syne'.",
+      "cdn_url": "https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap"
+    },
+    "body": {
+      "family": "Manrope, sans-serif",
+      "weights": ["400", "500", "700"],
+      "usage": "All paragraph text, UI labels, inputs, and data displays. Chosen for its geometric clarity and modern feel.",
+      "cdn_url": "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&display=swap"
+    },
+    "mono": {
+      "family": "JetBrains Mono, monospace",
+      "usage": "Code snippets, ID numbers (DoersID), and technical data."
+    }
+  },
+  "colors": {
+    "palette_name": "Electric India",
+    "primary": {
+      "DEFAULT": "#4F46E5",
+      "foreground": "#FFFFFF",
+      "description": "Electric Indigo - Represents Wisdom, Tech, and the 'Right' path."
+    },
+    "secondary": {
+      "DEFAULT": "#F97316",
+      "foreground": "#FFFFFF",
+      "description": "Signal Orange - Represents Action, Urgency (Blinkit-style), and Energy."
+    },
+    "accent": {
+      "DEFAULT": "#10B981",
+      "foreground": "#FFFFFF",
+      "description": "Success Green - Used for 'Hired', 'Verified', and Money."
+    },
+    "background": {
+      "light": "#F8FAFC",
+      "dark": "#09090B",
+      "description": "Off-white for day (clarity), Void Black for night (immersion)."
+    },
+    "surface": {
+      "light": "#FFFFFF",
+      "dark": "#18181B",
+      "description": "Cards and containers."
+    },
+    "gradients": {
+      "hero": "linear-gradient(135deg, #4F46E5 0%, #EC4899 100%)",
+      "pass_code": "linear-gradient(to right, #F97316, #EAB308)",
+      "club_power": "linear-gradient(45deg, #EF4444, #991B1B)",
+      "club_wellness": "linear-gradient(45deg, #10B981, #065F46)",
+      "club_problem": "linear-gradient(45deg, #3B82F6, #1E40AF)",
+      "club_knowledge": "linear-gradient(45deg, #8B5CF6, #5B21B6)",
+      "club_profit": "linear-gradient(45deg, #F59E0B, #B45309)"
+    }
+  },
+  "layout": {
+    "grid_system": {
+      "marketing": "Tetris Grid (Mode A) - Asymmetrical, dynamic, breaking the monotony.",
+      "dashboard": "Bento Grid (Mode B) - Dense, data-rich, every pixel utilized.",
+      "mobile": "Single column, card-based, bottom-sheet heavy."
+    },
+    "spacing": {
+      "scale": "Generous. Use p-6 or p-8 for containers. Gap-4 for tight data, Gap-8 for layout sections.",
+      "mobile_safe_area": "Ensure pb-20 for bottom navigation visibility."
+    },
+    "containers": {
+      "card_style": "Neo-Brutalist Soft. Rounded-xl, 1px border, subtle shadow-sm. Hover: shadow-md + scale-[1.01].",
+      "glass": "backdrop-blur-xl bg-white/70 (light) or bg-black/60 (dark) with border-white/20."
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "h-12 px-8 rounded-full bg-primary text-white font-bold shadow-lg hover:shadow-primary/25 transition-all active:scale-95",
+      "secondary": "h-12 px-8 rounded-full bg-secondary text-white font-bold shadow-lg hover:shadow-secondary/25 transition-all active:scale-95",
+      "ghost": "h-10 px-4 rounded-lg hover:bg-accent/10 hover:text-accent font-medium"
+    },
+    "inputs": {
+      "style": "h-12 rounded-lg border-2 border-slate-200 focus:border-primary focus:ring-0 bg-slate-50 transition-colors",
+      "otp": "Large, centered, individual boxes. Auto-focus next."
+    },
+    "cards": {
+      "job_card": "Border-l-4 border-l-primary bg-card p-4 rounded-r-lg shadow-sm hover:shadow-md transition-all",
+      "doer_card": "Profile image left, stats right. 'Hired' badge absolute top-right."
+    },
+    "navigation": {
+      "mobile_bottom_bar": "Fixed bottom, 5 items (Home, Jobs, AIMEE, Wallet, Profile). Active state: Filled icon + Label. Inactive: Outline icon.",
+      "desktop_sidebar": "Collapsible, icon-only mode for more content space."
+    }
+  },
+  "visual_enhancers": {
+    "textures": "Use subtle noise overlays (opacity 0.03) on solid backgrounds to prevent 'digital flatness'.",
+    "icons": "Phosphor Icons (Duotone) for UI. 3D Badges for Gamification.",
+    "micro_interactions": "Buttons click (scale down). Lists stagger in. Modals slide up from bottom (mobile).",
+    "confetti": "Trigger confetti on 'Job Applied' or 'Profile Complete'."
+  },
+  "assets": {
+    "images": {
+      "hero_bg": "https://images.pexels.com/photos/5011647/pexels-photo-5011647.jpeg",
+      "doer_portraits": [
+        "https://images.pexels.com/photos/5257775/pexels-photo-5257775.jpeg",
+        "https://images.pexels.com/photos/7580708/pexels-photo-7580708.jpeg"
+      ],
+      "gamification_badges": [
+        "https://images.pexels.com/photos/8834239/pexels-photo-8834239.jpeg",
+        "https://images.pexels.com/photos/8832235/pexels-photo-8832235.jpeg"
+      ],
+      "tech_abstract": "https://images.pexels.com/photos/158826/structure-light-led-movement-158826.jpeg"
+    },
+    "icons_library": "lucide-react (default), @phosphor-icons/react (recommended for polish)"
+  },
+  "motion": {
+    "philosophy": "Instant & Snappy. No slow fades.",
+    "transition_default": "transition-all duration-200 ease-out",
+    "page_transition": "initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}",
+    "hover_lift": "hover:-translate-y-1 hover:shadow-lg"
+  },
+  "accessibility": {
+    "contrast": "Ensure text is APCA compliant. Use text-slate-900 on light backgrounds, text-slate-50 on dark.",
+    "touch_targets": "Minimum 44x44px for all mobile interactions.",
+    "focus_states": "Visible ring-2 ring-primary ring-offset-2."
+  },
+  "instructions_to_main_agent": [
+    "1. INSTALL FONTS: Add the CDN links for Clash Display and Manrope to the index.html head immediately.",
+    "2. SETUP TAILWIND: Update tailwind.config.js with the 'Electric India' colors and font families.",
+    "3. MOBILE FIRST: Build the Mobile PWA view first. The desktop view is secondary.",
+    "4. GAMIFY: Use the 3D badge images in the 'Talent Clubs' section. Make them pop.",
+    "5. AIMEE CHAT: Build the AI Assistant page to look like a modern chat app (WhatsApp/Telegram) but with 'Job Cards' inside the chat.",
+    "6. QR CODE: The landing page MUST feature a prominent QR code scanner or display for the 'Shop GTM' strategy.",
+    "7. DO NOT use generic 'Lorem Ipsum'. Use realistic Indian names (Aarav, Diya, Arjun) and job titles (Data Entry, Delivery Partner, Java Developer).",
+    "8. USE SONNER: Replace default toasts with 'sonner' for better aesthetics."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients.",
+    "Don't make generic centered layouts, simplistic gradients, and uniform styling.",
+    "Create depth through layered design elements with z-index hierarchy.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur).",
+    "You MUST NOT apply universal transition. Eg: 'transition: all'. This results in breaking transforms.",
+    "You MUST NOT center align the app container.",
+    "Always use modern button styles like pill-shaped, or sharp button with interaction animations.",
+    "NEVER use AI assistant Emoji characters like 🤖🧠 for icons. Use Lucide or Phosphor icons.",
+    "Every interaction needs micro-animations - hover states, transitions, parallax effects.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "All interactive elements MUST include 'data-testid' attribute."
+  ]
+}
