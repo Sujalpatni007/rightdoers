@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth, API } from "@/App";
-import { BottomNav } from "./DoerDashboard";
+import BottomNavNew from "@/components/BottomNavNew";
 import axios from "axios";
 
 const CLUB_COLORS = {
