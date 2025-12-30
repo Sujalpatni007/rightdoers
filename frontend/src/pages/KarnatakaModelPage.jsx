@@ -263,8 +263,14 @@ export default function KarnatakaModelPage() {
         </Tabs>
       </div>
 
-      {/* Bottom CTA */}
-      <div className="px-4 py-6">
+      {/* Bottom CTAs */}
+      <div className="px-4 py-4 space-y-3">
+        <Button 
+          className="w-full h-14 bg-gradient-to-r from-green-600 to-emerald-600 text-lg"
+          onClick={() => navigate("/karnataka-schools")}
+        >
+          <School className="mr-2" /> View Schools Dashboard
+        </Button>
         <Button 
           className="w-full h-14 bg-gradient-to-r from-purple-600 to-indigo-600 text-lg"
           onClick={() => navigate("/government")}
