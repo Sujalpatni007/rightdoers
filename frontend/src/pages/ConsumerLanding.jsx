@@ -116,7 +116,7 @@ export default function ConsumerLanding() {
               key={cat.id}
               onClick={() => navigate(`/providers/${cat.id}`)}
               className="bg-white rounded-xl p-4 text-left shadow-sm border hover:shadow-md transition-all group"
-              data-testid={`category-${cat.id.toLowerCase()}`}
+              data-testid={`category-${cat.id.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '')}`}
             >
               <div className={`w-12 h-12 ${cat.color} rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
                 <cat.icon className="w-6 h-6 text-white" />
