@@ -173,6 +173,10 @@ function AppContent() {
       <Route path="/services" element={<ConsumerLanding />} />
       <Route path="/providers/:category" element={<ServiceProviders />} />
       
+      {/* Corporate/PowerMech Flow */}
+      <Route path="/corporate" element={<CorporateDashboard />} />
+      <Route path="/corporate/pipeline-builder" element={<PipelineBuilder />} />
+      
       {/* Employer Flow */}
       <Route path="/employer" element={<ProtectedRoute allowedRoles={["employer"]}><EmployerDashboard /></ProtectedRoute>} />
       <Route path="/employer/post" element={<ProtectedRoute allowedRoles={["employer"]}><PostJobPage /></ProtectedRoute>} />
