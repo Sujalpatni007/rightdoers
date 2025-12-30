@@ -206,6 +206,36 @@ export default function ProfilePage() {
         </div>
       </div>
 
+      {/* E-COIN Wallet Section */}
+      <div className="px-4 mb-6">
+        <button 
+          className="w-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl p-4 text-white text-left"
+          onClick={() => navigate("/ecoin")}
+          data-testid="ecoin-wallet-btn"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                <Zap className="w-6 h-6 text-yellow-300" />
+              </div>
+              <div>
+                <p className="text-white/70 text-xs">E-COIN Balance</p>
+                <p className="font-display font-bold text-2xl">1,650</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <Badge className="bg-white/20 text-white border-0 mb-1">
+                <Wallet className="w-3 h-3 mr-1" /> Wallet
+              </Badge>
+              <p className="text-white/60 text-xs">View Details →</p>
+            </div>
+          </div>
+          <p className="text-white/60 text-xs mt-2 italic text-center">
+            "My Energy = Your Energy = Harmony"
+          </p>
+        </button>
+      </div>
+
       {/* Profile Details */}
       <div className="px-4 mb-6">
         <div className="bg-white rounded-xl border overflow-hidden">
@@ -261,7 +291,7 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <BottomNav active="profile" />
+      <BottomNavNew active="profile" />
     </div>
   );
 }
