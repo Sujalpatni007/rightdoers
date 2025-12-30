@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/App";
-import { BottomNav } from "./DoerDashboard";
+import BottomNavNew from "@/components/BottomNavNew";
 
 const COURSES = {
   featured: [

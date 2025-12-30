@@ -20,7 +20,7 @@ import {
 import { toast } from "sonner";
 import axios from "axios";
 import { useAuth, API } from "@/App";
-import { BottomNav } from "./DoerDashboard";
+import BottomNavNew from "@/components/BottomNavNew";
 
 const LEVEL_INFO = {
   L1: { label: "Entry Level", salary: "₹15K-30K", color: "bg-green-500" },

@@ -19,7 +19,7 @@ import {
 import { toast } from "sonner";
 import axios from "axios";
 import { useAuth, API } from "@/App";
-import { BottomNav } from "./DoerDashboard";
+import BottomNavNew from "@/components/BottomNavNew";
 
 const QUICK_PROMPTS = [
   "🔍 Find jobs near me",
