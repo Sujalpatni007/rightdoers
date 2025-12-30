@@ -343,12 +343,14 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Nuclear Engineering Talent Pipeline Flow (Amazing People → Self Rating → Strengths → Academic → Career → Curriculum → Progress)"
-    - "Corporate Dashboard (PowerMech)"
-    - "Rewards and Course Pages"
-  stuck_tasks: []
+    - "Nuclear Course Page (Critical - topics not loading)"
+    - "Authentication Flow (Blocking talent pipeline testing)"
+    - "Nuclear Engineering Talent Pipeline Flow (Blocked by auth issue)"
+  stuck_tasks:
+    - "Nuclear Course Page (Course topics not displaying)"
+    - "Authentication Flow (Phone +919876543210 registered as employer, not doer)"
   test_all: false
-  test_priority: "high_first"
+  test_priority: "stuck_first"
 
 agent_communication:
   - agent: "main"
