@@ -258,7 +258,7 @@ _"Choose a job that feels like play to you, but looks like work to others."_ - N
         </div>
       </div>
 
-      <BottomNav active="aimee" />
+      <BottomNavNew active="home" />
     </div>
   );
 }

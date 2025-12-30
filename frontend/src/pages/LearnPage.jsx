@@ -205,7 +205,7 @@ export default function LearnPage() {
         </div>
       </div>
 
-      <BottomNav active="learn" />
+      <BottomNavNew active="home" />
     </div>
   );
 }

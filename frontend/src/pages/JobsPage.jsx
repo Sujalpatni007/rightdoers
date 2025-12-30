@@ -289,7 +289,7 @@ export default function JobsPage() {
         </SheetContent>
       </Sheet>
 
-      <BottomNav active="jobs" />
+      <BottomNavNew active="home" />
     </div>
   );
 }
