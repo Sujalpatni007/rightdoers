@@ -158,10 +158,10 @@ export default function DoerDashboard() {
       <div className="px-4 py-6">
         <div className="grid grid-cols-4 gap-3">
           {[
-            { icon: Briefcase, label: "Jobs", path: "/jobs", color: "bg-blue-500", testId: "quick-jobs" },
-            { icon: Sparkles, label: "AIMEE", path: "/aimee", color: "bg-purple-500", testId: "quick-aimee" },
+            { icon: Users, label: "Clubs", path: "/clubs", color: "bg-purple-500", testId: "quick-clubs" },
+            { icon: Briefcase, label: "Gigs", path: "/gigs", color: "bg-amber-500", testId: "quick-gigs" },
+            { icon: Sparkles, label: "AIMEE", path: "/aimee", color: "bg-indigo-500", testId: "quick-aimee" },
             { icon: BookOpen, label: "Learn", path: "/learn", color: "bg-green-500", testId: "quick-learn" },
-            { icon: TrendingUp, label: "Progress", path: "/profile", color: "bg-orange-500", testId: "quick-progress" },
           ].map((item) => (
             <button 
               key={item.label}
@@ -177,6 +177,31 @@ export default function DoerDashboard() {
           ))}
         </div>
       </div>
+
+      {/* E-COIN Earnings Summary */}
+      <section className="px-4 mb-6">
+        <div className="bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl p-4 text-white">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <p className="text-white/70 text-xs uppercase tracking-wide">Energy Exchange</p>
+              <p className="font-display font-bold text-lg">Gig Opportunities</p>
+            </div>
+            <Badge className="bg-white/20 text-white border-0">
+              <Zap className="w-3 h-3 mr-1" /> 6 New
+            </Badge>
+          </div>
+          <p className="text-white/80 text-sm mb-3">
+            Complete gigs to earn E-COIN • My Energy = Your Energy
+          </p>
+          <Button 
+            className="w-full bg-white text-amber-600 hover:bg-white/90"
+            onClick={() => navigate("/gigs")}
+            data-testid="explore-gigs-btn"
+          >
+            Explore Gigs
+          </Button>
+        </div>
+      </section>
 
       {/* Applications */}
       {applications.length > 0 && (
@@ -290,8 +315,8 @@ export default function DoerDashboard() {
         </div>
       </section>
 
-      {/* Bottom Navigation */}
-      <BottomNav active="home" />
+      {/* Bottom Navigation - New 4-Tab Version */}
+      <BottomNavNew active="home" />
     </div>
   );
 }
