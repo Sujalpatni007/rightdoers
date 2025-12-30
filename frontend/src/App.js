@@ -27,6 +27,19 @@ import DistrictDashboard from "@/pages/DistrictDashboard";
 import JunicornLanding from "@/pages/JunicornLanding";
 import JunicornApply from "@/pages/JunicornApply";
 
+// New Nuclear Pipeline Flow Pages
+import AmazingPeoplePage from "@/pages/AmazingPeoplePage";
+import SelfRatingPage from "@/pages/SelfRatingPage";
+import StrengthsPage from "@/pages/StrengthsPage";
+import AcademicSelectionPage from "@/pages/AcademicSelectionPage";
+import CareerRecommendationsPage from "@/pages/CareerRecommendationsPage";
+import CareerDetailPage from "@/pages/CareerDetailPage";
+import CurriculumPage from "@/pages/CurriculumPage";
+import CurriculumSuccessPage from "@/pages/CurriculumSuccessPage";
+import ProgressDashboard from "@/pages/ProgressDashboard";
+import RewardsPage from "@/pages/RewardsPage";
+import NuclearCoursePage from "@/pages/NuclearCoursePage";
+
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
 
