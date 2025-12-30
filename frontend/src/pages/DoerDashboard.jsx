@@ -320,36 +320,3 @@ export default function DoerDashboard() {
     </div>
   );
 }
-
-// Bottom Navigation Component
-export function BottomNav({ active }) {
-  const navigate = useNavigate();
-  
-  const items = [
-    { id: "home", icon: Home, label: "Home", path: "/dashboard" },
-    { id: "jobs", icon: Briefcase, label: "Jobs", path: "/jobs" },
-    { id: "aimee", icon: Sparkles, label: "AIMEE", path: "/aimee" },
-    { id: "learn", icon: BookOpen, label: "Learn", path: "/learn" },
-    { id: "profile", icon: User, label: "Profile", path: "/profile" },
-  ];
-
-  return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t safe-bottom z-50 shadow-lg">
-      <div className="flex items-center justify-around h-16 max-w-lg mx-auto">
-        {items.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => navigate(item.path)}
-            className={`flex flex-col items-center gap-1 px-4 py-2 transition-colors ${
-              active === item.id ? "text-indigo-600" : "text-slate-400"
-            }`}
-            data-testid={`nav-${item.id}`}
-          >
-            <item.icon className={`w-6 h-6 ${item.id === "aimee" && active !== "aimee" ? "text-purple-500" : ""}`} />
-            <span className="text-xs font-medium">{item.label}</span>
-          </button>
-        ))}
-      </div>
-    </nav>
-  );
-}
