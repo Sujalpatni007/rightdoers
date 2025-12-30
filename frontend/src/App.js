@@ -154,6 +154,19 @@ function AppContent() {
       <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
       <Route path="/learn" element={<ProtectedRoute><LearnPage /></ProtectedRoute>} />
       
+      {/* Nuclear Engineering Talent Pipeline Flow */}
+      <Route path="/amazing-people" element={<ProtectedRoute><AmazingPeoplePage /></ProtectedRoute>} />
+      <Route path="/self-rating" element={<ProtectedRoute><SelfRatingPage /></ProtectedRoute>} />
+      <Route path="/strengths" element={<ProtectedRoute><StrengthsPage /></ProtectedRoute>} />
+      <Route path="/academic-selection" element={<ProtectedRoute><AcademicSelectionPage /></ProtectedRoute>} />
+      <Route path="/career-recommendations" element={<ProtectedRoute><CareerRecommendationsPage /></ProtectedRoute>} />
+      <Route path="/career-detail/:careerId" element={<ProtectedRoute><CareerDetailPage /></ProtectedRoute>} />
+      <Route path="/curriculum" element={<ProtectedRoute><CurriculumPage /></ProtectedRoute>} />
+      <Route path="/curriculum-success" element={<ProtectedRoute><CurriculumSuccessPage /></ProtectedRoute>} />
+      <Route path="/progress-dashboard" element={<ProtectedRoute><ProgressDashboard /></ProtectedRoute>} />
+      <Route path="/rewards" element={<ProtectedRoute><RewardsPage /></ProtectedRoute>} />
+      <Route path="/course/nuclear-science" element={<ProtectedRoute><NuclearCoursePage /></ProtectedRoute>} />
+      
       {/* Consumer Flow */}
       <Route path="/services" element={<ConsumerLanding />} />
       <Route path="/providers/:category" element={<ServiceProviders />} />
