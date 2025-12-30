@@ -39,6 +39,8 @@ import CurriculumSuccessPage from "@/pages/CurriculumSuccessPage";
 import ProgressDashboard from "@/pages/ProgressDashboard";
 import RewardsPage from "@/pages/RewardsPage";
 import NuclearCoursePage from "@/pages/NuclearCoursePage";
+import CorporateDashboard from "@/pages/CorporateDashboard";
+import PipelineBuilder from "@/pages/PipelineBuilder";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
