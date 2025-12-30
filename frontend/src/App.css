@@ -9,26 +9,27 @@
     }
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-}
-
-.App-link {
-    color: #61dafb;
-}
-
 @keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
+
+/* Level Badge Colors */
+.level-l1 { @apply bg-green-100 text-green-800 border-green-200; }
+.level-l2 { @apply bg-blue-100 text-blue-800 border-blue-200; }
+.level-l3 { @apply bg-purple-100 text-purple-800 border-purple-200; }
+.level-l4 { @apply bg-amber-100 text-amber-800 border-amber-200; }
+
+/* Division Colors */
+.division-tech { @apply border-l-blue-500; }
+.division-health { @apply border-l-green-500; }
+.division-education { @apply border-l-purple-500; }
+.division-finance { @apply border-l-amber-500; }
+.division-security { @apply border-l-red-500; }
+.division-legal { @apply border-l-slate-500; }
+.division-transport { @apply border-l-cyan-500; }
+.division-food { @apply border-l-orange-500; }
+.division-art { @apply border-l-pink-500; }
+.division-sport { @apply border-l-lime-500; }
+.division-science { @apply border-l-indigo-500; }
+.division-policy { @apply border-l-gray-500; }
