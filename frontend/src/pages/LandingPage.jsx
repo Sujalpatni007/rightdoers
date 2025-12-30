@@ -83,20 +83,30 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <div className="px-4 py-8 text-center">
-        <Badge className="mb-4 bg-white/10 text-white border-white/20 px-4 py-1.5">
+        <Badge className="mb-4 bg-white/10 text-white border-white/20 px-4 py-1.5 text-sm tracking-wide">
           <Rocket className="w-4 h-4 mr-2" /> HI AI-APP.COM
         </Badge>
         
-        <h1 className="font-display text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">
+        <h1 className="font-display text-4xl md:text-5xl font-bold text-white mb-4 leading-tight tracking-tight">
           WHO ARE YOU?
         </h1>
         
-        <p className="text-white/70 text-lg mb-2 font-body">
+        <p className="text-white/80 text-lg mb-2 font-medium tracking-wide">
           Right People @ Right Place
         </p>
-        <p className="text-orange-400 font-semibold text-xl mb-8">
+        <p className="text-orange-400 font-bold text-xl mb-4 tracking-wide">
           Dream → Do → Done
         </p>
+        
+        {/* World Wheel Tagline */}
+        <div className="max-w-lg mx-auto">
+          <p className="text-indigo-300 text-sm font-medium tracking-wider uppercase">
+            Human • AI • Robo — Collaborative System
+          </p>
+          <p className="text-white/50 text-xs mt-2">
+            1000+ Future Ready Profile Proof • Prakruti Powered
+          </p>
+        </div>
       </div>
 
       {/* User Type Cards */}
