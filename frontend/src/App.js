@@ -41,6 +41,10 @@ import RewardsPage from "@/pages/RewardsPage";
 import NuclearCoursePage from "@/pages/NuclearCoursePage";
 import CorporateDashboard from "@/pages/CorporateDashboard";
 import PipelineBuilder from "@/pages/PipelineBuilder";
+import WorldWheelPage from "@/pages/WorldWheelPage";
+import WorkWheelPage from "@/pages/WorkWheelPage";
+import KarnatakaModelPage from "@/pages/KarnatakaModelPage";
+import AgentHubPage from "@/pages/AgentHubPage";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
