@@ -12,7 +12,9 @@ import {
   MapPin,
   ChevronRight,
   Mic,
-  Loader2
+  Loader2,
+  Bot,
+  User
 } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
@@ -20,10 +22,10 @@ import { useAuth, API } from "@/App";
 import { BottomNav } from "./DoerDashboard";
 
 const QUICK_PROMPTS = [
-  "Find jobs near me",
-  "What jobs match my skills?",
-  "Show entry level jobs",
-  "Tech jobs in Bangalore"
+  "🔍 Find jobs near me",
+  "📈 How to level up to L2?",
+  "💼 What skills should I learn?",
+  "🎯 Jobs matching my profile"
 ];
 
 export default function AimeePage() {
@@ -34,7 +36,19 @@ export default function AimeePage() {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: `Hi ${user?.name || "there"}! 👋 I'm AIMEE, your AI career assistant.\n\nI'm here to help you find work that feels like PLAY. Tell me what you're looking for, and I'll find the perfect matches for you!\n\n"Choose a job that feels like play to you, but looks like work to others." - Naval Ravikant`
+      content: `Namaste ${user?.name || "friend"}! 🙏
+
+I'm **AIMEE** - your AI career guide at Right Doers World.
+
+I know your profile:
+• **Division**: ${user?.division || "Not set yet"}
+• **Club**: ${user?.club || "Join a club!"}
+• **PASS Score**: ${Math.round(((user?.psy_score || 0) + (user?.skill_score || 0)) / 2)}/100
+• **Location**: ${user?.pincode || "Set your pincode"}
+
+**How can I help you today?**
+
+_"Choose a job that feels like play to you, but looks like work to others."_ - Naval`
     }
   ]);
   const [input, setInput] = useState("");
@@ -70,10 +84,10 @@ export default function AimeePage() {
       
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
-      toast.error("Failed to get response from AIMEE");
+      toast.error("AIMEE is taking a break. Try again!");
       setMessages(prev => [...prev, {
         role: "assistant",
-        content: "I'm having trouble connecting right now. Please try again in a moment."
+        content: "I'm having trouble connecting. Let me try again - please ask your question once more! 🙏"
       }]);
     } finally {
       setLoading(false);
@@ -88,9 +102,9 @@ export default function AimeePage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col pb-nav">
+    <div className="min-h-screen bg-slate-50 flex flex-col pb-24">
       {/* Header */}
-      <header className="bg-gradient-to-r from-primary to-pink-500 text-white p-4">
+      <header className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white p-4 shadow-lg">
         <div className="flex items-center gap-3">
           <Button 
             variant="ghost" 
@@ -101,15 +115,16 @@ export default function AimeePage() {
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-              <Sparkles className="w-5 h-5" />
+          <div className="flex items-center gap-3 flex-1">
+            <div className="w-12 h-12 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center animate-pulse">
+              <Sparkles className="w-6 h-6" />
             </div>
             <div>
               <h1 className="font-display font-bold text-lg">AIMEE</h1>
-              <p className="text-white/70 text-xs">AI Career Assistant</p>
+              <p className="text-white/70 text-xs">AI Matching & Employment Engine</p>
             </div>
           </div>
+          <Badge className="bg-green-400 text-green-900 border-0">Online</Badge>
         </div>
       </header>
 
@@ -123,33 +138,39 @@ export default function AimeePage() {
             >
               <div className={`max-w-[85%] ${
                 msg.role === "user" 
-                  ? "bg-primary text-white rounded-2xl rounded-br-md" 
-                  : "bg-white border rounded-2xl rounded-bl-md shadow-sm"
+                  ? "bg-indigo-600 text-white rounded-2xl rounded-br-sm" 
+                  : "bg-white border shadow-sm rounded-2xl rounded-bl-sm"
               } p-4`}>
                 {msg.role === "assistant" && (
-                  <div className="flex items-center gap-2 mb-2">
-                    <Sparkles className="w-4 h-4 text-primary" />
-                    <span className="text-xs font-medium text-primary">AIMEE</span>
+                  <div className="flex items-center gap-2 mb-2 pb-2 border-b">
+                    <div className="w-6 h-6 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                      <Sparkles className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-xs font-semibold text-indigo-600">AIMEE</span>
                   </div>
                 )}
-                <p className={`whitespace-pre-wrap ${msg.role === "user" ? "" : "text-slate-700"}`}>
-                  {msg.content}
-                </p>
+                <div className={`prose prose-sm ${msg.role === "user" ? "prose-invert" : ""} max-w-none`}>
+                  {msg.content.split('\n').map((line, j) => (
+                    <p key={j} className="mb-1 last:mb-0">{line}</p>
+                  ))}
+                </div>
                 
                 {/* Recommended Jobs */}
                 {msg.jobs && msg.jobs.length > 0 && (
-                  <div className="mt-4 space-y-2">
-                    <p className="text-xs font-medium text-slate-500 uppercase">Recommended Jobs</p>
+                  <div className="mt-4 pt-3 border-t space-y-2">
+                    <p className="text-xs font-semibold text-slate-500 uppercase flex items-center gap-1">
+                      <Building2 className="w-3 h-3" /> Matching Jobs
+                    </p>
                     {msg.jobs.map((job) => (
                       <button
                         key={job.id}
                         onClick={() => navigate(`/jobs?selected=${job.id}`)}
-                        className="w-full text-left bg-slate-50 hover:bg-slate-100 rounded-xl p-3 transition-colors"
+                        className="w-full text-left bg-slate-50 hover:bg-slate-100 rounded-xl p-3 transition-colors border"
                         data-testid={`aimee-job-${job.id}`}
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <Building2 className="w-5 h-5 text-primary" />
+                          <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <Building2 className="w-5 h-5 text-indigo-600" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="font-medium text-slate-900 truncate">{job.title}</p>
@@ -173,9 +194,11 @@ export default function AimeePage() {
           
           {loading && (
             <div className="flex justify-start">
-              <div className="bg-white border rounded-2xl rounded-bl-md p-4 shadow-sm">
-                <div className="flex items-center gap-2">
-                  <Loader2 className="w-4 h-4 text-primary animate-spin" />
+              <div className="bg-white border rounded-2xl rounded-bl-sm p-4 shadow-sm">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                    <Loader2 className="w-4 h-4 text-white animate-spin" />
+                  </div>
                   <span className="text-sm text-slate-500">AIMEE is thinking...</span>
                 </div>
               </div>
@@ -185,16 +208,16 @@ export default function AimeePage() {
       </ScrollArea>
 
       {/* Quick Prompts */}
-      {messages.length <= 1 && (
+      {messages.length <= 2 && (
         <div className="px-4 pb-2">
-          <p className="text-xs text-slate-500 mb-2">Quick prompts:</p>
+          <p className="text-xs text-slate-500 mb-2 font-medium">Try asking:</p>
           <div className="flex flex-wrap gap-2">
             {QUICK_PROMPTS.map((prompt) => (
               <button
                 key={prompt}
                 onClick={() => sendMessage(prompt)}
-                className="bg-white border rounded-full px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:border-primary transition-colors"
-                data-testid={`quick-prompt-${prompt.replace(/\s+/g, '-').toLowerCase()}`}
+                className="bg-white border rounded-full px-4 py-2 text-sm text-slate-700 hover:bg-indigo-50 hover:border-indigo-300 hover:text-indigo-700 transition-all shadow-sm"
+                data-testid={`quick-prompt`}
               >
                 {prompt}
               </button>
@@ -204,7 +227,7 @@ export default function AimeePage() {
       )}
 
       {/* Input */}
-      <div className="p-4 bg-white border-t">
+      <div className="p-4 bg-white border-t shadow-lg">
         <div className="flex items-center gap-2 max-w-2xl mx-auto">
           <div className="flex-1 relative">
             <Input
@@ -212,12 +235,12 @@ export default function AimeePage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              className="pr-12 h-12 rounded-full"
+              className="pr-12 h-12 rounded-full border-2 focus:border-indigo-400"
               disabled={loading}
               data-testid="aimee-input"
             />
             <button 
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-200"
               disabled
             >
               <Mic className="w-4 h-4" />
@@ -225,7 +248,7 @@ export default function AimeePage() {
           </div>
           <Button
             size="icon"
-            className="w-12 h-12 rounded-full bg-primary"
+            className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-90 shadow-lg"
             onClick={() => sendMessage(input)}
             disabled={loading || !input.trim()}
             data-testid="aimee-send-btn"
