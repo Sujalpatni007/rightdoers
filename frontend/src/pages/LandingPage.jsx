@@ -210,22 +210,28 @@ export default function LandingPage() {
 
       {/* Quick Access Features */}
       <div className="px-4 pb-6">
-        <div className="max-w-2xl mx-auto grid grid-cols-3 gap-3">
+        <div className="max-w-2xl mx-auto grid grid-cols-4 gap-3">
           <button
             onClick={() => navigate("/world-wheel")}
             className="bg-white/5 backdrop-blur border border-white/10 rounded-xl p-4 text-center hover:bg-white/10 transition-all"
           >
             <span className="text-2xl block mb-2">🌍</span>
             <p className="text-white text-xs font-medium">World Wheel</p>
-            <p className="text-white/50 text-[10px]">1000+ Roles</p>
           </button>
           <button
-            onClick={() => navigate("/work-wheel")}
+            onClick={() => navigate("/clubs")}
             className="bg-white/5 backdrop-blur border border-white/10 rounded-xl p-4 text-center hover:bg-white/10 transition-all"
           >
-            <span className="text-2xl block mb-2">🤖</span>
-            <p className="text-white text-xs font-medium">Work Wheel</p>
-            <p className="text-white/50 text-[10px]">Human-AI-Robo</p>
+            <span className="text-2xl block mb-2">🎪</span>
+            <p className="text-white text-xs font-medium">5 Clubs</p>
+          </button>
+          <button
+            onClick={() => navigate("/gigs")}
+            className="bg-gradient-to-br from-amber-500/30 to-orange-500/30 backdrop-blur border border-amber-500/30 rounded-xl p-4 text-center hover:bg-amber-500/40 transition-all"
+            data-testid="landing-gigs-btn"
+          >
+            <span className="text-2xl block mb-2">⚡</span>
+            <p className="text-amber-300 text-xs font-medium">E-COIN Gigs</p>
           </button>
           <button
             onClick={() => navigate("/agents")}
@@ -233,9 +239,35 @@ export default function LandingPage() {
           >
             <span className="text-2xl block mb-2">🧠</span>
             <p className="text-white text-xs font-medium">AI Agents</p>
-            <p className="text-white/50 text-[10px]">TalentON.AI</p>
           </button>
         </div>
+      </div>
+
+      {/* E-COIN Energy Exchange Banner */}
+      <div className="px-4 pb-6">
+        <button
+          onClick={() => navigate("/gigs")}
+          className="w-full max-w-2xl mx-auto block bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl p-5 text-left hover:from-amber-400 hover:to-orange-500 transition-all group"
+          data-testid="ecoin-banner"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <Badge className="bg-white/20 text-white border-0 mb-2">
+                ⚡ E-COIN ECOSYSTEM
+              </Badge>
+              <h3 className="font-display font-bold text-white text-xl mb-1">
+                Rent a Doer
+              </h3>
+              <p className="text-white/80 text-sm">
+                My Energy = Your Energy = Harmony
+              </p>
+              <p className="text-white/60 text-xs mt-1">
+                PASS Code System • Transmission over Transaction
+              </p>
+            </div>
+            <ArrowRight className="w-8 h-8 text-white/70 group-hover:translate-x-2 transition-transform" />
+          </div>
+        </button>
       </div>
 
       {/* Government Program Banner */}
