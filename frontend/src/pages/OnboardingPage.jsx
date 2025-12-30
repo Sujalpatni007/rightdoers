@@ -87,7 +87,7 @@ export default function OnboardingPage() {
         return;
       }
       
-      // Save and proceed to psychometric test
+      // Save and proceed to Amazing People flow (Nuclear Pipeline)
       setLoading(true);
       try {
         const updates = {
@@ -105,7 +105,8 @@ export default function OnboardingPage() {
         });
         
         toast.success("Profile updated! Let's discover your talents!");
-        navigate("/psychometric");
+        // Navigate to Amazing People page (Nuclear Engineering Talent Pipeline)
+        navigate("/amazing-people");
       } catch (error) {
         toast.error("Failed to update profile");
       } finally {
