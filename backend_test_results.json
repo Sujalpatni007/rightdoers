@@ -1,0 +1,105 @@
+{
+  "tests_run": 16,
+  "tests_passed": 16,
+  "success_rate": 100.0,
+  "failed_tests": [],
+  "critical_issues": [],
+  "test_results": [
+    {
+      "test": "API Root Endpoint",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-12-30T11:57:28.896830"
+    },
+    {
+      "test": "Seed Data",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-12-30T11:57:28.939989"
+    },
+    {
+      "test": "Send OTP",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-12-30T11:57:28.982807"
+    },
+    {
+      "test": "Verify OTP",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-12-30T11:57:29.030318"
+    },
+    {
+      "test": "Create Doer User",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-12-30T11:57:29.072346"
+    },
+    {
+      "test": "Create Employer User",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-12-30T11:57:29.118608"
+    },
+    {
+      "test": "Create Admin User",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-12-30T11:57:29.161370"
+    },
+    {
+      "test": "Get User by ID",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-12-30T11:57:29.204799"
+    },
+    {
+      "test": "Get User by Phone",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-12-30T11:57:29.244033"
+    },
+    {
+      "test": "Get Jobs",
+      "success": true,
+      "details": "Status: 200, Jobs: 10",
+      "timestamp": "2025-12-30T11:57:29.278359"
+    },
+    {
+      "test": "Get Jobs with Filters",
+      "success": true,
+      "details": "Status: 200, Filtered Jobs: 1",
+      "timestamp": "2025-12-30T11:57:29.322753"
+    },
+    {
+      "test": "Create Job",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-12-30T11:57:29.360772"
+    },
+    {
+      "test": "Job Application",
+      "success": true,
+      "details": "",
+      "timestamp": "2025-12-30T11:57:29.422837"
+    },
+    {
+      "test": "Get Doer Applications",
+      "success": true,
+      "details": "Status: 200, Applications: 1",
+      "timestamp": "2025-12-30T11:57:29.460629"
+    },
+    {
+      "test": "AIMEE Chat",
+      "success": true,
+      "details": "Response length: 995",
+      "timestamp": "2025-12-30T11:57:34.071853"
+    },
+    {
+      "test": "Admin Stats",
+      "success": true,
+      "details": "Stats: ['total_doers', 'total_employers', 'total_jobs', 'total_applications', 'division_stats', 'recent_jobs']",
+      "timestamp": "2025-12-30T11:57:34.133332"
+    }
+  ]
+}
