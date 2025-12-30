@@ -188,6 +188,7 @@ function AppContent() {
       
       {/* Government Programs */}
       <Route path="/karnataka-model" element={<KarnatakaModelPage />} />
+      <Route path="/karnataka-schools" element={<KarnatakaSchoolsDashboard />} />
       
       {/* AI Agents Hub */}
       <Route path="/agents" element={<AgentHubPage />} />
