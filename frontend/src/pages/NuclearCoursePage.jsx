@@ -238,6 +238,7 @@ export default function NuclearCoursePage() {
           <Button 
             className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-purple-600 to-indigo-600"
             onClick={handleEnroll}
+            data-testid="enroll-btn"
           >
             Get Certified Now!
           </Button>
