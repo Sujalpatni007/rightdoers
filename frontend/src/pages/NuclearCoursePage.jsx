@@ -181,6 +181,7 @@ export default function NuclearCoursePage() {
               {COURSE_DATA.topics.map((topic, index) => (
                 <button
                   key={topic.id}
+                  data-testid={`topic-${topic.id}`}
                   className={`w-full flex items-center gap-4 p-3 rounded-xl transition-all ${
                     enrolled && index === 0 
                       ? 'bg-indigo-50 border border-indigo-200' 
