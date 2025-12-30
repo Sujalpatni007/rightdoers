@@ -150,7 +150,7 @@ export default function CapabilityClubsPage() {
             </div>
           </div>
           <p className="text-white/50 text-xs text-center italic">
-            "Give Energy, Receive Harmony" ✨
+            &ldquo;Give Energy, Receive Harmony&rdquo; ✨
           </p>
         </div>
       </header>

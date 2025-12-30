@@ -175,7 +175,7 @@ export default function EcoinWalletPage() {
               </div>
             </div>
             <p className="text-center text-slate-500 text-xs mt-4 italic">
-              "My Energy = Your Energy = Both Happy in Harmony"
+              &ldquo;My Energy = Your Energy = Both Happy in Harmony&rdquo;
             </p>
           </CardContent>
         </Card>
