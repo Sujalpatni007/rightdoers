@@ -18,7 +18,9 @@ import {
   Share2,
   QrCode,
   Trophy,
-  Target
+  Target,
+  Zap,
+  Wallet
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth, API } from "@/App";
