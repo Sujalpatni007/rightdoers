@@ -167,7 +167,7 @@ function AppContent() {
       <Route path="/curriculum-success" element={<ProtectedRoute><CurriculumSuccessPage /></ProtectedRoute>} />
       <Route path="/progress-dashboard" element={<ProtectedRoute><ProgressDashboard /></ProtectedRoute>} />
       <Route path="/rewards" element={<ProtectedRoute><RewardsPage /></ProtectedRoute>} />
-      <Route path="/course/nuclear-science" element={<ProtectedRoute><NuclearCoursePage /></ProtectedRoute>} />
+      <Route path="/course/nuclear-science" element={<NuclearCoursePage />} />
       
       {/* Consumer Flow */}
       <Route path="/services" element={<ConsumerLanding />} />
