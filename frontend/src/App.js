@@ -181,6 +181,16 @@ function AppContent() {
       <Route path="/corporate" element={<CorporateDashboard />} />
       <Route path="/corporate/pipeline-builder" element={<PipelineBuilder />} />
       
+      {/* World Wheel & Work Wheel */}
+      <Route path="/world-wheel" element={<WorldWheelPage />} />
+      <Route path="/work-wheel" element={<WorkWheelPage />} />
+      
+      {/* Government Programs */}
+      <Route path="/karnataka-model" element={<KarnatakaModelPage />} />
+      
+      {/* AI Agents Hub */}
+      <Route path="/agents" element={<AgentHubPage />} />
+      
       {/* Employer Flow */}
       <Route path="/employer" element={<ProtectedRoute allowedRoles={["employer"]}><EmployerDashboard /></ProtectedRoute>} />
       <Route path="/employer/post" element={<ProtectedRoute allowedRoles={["employer"]}><PostJobPage /></ProtectedRoute>} />
