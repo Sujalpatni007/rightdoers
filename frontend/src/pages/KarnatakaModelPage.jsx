@@ -19,7 +19,8 @@ import {
   Globe,
   ChevronRight,
   Download,
-  Calendar
+  Calendar,
+  School
 } from "lucide-react";
 
 const KARNATAKA_STATS = {
