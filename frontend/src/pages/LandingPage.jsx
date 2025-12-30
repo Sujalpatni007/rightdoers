@@ -184,6 +184,33 @@ export default function LandingPage() {
         </div>
       </div>
 
+      {/* Doers Dream SIIP - Family Plan */}
+      <div className="px-4 py-6">
+        <button
+          onClick={() => navigate("/dream-siip")}
+          className="w-full max-w-2xl mx-auto block bg-gradient-to-r from-red-500 via-orange-500 to-amber-500 rounded-2xl p-6 text-left hover:from-red-400 hover:via-orange-400 hover:to-amber-400 transition-all group"
+          data-testid="dream-siip-btn"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <Badge className="bg-white/20 text-white border-0 mb-2">
+                👨‍👩‍👧‍👦 FAMILY PLAN
+              </Badge>
+              <h3 className="font-display font-bold text-white text-xl">
+                Doers Dream SIIP
+              </h3>
+              <p className="text-white/80 text-sm mt-1">
+                ₹3K/month → ₹1 Lac/month for 30 years
+              </p>
+              <p className="text-white/60 text-xs mt-1">
+                One Family • Different Dreams • Impact Delivered
+              </p>
+            </div>
+            <ArrowRight className="w-8 h-8 text-white/70 group-hover:translate-x-2 transition-transform" />
+          </div>
+        </button>
+      </div>
+
       {/* Junicorn Section */}
       <div className="px-4 py-6">
         <button
