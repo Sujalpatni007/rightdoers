@@ -49,6 +49,7 @@ import AgentHubPage from "@/pages/AgentHubPage";
 import CapabilityClubsPage from "@/pages/CapabilityClubsPage";
 import GigMarketplacePage from "@/pages/GigMarketplacePage";
 import EcoinWalletPage from "@/pages/EcoinWalletPage";
+import DoersDreamSIIPPage from "@/pages/DoersDreamSIIPPage";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
@@ -200,6 +201,7 @@ function AppContent() {
       <Route path="/clubs" element={<ProtectedRoute><CapabilityClubsPage /></ProtectedRoute>} />
       <Route path="/gigs" element={<ProtectedRoute><GigMarketplacePage /></ProtectedRoute>} />
       <Route path="/ecoin" element={<ProtectedRoute><EcoinWalletPage /></ProtectedRoute>} />
+      <Route path="/dream-siip" element={<DoersDreamSIIPPage />} />
       
       {/* Employer Flow */}
       <Route path="/employer" element={<ProtectedRoute allowedRoles={["employer"]}><EmployerDashboard /></ProtectedRoute>} />
