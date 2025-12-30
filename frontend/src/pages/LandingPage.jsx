@@ -43,18 +43,18 @@ export default function LandingPage() {
       id: "company",
       icon: Building2,
       title: "I'M HIRING",
-      subtitle: "Find Right Doers",
-      description: "Build your dream team",
+      subtitle: "Talent Pipeline Builder",
+      description: "Build your Human-AI-Robo team",
       color: "from-orange-500 to-amber-600",
-      path: "/auth?role=employer",
+      path: "/corporate",
       testId: "user-type-company"
     },
     {
       id: "government",
       icon: Landmark,
       title: "GOVERNMENT",
-      subtitle: "I Want to Impact",
-      description: "Population talent dashboard",
+      subtitle: "Talent Pipeline Programs",
+      description: "Transform your state's workforce",
       color: "from-purple-500 to-violet-600",
       path: "/auth?role=admin",
       testId: "user-type-government"
