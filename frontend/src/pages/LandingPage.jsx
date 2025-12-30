@@ -124,11 +124,11 @@ export default function LandingPage() {
             </div>
             
             {/* Content */}
-            <h3 className="font-display font-bold text-white text-sm mb-1">
+            <h3 className="font-display font-bold text-white text-base mb-1 tracking-wide">
               {type.title}
             </h3>
-            <p className="text-white/60 text-xs mb-2">{type.subtitle}</p>
-            <p className="text-white/40 text-xs">{type.description}</p>
+            <p className="text-white/70 text-sm mb-2 font-medium">{type.subtitle}</p>
+            <p className="text-white/50 text-xs leading-relaxed">{type.description}</p>
             
             {/* Arrow */}
             <ArrowRight className="absolute bottom-4 right-4 w-5 h-5 text-white/30 group-hover:text-white/60 group-hover:translate-x-1 transition-all" />
@@ -136,26 +136,34 @@ export default function LandingPage() {
         ))}
       </div>
 
-      {/* Stats Section */}
+      {/* Stats Section - World & Work Wheel */}
       <div className="px-4 py-6">
         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 max-w-2xl mx-auto">
+          <div className="text-center mb-4">
+            <p className="text-white/50 text-xs uppercase tracking-widest">World Wheel × Work Wheel</p>
+          </div>
           <div className="grid grid-cols-4 gap-4 text-center">
             <div>
               <p className="font-display font-bold text-2xl text-white">12</p>
-              <p className="text-white/50 text-xs">Divisions</p>
+              <p className="text-white/60 text-xs font-medium">Divisions</p>
             </div>
             <div>
-              <p className="font-display font-bold text-2xl text-white">5</p>
-              <p className="text-white/50 text-xs">Clubs</p>
+              <p className="font-display font-bold text-2xl text-white">1000+</p>
+              <p className="text-white/60 text-xs font-medium">Job Roles</p>
             </div>
             <div>
               <p className="font-display font-bold text-2xl text-white">L1-L5</p>
-              <p className="text-white/50 text-xs">Levels</p>
+              <p className="text-white/60 text-xs font-medium">Levels</p>
             </div>
             <div>
-              <p className="font-display font-bold text-2xl text-orange-400">∞</p>
-              <p className="text-white/50 text-xs">Dreams</p>
+              <p className="font-display font-bold text-2xl text-orange-400">7I</p>
+              <p className="text-white/60 text-xs font-medium">Framework</p>
             </div>
+          </div>
+          <div className="mt-4 pt-4 border-t border-white/10 text-center">
+            <p className="text-white/40 text-xs tracking-wide">
+              Individual → Industry → Institutions → India → International → Impact → Innovation
+            </p>
           </div>
         </div>
       </div>
