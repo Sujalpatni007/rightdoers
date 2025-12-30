@@ -301,15 +301,18 @@ frontend:
 
   - task: "Corporate Dashboard (PowerMech)"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/pages/CorporateDashboard.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "NEW - PowerMech talent pipeline with FOMO alerts. Verified via screenshot. Needs full testing."
+      - working: true
+        agent: "testing"
+        comment: "TESTED - PowerMech branding verified, FOMO alert '3 competitors viewing' confirmed, all key stats working (2847 candidates, 127 matched, 14d avg hire time, 66% savings), candidate profiles (Rohan Kumar, Aadhya Sharma) displayed correctly."
 
   - task: "Pipeline Builder"
     implemented: true
