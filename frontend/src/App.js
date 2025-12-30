@@ -44,6 +44,7 @@ import PipelineBuilder from "@/pages/PipelineBuilder";
 import WorldWheelPage from "@/pages/WorldWheelPage";
 import WorkWheelPage from "@/pages/WorkWheelPage";
 import KarnatakaModelPage from "@/pages/KarnatakaModelPage";
+import KarnatakaSchoolsDashboard from "@/pages/KarnatakaSchoolsDashboard";
 import AgentHubPage from "@/pages/AgentHubPage";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
