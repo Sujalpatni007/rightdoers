@@ -15,10 +15,14 @@ import {
   Building2,
   Clock,
   Bell,
-  Award
+  Award,
+  Zap,
+  Users,
+  Flame
 } from "lucide-react";
 import axios from "axios";
 import { useAuth, API } from "@/App";
+import BottomNavNew from "@/components/BottomNavNew";
 
 const LEVEL_INFO = {
   L1: { label: "Entry Level", salary: "₹15K-30K", color: "bg-green-500" },
@@ -65,6 +69,8 @@ export default function DoerDashboard() {
   const passScore = Math.round(((user?.psy_score || 0) + (user?.skill_score || 0)) / 2);
   const clubColor = CLUB_COLORS[user?.club] || "from-indigo-500 to-purple-600";
   const doersId = `RDW-${user?.pincode || '000000'}-${(user?.division || 'GEN').slice(0, 3).toUpperCase()}-L1`;
+  const ecoinBalance = 1650; // Will be fetched from backend later
+  const userStreak = 7;
 
   return (
     <div className="min-h-screen bg-slate-50 pb-24">
@@ -75,7 +81,12 @@ export default function DoerDashboard() {
             <p className="text-white/70 text-sm">Welcome back,</p>
             <h1 className="font-display text-xl font-bold">{user?.name || "Doer"}</h1>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            {/* Streak Badge */}
+            <div className="flex items-center gap-1 bg-white/20 px-2.5 py-1 rounded-full">
+              <Flame className="w-4 h-4 text-orange-300" />
+              <span className="font-bold text-sm">{userStreak}</span>
+            </div>
             <button className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
               <Bell className="w-5 h-5" />
             </button>
@@ -89,16 +100,33 @@ export default function DoerDashboard() {
           </div>
         </div>
 
-        {/* DoersID Mini */}
-        <div className="bg-white/10 backdrop-blur rounded-xl p-3 flex items-center gap-3">
-          <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center font-bold text-lg">
-            {user?.name?.charAt(0) || "D"}
+        {/* E-COIN Balance + DoersID Row */}
+        <div className="grid grid-cols-2 gap-3">
+          {/* E-COIN Balance */}
+          <button 
+            className="bg-gradient-to-r from-amber-500/30 to-orange-500/30 backdrop-blur rounded-xl p-3 text-left"
+            onClick={() => navigate("/ecoin")}
+            data-testid="ecoin-balance-btn"
+          >
+            <div className="flex items-center gap-2 mb-1">
+              <Zap className="w-5 h-5 text-yellow-300" />
+              <span className="text-xs text-white/70">E-COIN</span>
+            </div>
+            <p className="font-display font-bold text-xl">{ecoinBalance.toLocaleString()}</p>
+            <p className="text-[10px] text-white/50 italic">Energy Balance</p>
+          </button>
+          
+          {/* DoersID Mini */}
+          <div className="bg-white/10 backdrop-blur rounded-xl p-3">
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-6 h-6 bg-white/20 rounded flex items-center justify-center font-bold text-xs">
+                {user?.name?.charAt(0) || "D"}
+              </div>
+              <span className="text-xs text-white/60">DoersID</span>
+            </div>
+            <p className="font-mono text-xs font-semibold truncate">{doersId}</p>
+            <Badge className="bg-white/20 text-white border-0 text-[10px] mt-1">L1</Badge>
           </div>
-          <div className="flex-1">
-            <p className="text-xs text-white/60">DoersID</p>
-            <p className="font-mono text-sm font-semibold">{doersId}</p>
-          </div>
-          <Badge className="bg-white/20 text-white border-0">L1</Badge>
         </div>
       </header>
 
