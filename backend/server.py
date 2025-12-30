@@ -92,6 +92,9 @@ class UserCreate(BaseModel):
     division: Optional[DoersDivision] = None
     pincode: Optional[str] = None
     company_name: Optional[str] = None
+    age_group: Optional[str] = None
+    gender: Optional[str] = None
+    interests: Optional[List[str]] = None
 
 class User(BaseModel):
     model_config = ConfigDict(extra="ignore")
@@ -106,6 +109,11 @@ class User(BaseModel):
     psy_score: int = 0
     skill_score: int = 0
     pass_code: Optional[Dict[str, Any]] = None
+    age_group: Optional[str] = None
+    gender: Optional[str] = None
+    interests: Optional[List[str]] = None
+    personality_traits: Optional[Dict[str, Any]] = None
+    level: str = "L1"
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 class JobCreate(BaseModel):
@@ -200,8 +208,12 @@ async def create_user(user_data: UserCreate):
         club=DIVISION_TO_CLUB.get(user_data.division) if user_data.division else None,
         pincode=user_data.pincode,
         company_name=user_data.company_name,
-        psy_score=random.randint(60, 97),  # Simulated
-        skill_score=random.randint(50, 85),  # Simulated
+        age_group=user_data.age_group,
+        gender=user_data.gender,
+        interests=user_data.interests,
+        psy_score=0,  # Will be set after psychometric test
+        skill_score=0,  # Will be set after skill assessment
+        level="L1"
     )
     doc = user.model_dump()
     await db.users.insert_one(doc)
