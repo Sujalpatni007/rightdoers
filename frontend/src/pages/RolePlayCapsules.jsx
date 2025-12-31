@@ -1009,7 +1009,7 @@ export default function RolePlayCapsules() {
           </div>
         </div>
 
-        {/* Lesson Content */}
+        {/* Capsule Content */}
         <AnimatePresence mode="wait">
           <motion.div
             key={currentLessonIndex}
@@ -1019,7 +1019,7 @@ export default function RolePlayCapsules() {
             transition={{ duration: 0.3 }}
           >
             {/* INTRO Type */}
-            {currentLesson.type === "intro" && (
+            {currentCapsule.type === "intro" && (
               <Card className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 border-purple-500/30">
                 <CardContent className="p-6 text-center">
                   <motion.div
