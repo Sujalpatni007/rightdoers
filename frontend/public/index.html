@@ -3,10 +3,34 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-        <meta name="theme-color" content="#4F46E5" />
-        <meta name="description" content="Right Doers World - The Future of Work. Find your dream job that feels like play." />
+        <meta name="theme-color" content="#f97316" />
+        <meta name="description" content="HI AI-APP.COM - Right Doers World. Find a Job That Feels Like Play. Human Potential Management & Transformation." />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="HI AI-APP" />
+        
+        <!-- PWA Manifest -->
+        <link rel="manifest" href="/manifest.json" />
+        
+        <!-- Apple Touch Icons -->
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png" />
+        <link rel="apple-touch-icon" sizes="167x167" href="/icons/icon-192x192.png" />
+        
+        <!-- Splash Screens for iOS -->
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        
+        <!-- Open Graph / Social -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="HI AI-APP.COM - Right Doers World" />
+        <meta property="og:description" content="Find a Job That Feels Like Play. Will AI replace me or empower me? Let Agent AIMEE analyze your talents!" />
+        <meta property="og:url" content="https://hi-ai-app.com" />
+        
+        <!-- Twitter -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="HI AI-APP.COM" />
+        <meta name="twitter:description" content="Human • AI • Robo — Collaborative System. Dream → Do → Done" />
         
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +38,7 @@
         <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
         
-        <title>Right Doers World | The Future of Work</title>
+        <title>HI AI-APP.COM | Right Doers World</title>
         <script src="https://assets.emergent.sh/scripts/emergent-main.js"></script>
         <script>
             if (window.self !== window.top) {
@@ -32,6 +56,21 @@
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="root"></div>
+        
+        <!-- Service Worker Registration -->
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/service-worker.js')
+                        .then(function(registration) {
+                            console.log('HI AI-APP: ServiceWorker registered', registration.scope);
+                        })
+                        .catch(function(error) {
+                            console.log('HI AI-APP: ServiceWorker registration failed', error);
+                        });
+                });
+            }
+        </script>
         <a
             id="emergent-badge"
             target="_blank"

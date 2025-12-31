@@ -206,7 +206,7 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* E-COIN Wallet Section */}
+      {/* D-COIN Wallet Section */}
       <div className="px-4 mb-6">
         <button 
           className="w-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl p-4 text-white text-left"
@@ -219,7 +219,7 @@ export default function ProfilePage() {
                 <Zap className="w-6 h-6 text-yellow-300" />
               </div>
               <div>
-                <p className="text-white/70 text-xs">E-COIN Balance</p>
+                <p className="text-white/70 text-xs">D-COIN Balance</p>
                 <p className="font-display font-bold text-2xl">1,650</p>
               </div>
             </div>

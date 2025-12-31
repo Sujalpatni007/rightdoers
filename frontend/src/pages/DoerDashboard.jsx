@@ -100,9 +100,9 @@ export default function DoerDashboard() {
           </div>
         </div>
 
-        {/* E-COIN Balance + DoersID Row */}
+        {/* D-COIN Balance + DoersID Row */}
         <div className="grid grid-cols-2 gap-3">
-          {/* E-COIN Balance */}
+          {/* D-COIN Balance */}
           <button 
             className="bg-gradient-to-r from-amber-500/30 to-orange-500/30 backdrop-blur rounded-xl p-3 text-left"
             onClick={() => navigate("/ecoin")}
@@ -110,7 +110,7 @@ export default function DoerDashboard() {
           >
             <div className="flex items-center gap-2 mb-1">
               <Zap className="w-5 h-5 text-yellow-300" />
-              <span className="text-xs text-white/70">E-COIN</span>
+              <span className="text-xs text-white/70">D-COIN</span>
             </div>
             <p className="font-display font-bold text-xl">{ecoinBalance.toLocaleString()}</p>
             <p className="text-[10px] text-white/50 italic">Energy Balance</p>
@@ -178,7 +178,7 @@ export default function DoerDashboard() {
         </div>
       </div>
 
-      {/* E-COIN Earnings Summary */}
+      {/* D-COIN Earnings Summary */}
       <section className="px-4 mb-6">
         <div className="bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl p-4 text-white">
           <div className="flex items-center justify-between mb-3">
@@ -191,7 +191,7 @@ export default function DoerDashboard() {
             </Badge>
           </div>
           <p className="text-white/80 text-sm mb-3">
-            Complete gigs to earn E-COIN • My Energy = Your Energy
+            Complete gigs to earn D-COIN • My Energy = Your Energy
           </p>
           <Button 
             className="w-full bg-white text-amber-600 hover:bg-white/90"
