@@ -83,7 +83,7 @@ const PRAKRUTI_TYPES = {
   }
 };
 
-// 5 CHARACTER CLUBS - PANCHA PANDAVAS
+// 5 CHARACTER CLUBS - PANCHA PANDAVAS (Order: Internal → External)
 const CHARACTER_CLUBS = {
   dharma: {
     name: "DHARMA CLUB",
@@ -92,7 +92,7 @@ const CHARACTER_CLUBS = {
     icon: Shield,
     color: "#3B82F6",
     divisions: ["Policy", "Legal"],
-    motto: "守护正义与秩序"
+    motto: "Foundation of All Power"
   },
   shakti: {
     name: "SHAKTI CLUB",
@@ -101,7 +101,7 @@ const CHARACTER_CLUBS = {
     icon: Heart,
     color: "#EF4444",
     divisions: ["Health", "Sports", "Food"],
-    motto: "身心健康是财富"
+    motto: "Health is True Wealth"
   },
   vidya: {
     name: "VIDYA CLUB",
@@ -110,16 +110,7 @@ const CHARACTER_CLUBS = {
     icon: Target,
     color: "#8B5CF6",
     divisions: ["Technology", "Science", "Security"],
-    motto: "每个问题都有解决方案"
-  },
-  kala: {
-    name: "KALA CLUB",
-    pandava: "Nakula",
-    quality: "PROFIT MAXIMIZER",
-    icon: Coins,
-    color: "#F59E0B",
-    divisions: ["Finance", "Art", "Hospitality"],
-    motto: "价值创造与增长"
+    motto: "Every Problem Has a Solution"
   },
   gyana: {
     name: "GYANA CLUB",
@@ -128,7 +119,16 @@ const CHARACTER_CLUBS = {
     icon: Brain,
     color: "#10B981",
     divisions: ["Education", "Transport"],
-    motto: "知识就是力量"
+    motto: "Knowledge is Liberation"
+  },
+  kala: {
+    name: "KALA CLUB",
+    pandava: "Nakula",
+    quality: "PROFIT MAXIMIZER",
+    icon: Coins,
+    color: "#F59E0B",
+    divisions: ["Finance", "Art", "Hospitality"],
+    motto: "Talent Creates Value"
   }
 };
 
