@@ -203,6 +203,22 @@ export default function InvestorPitch() {
   const [selectedTier, setSelectedTier] = useState("professional");
   const [billingCycle, setBillingCycle] = useState("yearly");
   const [currency, setCurrency] = useState("USD");
+  const [showQR, setShowQR] = useState(false);
+  const [qrTier, setQrTier] = useState(null);
+
+  // Calculate price in selected currency
+  const getPrice = (basePrice, currencyCode) => {
+    const rate = CURRENCIES[currencyCode].rate;
+    return Math.round(basePrice * rate);
+  };
+
+  // Generate UPI QR URL
+  const generateUPIUrl = (tier, cycle) => {
+    const qrData = UPI_QR_DATA[tier];
+    if (!qrData || qrData.amount.custom) return null;
+    const amount = qrData.amount[cycle];
+    return `upi://pay?pa=${qrData.upiId}&pn=${qrData.merchantName}&am=${amount}&cu=INR&tn=DOERS_${tier.toUpperCase()}_${cycle.toUpperCase()}`;
+  };
 
   const renderDemoFlow = () => (
     <div className="space-y-6">
