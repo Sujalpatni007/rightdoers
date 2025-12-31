@@ -123,7 +123,7 @@ export default function DoersDreamSIIPPage() {
             ₹3K/Month Today = ₹1 Lac/Month Tomorrow
           </h2>
           <p className="text-white/80 text-sm">
-            Invest for 30 years • Withdraw for 30 years • Legacy Forever
+            Invest Today • Grow Steadily • Secure Forever
           </p>
         </div>
       </header>
