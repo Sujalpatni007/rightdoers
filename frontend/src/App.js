@@ -53,6 +53,7 @@ import EcoinWalletPage from "@/pages/EcoinWalletPage";
 import DoersDreamSIIPPage from "@/pages/DoersDreamSIIPPage";
 import AgentAimeeAnalyzer from "@/pages/AgentAimeeAnalyzer";
 import DoersIDProfile from "@/pages/DoersIDProfile";
+import RolePlayCapsules from "@/pages/RolePlayCapsules";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
@@ -167,6 +168,8 @@ function AppContent() {
       <Route path="/aimee" element={<ProtectedRoute><AimeePage /></ProtectedRoute>} />
       <Route path="/aimee-analyzer" element={<AgentAimeeAnalyzer />} />
       <Route path="/doers-profile" element={<DoersIDProfile />} />
+      <Route path="/role-play" element={<RolePlayCapsules />} />
+      <Route path="/role-play/:divisionId" element={<RolePlayCapsules />} />
       <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
       <Route path="/learn" element={<ProtectedRoute><LearnPage /></ProtectedRoute>} />
       

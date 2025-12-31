@@ -47,7 +47,7 @@ const ENTRY_POINTS = {
       description: "Skilling Solutions for Industry 4.0 & 5.0",
       icon: GraduationCap,
       color: "from-blue-500 to-indigo-600",
-      path: "/auth?role=doer&type=pupil",
+      path: "/role-play",
       features: ["Ability Assessment", "Career Guidance", "Skill Courses"]
     },
     {
@@ -89,7 +89,7 @@ const ENTRY_POINTS = {
       description: "इंडस्ट्री 4.0 और 5.0 के लिए स्किलिंग",
       icon: GraduationCap,
       color: "from-blue-500 to-indigo-600",
-      path: "/auth?role=doer&type=pupil",
+      path: "/role-play",
       features: ["योग्यता मूल्यांकन", "करियर मार्गदर्शन", "कौशल पाठ्यक्रम"]
     },
     {
