@@ -264,7 +264,7 @@ export default function LandingPage() {
         >
           <div className="max-w-lg mx-auto">
             {/* Cosmic glow effect */}
-            <div className="absolute left-1/2 top-32 -translate-x-1/2 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl" />
+            <div className="absolute left-1/2 top-32 -translate-x-1/2 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
             
             <motion.div
               className="relative"
