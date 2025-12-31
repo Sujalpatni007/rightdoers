@@ -690,19 +690,19 @@ export default function RolePlayCapsules() {
 
   const division = selectedDivision ? DIVISIONS_CAPSULES[selectedDivision] : null;
   
-  // Get lessons for current module
-  const getLessonsForModule = (module) => {
-    if (LESSON_CONTENT[module?.id]) {
-      return LESSON_CONTENT[module.id];
+  // Get capsules for current module
+  const getCapsulesForModule = (module) => {
+    if (DAILY_CAPSULE_CONTENT[module?.id]) {
+      return DAILY_CAPSULE_CONTENT[module.id];
     }
     if (module && division) {
-      return generateGenericLessons(module, division);
+      return generateGenericCapsules(module, division);
     }
-    return { lessons: [] };
+    return { capsules: [] };
   };
   
-  const currentLessons = selectedModule ? getLessonsForModule(selectedModule) : { lessons: [] };
-  const currentLesson = currentLessons.lessons[currentLessonIndex];
+  const currentCapsules = selectedModule ? getCapsulesForModule(selectedModule) : { capsules: [] };
+  const currentCapsule = currentCapsules.capsules[currentLessonIndex];
   
   // Start a lesson
   const startLesson = (module) => {
