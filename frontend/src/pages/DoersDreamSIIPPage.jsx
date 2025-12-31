@@ -229,8 +229,8 @@ export default function DoersDreamSIIPPage() {
                       ))}
                     </div>
                     <div className="mt-2 pt-2 border-t flex justify-between text-xs text-slate-500">
-                      <span>Maturity: ₹{(plan.maturityValue/10000000).toFixed(1)} Cr</span>
-                      <span>Pension: ₹{(plan.monthlyWithdrawal/1000)}K/mo</span>
+                      <span>Grows To: ₹{(plan.maturityValue/10000000).toFixed(1)} Cr</span>
+                      <span>Returns: ₹{(plan.monthlyWithdrawal/1000)}K/mo</span>
                     </div>
                   </div>
                 </div>
