@@ -435,6 +435,145 @@ const DIVISIONS_CAPSULES = {
   }
 };
 
+// Duolingo-style lesson content for each module
+const LESSON_CONTENT = {
+  legal_101: {
+    lessons: [
+      {
+        id: 1,
+        type: "intro",
+        title: "Welcome to Legal Foundations",
+        content: "You're about to embark on an exciting journey into the world of law! Let's start with the basics of the Indian Legal System.",
+        dcoin: 5
+      },
+      {
+        id: 2,
+        type: "learn",
+        title: "The Indian Constitution",
+        content: "The Constitution of India is the supreme law of India. It came into effect on January 26, 1950. It establishes the framework for political principles, procedures, and powers of government.",
+        keyPoints: [
+          "Longest written constitution in the world",
+          "Originally 395 Articles in 22 Parts",
+          "Currently 470+ Articles after amendments",
+          "Preamble declares India as Sovereign, Socialist, Secular, Democratic Republic"
+        ],
+        dcoin: 10
+      },
+      {
+        id: 3,
+        type: "quiz",
+        title: "Quick Check!",
+        question: "When did the Indian Constitution come into effect?",
+        options: [
+          { id: "a", text: "August 15, 1947", correct: false },
+          { id: "b", text: "January 26, 1950", correct: true },
+          { id: "c", text: "November 26, 1949", correct: false },
+          { id: "d", text: "January 26, 1947", correct: false }
+        ],
+        explanation: "While August 15, 1947 was Independence Day and November 26, 1949 was when the Constitution was adopted, it came into effect on January 26, 1950 - celebrated as Republic Day!",
+        dcoin: 15
+      },
+      {
+        id: 4,
+        type: "learn",
+        title: "Courts Hierarchy in India",
+        content: "India follows a three-tier court system with the Supreme Court at the apex.",
+        keyPoints: [
+          "Supreme Court - Apex court, final interpreter of Constitution",
+          "High Courts - One for each state/group of states (25 total)",
+          "District Courts - Trial courts at district level",
+          "Subordinate Courts - Below district level"
+        ],
+        dcoin: 10
+      },
+      {
+        id: 5,
+        type: "quiz",
+        title: "Test Your Knowledge",
+        question: "Which is the apex court in India?",
+        options: [
+          { id: "a", text: "High Court", correct: false },
+          { id: "b", text: "District Court", correct: true },
+          { id: "c", text: "Supreme Court", correct: true },
+          { id: "d", text: "Sessions Court", correct: false }
+        ],
+        correctId: "c",
+        explanation: "The Supreme Court of India is the highest judicial court and the final court of appeal under the Constitution of India.",
+        dcoin: 15
+      },
+      {
+        id: 6,
+        type: "roleplay",
+        title: "🎭 Role Play: The First Day",
+        scenario: "You're a fresh law graduate on your first day at a law firm. Your senior partner asks you to explain the basic structure of Indian courts to a client.",
+        task: "How would you explain the court hierarchy in simple terms?",
+        hints: ["Start with the highest court", "Mention the 3-tier system", "Give a relatable example"],
+        dcoin: 20
+      },
+      {
+        id: 7,
+        type: "complete",
+        title: "Module Complete! 🎉",
+        content: "Congratulations! You've completed Legal Foundations Module 1. You now understand the basics of Indian Legal System.",
+        achievements: ["Constitution Basics", "Court Hierarchy", "First Role Play"],
+        totalDcoin: 50
+      }
+    ]
+  }
+};
+
+// Generate generic lessons for modules without specific content
+const generateGenericLessons = (module, division) => ({
+  lessons: [
+    {
+      id: 1,
+      type: "intro",
+      title: `Welcome to ${module.title}`,
+      content: `You're starting ${module.title} in ${division.name}. This ${module.duration} journey will take you from ${module.level} concepts to practical application.`,
+      dcoin: 5
+    },
+    {
+      id: 2,
+      type: "learn",
+      title: `${module.topics[0]}`,
+      content: `Let's explore the fundamentals of ${module.topics[0]}. This is a critical concept in ${division.name}.`,
+      keyPoints: module.topics.map(t => `Master ${t}`),
+      dcoin: 10
+    },
+    {
+      id: 3,
+      type: "quiz",
+      title: "Quick Assessment",
+      question: `What is the primary focus of ${module.title}?`,
+      options: [
+        { id: "a", text: module.topics[0], correct: true },
+        { id: "b", text: "General Knowledge", correct: false },
+        { id: "c", text: "Unrelated Skills", correct: false },
+        { id: "d", text: "Basic Mathematics", correct: false }
+      ],
+      explanation: `${module.topics[0]} is indeed a core focus of this module!`,
+      dcoin: 15
+    },
+    {
+      id: 4,
+      type: "roleplay",
+      title: "🎭 Practice Scenario",
+      scenario: `Imagine you're working in ${division.name}. A colleague needs help understanding ${module.topics[1]}.`,
+      task: "How would you explain this concept clearly?",
+      hints: ["Use simple language", "Give real examples", "Connect to daily life"],
+      dcoin: 20
+    },
+    {
+      id: 5,
+      type: "complete",
+      title: "Module Progress! 🎉",
+      content: `Great work! You've made progress in ${module.title}. Keep going to unlock more content!`,
+      achievements: module.topics.slice(0, 2),
+      totalDcoin: module.dcoin
+    }
+  ]
+});
+
 export default function RolePlayCapsules() {
   const navigate = useNavigate();
   const { divisionId } = useParams();
@@ -445,8 +584,68 @@ export default function RolePlayCapsules() {
   const [userLevel, setUserLevel] = useState("L1");
   const [completedModules, setCompletedModules] = useState([]);
   const [earnedDcoins, setEarnedDcoins] = useState(0);
+  
+  // Lesson state
+  const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
+  const [lessonMode, setLessonMode] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [showExplanation, setShowExplanation] = useState(false);
+  const [rolePlayResponse, setRolePlayResponse] = useState("");
+  const [lessonProgress, setLessonProgress] = useState(0);
 
   const division = selectedDivision ? DIVISIONS_CAPSULES[selectedDivision] : null;
+  
+  // Get lessons for current module
+  const getLessonsForModule = (module) => {
+    if (LESSON_CONTENT[module?.id]) {
+      return LESSON_CONTENT[module.id];
+    }
+    if (module && division) {
+      return generateGenericLessons(module, division);
+    }
+    return { lessons: [] };
+  };
+  
+  const currentLessons = selectedModule ? getLessonsForModule(selectedModule) : { lessons: [] };
+  const currentLesson = currentLessons.lessons[currentLessonIndex];
+  
+  // Start a lesson
+  const startLesson = (module) => {
+    setSelectedModule(module);
+    setCurrentLessonIndex(0);
+    setLessonMode(true);
+    setSelectedAnswer(null);
+    setShowExplanation(false);
+    setRolePlayResponse("");
+    setLessonProgress(0);
+  };
+  
+  // Handle next lesson
+  const nextLesson = () => {
+    if (currentLesson?.dcoin) {
+      setEarnedDcoins(prev => prev + currentLesson.dcoin);
+    }
+    
+    if (currentLessonIndex < currentLessons.lessons.length - 1) {
+      setCurrentLessonIndex(prev => prev + 1);
+      setSelectedAnswer(null);
+      setShowExplanation(false);
+      setRolePlayResponse("");
+      setLessonProgress(((currentLessonIndex + 1) / currentLessons.lessons.length) * 100);
+    } else {
+      // Module complete
+      setCompletedModules(prev => [...prev, selectedModule.id]);
+      setLessonMode(false);
+      setSelectedModule(null);
+      toast.success(`Module Complete! +${selectedModule.dcoin} D-COIN earned!`);
+    }
+  };
+  
+  // Handle quiz answer
+  const handleQuizAnswer = (option) => {
+    setSelectedAnswer(option.id);
+    setShowExplanation(true);
+  };
 
   // Render Division Selection
   const renderDivisionGrid = () => (
