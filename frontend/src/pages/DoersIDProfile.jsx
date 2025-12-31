@@ -103,14 +103,16 @@ export default function DoersIDProfile({ profileData }) {
   const scrollRef = useRef(null);
   
   // Mock data for demonstration - in production this comes from assessment
-  const [profile, setProfile] = useState(profileData || {
-    // Basic Info
-    name: user?.name || "Doer Profile",
-    phone: user?.phone || "",
-    location: "Bengaluru, Karnataka",
-    doersId: `DOE-${Date.now().toString(36).toUpperCase()}`,
-    createdAt: new Date().toISOString(),
-    stage: "clarity", // unaware, confused, exploring, clarity, future_ready
+  const [profile, setProfile] = useState(() => {
+    const timestamp = Date.now();
+    return profileData || {
+      // Basic Info
+      name: user?.name || "Doer Profile",
+      phone: user?.phone || "",
+      location: "Bengaluru, Karnataka",
+      doersId: `DOE-${timestamp.toString(36).toUpperCase()}`,
+      createdAt: new Date().toISOString(),
+      stage: "clarity", // unaware, confused, exploring, clarity, future_ready
     
     // PASS Code
     passCode: {
