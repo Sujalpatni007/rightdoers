@@ -510,11 +510,12 @@ export default function FounderDashboard() {
             size="icon" 
             className="text-white"
             onClick={() => navigate("/welcome")}
+            data-testid="captain-back-btn"
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div className="text-center">
-            <h1 className="text-white font-bold">FOUNDER'S OFFICE</h1>
+            <h1 className="text-white font-bold">CAPTAIN COMMAND CENTRE</h1>
             <p className="text-white/50 text-xs">WTC Bangalore • 15th Floor</p>
           </div>
           <Badge className="bg-red-500/20 text-red-400 border-0 text-xs">
