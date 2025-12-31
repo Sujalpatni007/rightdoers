@@ -935,23 +935,47 @@ Say HI AI. Get your D.P. (Doers Profiler) at:`;
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 100, opacity: 0 }}
-              className="bg-gradient-to-br from-slate-900 via-purple-900/50 to-slate-900 rounded-3xl w-full max-w-md border border-white/20 overflow-hidden"
+              className="bg-gradient-to-br from-slate-900 via-purple-900/50 to-slate-900 rounded-3xl w-full max-w-md border border-white/20 overflow-hidden relative"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Modal Header */}
-              <div className="p-6 text-center border-b border-white/10">
+              {/* Modal Header - D.P. CAMPAIGN */}
+              <div className="p-6 text-center border-b border-white/10 bg-gradient-to-b from-indigo-900/50 to-transparent">
+                <Badge className="mb-3 bg-red-500/20 text-red-400 border-0 text-[10px]">
+                  FROM FAKE D.P. TO REAL D.P.
+                </Badge>
                 <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
                   <Send className="w-8 h-8 text-white" />
                 </div>
                 <h2 className="text-white text-xl font-bold mb-1">Send Your Profiler</h2>
-                <p className="text-white/60 text-sm">Share your TalentCard with the world!</p>
-                <Badge className="mt-2 bg-amber-500/20 text-amber-400 border-0">
-                  TALENTON.AI REVOLUTION
-                </Badge>
+                <p className="text-purple-300 text-sm font-medium">HI AI-APP.COM</p>
+                <p className="text-white/60 text-xs mt-1">JOIN THE AI REVOLUTION</p>
+              </div>
+
+              {/* Big 5 Action Cards */}
+              <div className="px-4 py-3 space-y-2">
+                <div className="flex items-center gap-3 bg-gradient-to-r from-green-500/20 to-emerald-500/10 rounded-xl p-3 border border-green-500/20">
+                  <div className="w-8 h-8 rounded-lg bg-green-500/30 flex items-center justify-center text-green-400 font-bold text-sm">GET</div>
+                  <div className="flex-1">
+                    <p className="text-white text-sm font-medium">Your TALENT CARD</p>
+                    <p className="text-green-400/80 text-xs">@ talenton.ai</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 bg-gradient-to-r from-blue-500/20 to-indigo-500/10 rounded-xl p-3 border border-blue-500/20">
+                  <div className="w-8 h-8 rounded-lg bg-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-sm">SHARE</div>
+                  <p className="text-white text-sm">with those who did not believe YOU</p>
+                </div>
+                <div className="flex items-center gap-3 bg-gradient-to-r from-purple-500/20 to-pink-500/10 rounded-xl p-3 border border-purple-500/20">
+                  <div className="w-8 h-8 rounded-lg bg-purple-500/30 flex items-center justify-center text-purple-400 font-bold text-sm">KEEP</div>
+                  <p className="text-white text-sm">with you as your PERSONAL G.P.S</p>
+                </div>
+                <div className="flex items-center gap-3 bg-gradient-to-r from-amber-500/20 to-orange-500/10 rounded-xl p-3 border border-amber-500/20">
+                  <div className="w-8 h-8 rounded-lg bg-amber-500/30 flex items-center justify-center text-amber-400 font-bold text-sm">MATCH</div>
+                  <p className="text-white text-sm">to see MULTIPLIER X EFFECT</p>
+                </div>
               </div>
 
               {/* Preview Card */}
-              <div className="px-6 py-4">
+              <div className="px-4 py-3">
                 <div className="bg-gradient-to-br from-indigo-600/30 to-purple-600/30 rounded-2xl p-4 border border-white/10">
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl">
@@ -976,8 +1000,8 @@ Say HI AI. Get your D.P. (Doers Profiler) at:`;
               </div>
 
               {/* Share Options */}
-              <div className="px-6 pb-6">
-                <p className="text-white/50 text-xs uppercase tracking-wider mb-3">Share via</p>
+              <div className="px-4 pb-4">
+                <p className="text-white/50 text-xs uppercase tracking-wider mb-2">Share via</p>
                 <div className="grid grid-cols-3 gap-3 mb-4">
                   <Button
                     onClick={shareToWhatsApp}
