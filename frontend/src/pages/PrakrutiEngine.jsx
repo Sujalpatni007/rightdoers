@@ -176,6 +176,13 @@ const ECONOMY_LAYERS = [
   }
 ];
 
+// GLOCAL GURUKUL - CIRCULAR LEARN-EARN-LIFE MODEL
+const CIRCULAR_MODEL = {
+  learn: { icon: "📚", name: "LEARN", color: "#3B82F6" },
+  earn: { icon: "💰", name: "EARN", color: "#F59E0B" },
+  life: { icon: "🌟", name: "LIFE", color: "#10B981" }
+};
+
 // GLOCAL PROFICORN INITIATIVES
 const GLOCAL_INITIATIVES = [
   {
@@ -414,7 +421,7 @@ export default function PrakrutiEngine() {
           <Coins className="w-3 h-3 mr-1" /> D-COIN ECONOMY
         </Badge>
         <h2 className="text-2xl font-bold text-white mb-2">Circular Economic Engine</h2>
-        <p className="text-white/60 text-sm">Talent Tokenization for GLOCAL Proficorns</p>
+        <p className="text-white/60 text-sm">LEARN → EARN → LIFE • GLOCAL Proficorns</p>
       </div>
 
       {/* User D-COIN Balance */}
@@ -503,7 +510,7 @@ export default function PrakrutiEngine() {
           </Button>
           <div className="text-center">
             <h1 className="text-white font-bold">PRAKRUTI ENGINE</h1>
-            <p className="text-white/50 text-xs">Industry 5.0 • Cognitive Customization</p>
+            <p className="text-white/50 text-xs">GLOCAL GURUKUL • Global Talent NEST</p>
           </div>
           <Badge className="bg-amber-500/20 text-amber-400 border-0">
             <Coins className="w-3 h-3 mr-1" /> {userDcoin}
