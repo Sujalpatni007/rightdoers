@@ -51,6 +51,7 @@ import CapabilityClubsPage from "@/pages/CapabilityClubsPage";
 import GigMarketplacePage from "@/pages/GigMarketplacePage";
 import EcoinWalletPage from "@/pages/EcoinWalletPage";
 import DoersDreamSIIPPage from "@/pages/DoersDreamSIIPPage";
+import AgentAimeeAnalyzer from "@/pages/AgentAimeeAnalyzer";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
