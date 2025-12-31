@@ -7,482 +7,475 @@ import { Card, CardContent } from "@/components/ui/card";
 import { 
   Sparkles, 
   ArrowRight,
-  ArrowLeft,
-  QrCode,
-  Zap,
   Brain,
-  Gamepad2,
-  Briefcase,
   GraduationCap,
   Users,
-  Bot,
-  Target,
-  Rocket,
-  Heart,
-  Globe,
+  Handshake,
   Star,
   Play,
-  ChevronRight,
-  Coins,
-  Building2,
-  User,
-  ShoppingBag
+  Globe,
+  Zap,
+  ChevronDown
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import { LanguageSelector } from "@/components/LanguageSelector";
-import { FloatingAstro } from "@/components/AstroDoer";
+import LanguageSelector from "@/components/LanguageSelector";
+import AstroDoer from "@/components/AstroDoer";
+
+// 12 Divisions for the Flywheel
+const DIVISIONS = [
+  { id: "policy", name: "Policy", icon: "🏛️", color: "#8B5CF6" },
+  { id: "legal", name: "Legal", icon: "⚖️", color: "#6366F1" },
+  { id: "security", name: "Security", icon: "🛡️", color: "#EF4444" },
+  { id: "sport", name: "Sport", icon: "🏆", color: "#F97316" },
+  { id: "food", name: "Food", icon: "🍽️", color: "#22C55E" },
+  { id: "health", name: "Health", icon: "🏥", color: "#EC4899" },
+  { id: "science", name: "Science", icon: "🔬", color: "#06B6D4" },
+  { id: "tech", name: "Tech", icon: "💻", color: "#8B5CF6" },
+  { id: "transport", name: "Transport", icon: "✈️", color: "#0EA5E9" },
+  { id: "art", name: "Art", icon: "🎨", color: "#F472B6" },
+  { id: "education", name: "Education", icon: "📚", color: "#14B8A6" },
+  { id: "finance", name: "Finance", icon: "💰", color: "#EAB308" },
+];
+
+// 4 Entry Points (The 4 P's)
+const ENTRY_POINTS = {
+  en: [
+    {
+      id: "pupil",
+      title: "PUPIL",
+      subtitle: "Students & Learners",
+      description: "Skilling Solutions for Industry 4.0 & 5.0",
+      icon: GraduationCap,
+      color: "from-blue-500 to-indigo-600",
+      path: "/auth?role=doer&type=pupil",
+      features: ["Ability Assessment", "Career Guidance", "Skill Courses"]
+    },
+    {
+      id: "people",
+      title: "PEOPLE",
+      subtitle: "Consumers & Job Seekers",
+      description: "Find work that feels like PLAY",
+      icon: Users,
+      color: "from-green-500 to-emerald-600",
+      path: "/auth?role=doer&type=people",
+      features: ["Agent AIMEE Analysis", "Jobs4Me Matching", "D-COIN Rewards"]
+    },
+    {
+      id: "partners",
+      title: "PARTNERS",
+      subtitle: "B2G • B2B • B2C • B2D",
+      description: "Build the future workforce together",
+      icon: Handshake,
+      color: "from-purple-500 to-violet-600",
+      path: "/auth?role=employer&type=partner",
+      features: ["Talent Pipeline", "Corporate Training", "Government Programs"]
+    },
+    {
+      id: "performers",
+      title: "PERFORMERS",
+      subtitle: "Ready to Work",
+      description: "Showcase your talents to the world",
+      icon: Star,
+      color: "from-amber-500 to-orange-600",
+      path: "/auth?role=doer&type=performer",
+      features: ["DoersID Card", "Gig Marketplace", "Career Growth"]
+    }
+  ],
+  hi: [
+    {
+      id: "pupil",
+      title: "विद्यार्थी",
+      subtitle: "छात्र और सीखने वाले",
+      description: "इंडस्ट्री 4.0 और 5.0 के लिए स्किलिंग",
+      icon: GraduationCap,
+      color: "from-blue-500 to-indigo-600",
+      path: "/auth?role=doer&type=pupil",
+      features: ["योग्यता मूल्यांकन", "करियर मार्गदर्शन", "कौशल पाठ्यक्रम"]
+    },
+    {
+      id: "people",
+      title: "लोग",
+      subtitle: "उपभोक्ता और नौकरी चाहने वाले",
+      description: "ऐसा काम खोजें जो खेल जैसा लगे",
+      icon: Users,
+      color: "from-green-500 to-emerald-600",
+      path: "/auth?role=doer&type=people",
+      features: ["Agent AIMEE विश्लेषण", "Jobs4Me मैचिंग", "D-COIN पुरस्कार"]
+    },
+    {
+      id: "partners",
+      title: "साझेदार",
+      subtitle: "B2G • B2B • B2C • B2D",
+      description: "भविष्य की कार्यबल साथ मिलकर बनाएं",
+      icon: Handshake,
+      color: "from-purple-500 to-violet-600",
+      path: "/auth?role=employer&type=partner",
+      features: ["टैलेंट पाइपलाइन", "कॉर्पोरेट ट्रेनिंग", "सरकारी कार्यक्रम"]
+    },
+    {
+      id: "performers",
+      title: "प्रदर्शक",
+      subtitle: "काम के लिए तैयार",
+      description: "अपनी प्रतिभा दुनिया को दिखाएं",
+      icon: Star,
+      color: "from-amber-500 to-orange-600",
+      path: "/auth?role=doer&type=performer",
+      features: ["DoersID कार्ड", "गिग मार्केटप्लेस", "करियर विकास"]
+    }
+  ]
+};
+
+// Hook question translations
+const HOOK_CONTENT = {
+  en: {
+    question1: "Will AI make my life better?",
+    question2: "Will AI take away my job?",
+    question3: "Or BOTH?",
+    cta: "ASK AGENT AIMEE TO ANALYZE YOU",
+    whoAreYou: "WHO ARE YOU?",
+    whereEnter: "Where do you want to ENTER?",
+    enterDoersWorld: "ENTER THE DOERS WORLD",
+    flywheel: "12 DIVISIONS",
+    wow: "WOW - Way of Work",
+    tagline: "Dream → Do → Done",
+    poweredBy: "Ability Assessments + Skilling Solutions = World's Workforce Creators"
+  },
+  hi: {
+    question1: "क्या AI मेरी जिंदगी बेहतर बनाएगा?",
+    question2: "क्या AI मेरी नौकरी छीन लेगा?",
+    question3: "या दोनों?",
+    cta: "AGENT AIMEE से विश्लेषण करवाएं",
+    whoAreYou: "आप कौन हैं?",
+    whereEnter: "आप कहाँ प्रवेश करना चाहते हैं?",
+    enterDoersWorld: "DOERS WORLD में प्रवेश करें",
+    flywheel: "12 विभाग",
+    wow: "WOW - काम का तरीका",
+    tagline: "सपना → करो → पूरा",
+    poweredBy: "योग्यता मूल्यांकन + स्किलिंग समाधान = विश्व की कार्यबल निर्माता"
+  }
+};
 
 export default function LandingPage() {
   const navigate = useNavigate();
-  const { t, language } = useLanguage();
-  const [activePersona, setActivePersona] = useState(0);
+  const { language } = useLanguage();
+  const [selectedEntry, setSelectedEntry] = useState(null);
   const [wheelRotation, setWheelRotation] = useState(0);
   const [showAstro, setShowAstro] = useState(false);
 
-  // Show Astro mascot after initial load
+  const content = HOOK_CONTENT[language] || HOOK_CONTENT.en;
+  const entryPoints = ENTRY_POINTS[language] || ENTRY_POINTS.en;
+
+  // Rotate wheel continuously
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setWheelRotation(prev => prev + 0.5);
+    }, 50);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Show Astro after delay
   useEffect(() => {
     const timer = setTimeout(() => setShowAstro(true), 2000);
     return () => clearTimeout(timer);
   }, []);
 
-  // 5 Wheels Animation (Olympic Rings style)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setWheelRotation(prev => (prev + 1) % 360);
-    }, 50);
-    return () => clearInterval(interval);
-  }, []);
-
-  // 3 Persona Swipe Cards - Candidate, Consumer, Corporate
-  const personas = [
-    {
-      id: "candidate",
-      title: "I'm a Doer",
-      subtitle: "Candidate",
-      description: "Find a Job That Feels Like Play",
-      icon: "🎓",
-      color: "from-blue-500 to-indigo-600",
-      features: ["Agent AIMEE Analysis", "DoersID", "Learn-Earn-Live"],
-      path: "/auth?role=doer",
-      dcoin: "+100 D-COIN"
-    },
-    {
-      id: "consumer",
-      title: "I Need a Doer",
-      subtitle: "Consumer",
-      description: "Rent a Doer for Any Task",
-      icon: "🛒",
-      color: "from-green-500 to-emerald-600",
-      features: ["Book Services", "Trusted Profiles", "Secure Payments"],
-      path: "/auth?role=consumer",
-      dcoin: "+50 D-COIN"
-    },
-    {
-      id: "corporate",
-      title: "We Hire Doers",
-      subtitle: "Corporate",
-      description: "Build Your Talent Pipeline",
-      icon: "🏢",
-      color: "from-amber-500 to-orange-600",
-      features: ["L1-L5 Matching", "PASS Code System", "Bulk Hiring"],
-      path: "/auth?role=employer",
-      dcoin: "Custom Plans"
-    }
-  ];
-
-  // Super App Icons - 8 Icon Grid
-  const appIcons = [
-    { id: "aimee", icon: "🤖", label: "Agent AIMEE", sublabel: "AI Analyzer", path: "/aimee-analyzer", badge: "+100" },
-    { id: "doersid", icon: "🆔", label: "DoersID", sublabel: "Who Are You?", path: "/auth?role=doer", badge: null },
-    { id: "roleplay", icon: "🎮", label: "Role Play", sublabel: "Simulation", path: "/clubs", badge: "D-COIN" },
-    { id: "jobs4me", icon: "💼", label: "Jobs4Me", sublabel: "L1-L5", path: "/gigs", badge: "₹" },
-    { id: "worldwheel", icon: "🌍", label: "World Wheel", sublabel: "1000+ Roles", path: "/world-wheel", badge: null },
-    { id: "dcoin", icon: "💎", label: "D-COIN", sublabel: "Deliver Value", path: "/dcoin", badge: null },
-    { id: "clubs", icon: "🎪", label: "5 Clubs", sublabel: "5C Framework", path: "/clubs", badge: "5C" },
-    { id: "siip", icon: "🏠", label: "Dream SIIP", sublabel: "Family Plan", path: "/dream-siip", badge: "₹3K" },
-  ];
-
-  const nextPersona = () => setActivePersona((prev) => (prev + 1) % personas.length);
-  const prevPersona = () => setActivePersona((prev) => (prev - 1 + personas.length) % personas.length);
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
-      {/* Floating Astro Mascot */}
-      {showAstro && <FloatingAstro position="bottom-right" lang={language} />}
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 overflow-hidden relative">
+      {/* Animated Stars Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(50)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-white rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              opacity: [0.2, 1, 0.2],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: 2 + Math.random() * 2,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+            }}
+          />
+        ))}
+      </div>
 
-      {/* Header - HI AI-APP.COM Brand */}
+      {/* Floating Astro Doer */}
+      {showAstro && (
+        <div className="fixed bottom-24 right-4 z-50">
+          <AstroDoer message="greeting" size="sm" showBubble={true} autoHide={true} />
+        </div>
+      )}
+
+      {/* Header */}
       <motion.header 
-        className="p-4 flex items-center justify-between"
+        className="relative z-10 p-4 flex items-center justify-between"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
       >
         <div className="flex items-center gap-2">
           <motion.div 
-            className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-lg"
+            className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-lg shadow-orange-500/30"
             whileHover={{ scale: 1.1, rotate: 5 }}
-            whileTap={{ scale: 0.95 }}
           >
             <span className="text-white font-bold text-lg">HI</span>
           </motion.div>
           <div>
-            <span className="font-display font-bold text-orange-400 text-lg">HI AI</span>
-            <span className="text-white font-display">-APP</span>
-            <span className="text-blue-400 font-display">.COM</span>
+            <span className="font-bold text-orange-400">HI AI</span>
+            <span className="text-white">-APP</span>
+            <span className="text-blue-400">.COM</span>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <LanguageSelector />
-          <Badge className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-300 border-purple-500/30 px-3 hidden sm:flex">
-            <Rocket className="w-3 h-3 mr-1" /> ESG Moonshot
-          </Badge>
-        </div>
+        <LanguageSelector />
       </motion.header>
 
-      {/* Domain Story Banner */}
-      <motion.div 
-        className="px-4 py-2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-      >
-        <div className="flex justify-center gap-2 text-xs">
-          {[
-            { label: ".COM", color: "bg-blue-500/20 text-blue-300" },
-            { label: "APP", color: "bg-green-500/20 text-green-300" },
-            { label: "AI", color: "bg-purple-500/20 text-purple-300" },
-            { label: "HI", color: "bg-orange-500/20 text-orange-300 font-bold" },
-          ].map((item, idx) => (
-            <motion.span 
-              key={item.label}
-              className={`px-2 py-1 ${item.color} rounded`}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 + idx * 0.1 }}
-            >
-              {item.label}
-            </motion.span>
-          ))}
-        </div>
-        <p className="text-center text-white/40 text-[10px] mt-1">
-          4 Generations of Tech • Millennial → Gen Z → Alpha → Beta
-        </p>
-      </motion.div>
-
-      {/* The Billion Dollar Question */}
-      <motion.div 
-        className="px-4 py-4"
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.5, type: "spring" }}
-      >
-        <div className="bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20 rounded-2xl p-4 text-center">
-          <motion.div
-            animate={{ scale: [1, 1.02, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <Badge className="mb-2 bg-orange-500/20 text-orange-300 border-0 px-3">
-              <Brain className="w-3 h-3 mr-1" /> {t('billionQuestion')}
-            </Badge>
-          </motion.div>
-          
-          <h2 className="font-display text-lg font-bold text-white mb-2">
-            {t('willAI')} <span className="text-red-400">{t('replaceMe')}</span>?
-            <span className="text-white/40 mx-2">{t('or')}</span>
-            <span className="text-green-400">{t('empowerMe')}</span>?
-          </h2>
-          
-          <p className="text-orange-300 text-sm">
-            {t('letAimee')}
-          </p>
-        </div>
-      </motion.div>
-
-      {/* Persona Swipe Cards - IDFC First Style */}
-      <div className="px-4 py-4">
-        <p className="text-white/60 text-xs text-center mb-3 uppercase tracking-widest">{t('whoAreYou')}</p>
+      {/* Main Content */}
+      <main className="relative z-10 px-4 pb-8">
         
-        <div className="relative">
-          {/* Card with Animation */}
-          <AnimatePresence mode="wait">
+        {/* THE HOOK QUESTION */}
+        <motion.section 
+          className="text-center py-6"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <div className="max-w-lg mx-auto">
+            {/* Cosmic glow effect */}
+            <div className="absolute left-1/2 top-32 -translate-x-1/2 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl" />
+            
             <motion.div
-              key={activePersona}
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="relative"
+              animate={{ y: [0, -5, 0] }}
+              transition={{ duration: 3, repeat: Infinity }}
             >
-              <Card className={`bg-gradient-to-br ${personas[activePersona].color} border-0 text-white overflow-hidden`}>
-                <CardContent className="p-5">
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <motion.span 
-                        className="text-5xl mb-2 block"
-                        animate={{ y: [0, -5, 0] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                      >
-                        {personas[activePersona].icon}
-                      </motion.span>
-                      <h3 className="font-display font-bold text-2xl">{personas[activePersona].title}</h3>
-                      <p className="text-white/80">{personas[activePersona].subtitle}</p>
-                    </div>
-                    <Badge className="bg-white/20 text-white border-0 px-3">
-                      <Coins className="w-3 h-3 mr-1" /> {personas[activePersona].dcoin}
-                    </Badge>
-                  </div>
-                  
-                  <p className="text-white/90 font-medium mb-4">{personas[activePersona].description}</p>
-                  
-                  <div className="flex gap-2 mb-4 flex-wrap">
-                    {personas[activePersona].features.map((feature, idx) => (
-                      <motion.div
-                        key={idx}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: idx * 0.1 }}
-                      >
-                        <Badge variant="outline" className="border-white/30 text-white text-[10px]">
-                          {feature}
-                        </Badge>
-                      </motion.div>
-                    ))}
-                  </div>
-                  
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                    <Button 
-                      className="w-full bg-white text-slate-900 hover:bg-white/90 font-semibold"
-                      onClick={() => navigate(personas[activePersona].path)}
-                      data-testid={`persona-btn-${personas[activePersona].id}`}
-                    >
-                      Start as {personas[activePersona].subtitle}
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </motion.div>
-                </CardContent>
-              </Card>
+              <Badge className="mb-4 bg-purple-500/20 text-purple-300 border-purple-500/30 px-4 py-1">
+                <Brain className="w-4 h-4 mr-2" /> THE BILLION DOLLAR QUESTION
+              </Badge>
             </motion.div>
-          </AnimatePresence>
 
-          {/* Swipe Controls */}
-          <div className="flex justify-center items-center gap-4 mt-4">
-            <motion.button 
-              onClick={prevPersona}
-              className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              data-testid="prev-persona-btn"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </motion.button>
-            
-            <div className="flex gap-2">
-              {personas.map((_, idx) => (
-                <motion.button
-                  key={idx}
-                  onClick={() => setActivePersona(idx)}
-                  className={`h-2.5 rounded-full transition-all ${
-                    idx === activePersona ? "bg-orange-500 w-6" : "bg-white/30 w-2.5"
-                  }`}
-                  whileHover={{ scale: 1.2 }}
-                  data-testid={`persona-dot-${idx}`}
-                />
-              ))}
-            </div>
-            
-            <motion.button 
-              onClick={nextPersona}
-              className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              data-testid="next-persona-btn"
-            >
-              <ArrowRight className="w-5 h-5" />
-            </motion.button>
-          </div>
-        </div>
-      </div>
-
-      {/* 5 Wheels Animation - Olympic Rings Style */}
-      <motion.div 
-        className="px-4 py-4"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
-      >
-        <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-          <p className="text-center text-white/50 text-xs uppercase tracking-widest mb-3">The 5 Wheels Engine</p>
-          
-          <div className="flex justify-center items-center gap-2 mb-3">
-            {[
-              { color: "text-blue-400", label: t('learn') },
-              { color: "text-green-400", label: t('earn') },
-              { color: "text-amber-400", label: t('live') },
-              { color: "text-purple-400", label: "Work" },
-              { color: "text-red-400", label: "World" },
-            ].map((wheel, idx) => (
-              <motion.div 
-                key={idx} 
-                className="relative"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 10 + idx * 2, repeat: Infinity, ease: "linear" }}
+            <h1 className="font-display text-2xl md:text-3xl font-bold text-white mb-4 leading-tight">
+              <motion.span 
+                className="text-green-400 block"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
               >
-                <div className={`w-10 h-10 rounded-full border-2 ${wheel.color.replace('text-', 'border-')} flex items-center justify-center`}>
-                  <motion.div 
-                    className={`w-2 h-2 rounded-full ${wheel.color.replace('text-', 'bg-')}`}
-                    animate={{ scale: [1, 1.5, 1] }}
-                    transition={{ duration: 1, repeat: Infinity, delay: idx * 0.2 }}
-                  />
-                </div>
-              </motion.div>
-            ))}
-          </div>
-          
-          <div className="flex justify-center gap-3 text-[10px]">
-            <span className="text-blue-400">{t('learn')}</span>
-            <span className="text-white/30">•</span>
-            <span className="text-green-400">{t('earn')}</span>
-            <span className="text-white/30">•</span>
-            <span className="text-amber-400">{t('live')}</span>
-            <span className="text-white/30">•</span>
-            <span className="text-purple-400">Work Wheel</span>
-            <span className="text-white/30">•</span>
-            <span className="text-red-400">World Wheel</span>
-          </div>
-        </div>
-      </motion.div>
+                {content.question1}
+              </motion.span>
+              <motion.span 
+                className="text-red-400 block"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5 }}
+              >
+                {content.question2}
+              </motion.span>
+              <motion.span 
+                className="text-amber-400 block text-3xl md:text-4xl mt-2"
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.7, type: "spring" }}
+              >
+                {content.question3}
+              </motion.span>
+            </h1>
 
-      {/* 8 Super App Icons Grid */}
-      <div className="px-4 py-4">
-        <div className="grid grid-cols-4 gap-3">
-          {appIcons.map((item, idx) => (
-            <motion.button
-              key={item.id}
-              onClick={() => navigate(item.path)}
-              className="relative flex flex-col items-center p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all"
-              data-testid={`icon-${item.id}`}
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9 + idx * 0.05 }}
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
+              transition={{ delay: 0.9 }}
             >
-              {item.badge && (
-                <motion.span 
-                  className="absolute -top-1 -right-1 bg-orange-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full"
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                >
-                  {item.badge}
-                </motion.span>
-              )}
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center mb-1.5 shadow-lg">
-                <span className="text-lg">{item.icon}</span>
-              </div>
-              <span className="text-white text-[10px] font-semibold text-center leading-tight">{item.label}</span>
-              <span className="text-white/40 text-[8px] text-center">{item.sublabel}</span>
-            </motion.button>
-          ))}
-        </div>
-      </div>
-
-      {/* D-COIN Flywheel */}
-      <motion.div 
-        className="px-4 py-3"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.1 }}
-      >
-        <div className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-xl p-4">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <motion.span 
-                className="text-2xl"
-                animate={{ rotate: [0, 10, -10, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
+              <Button 
+                size="lg"
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold px-6 py-6 text-base shadow-lg shadow-purple-500/30"
+                onClick={() => navigate("/aimee-analyzer")}
+                data-testid="ask-aimee-btn"
               >
-                💎
-              </motion.span>
-              <div>
-                <p className="text-white font-semibold text-sm">{t('dCoin')}</p>
-                <p className="text-white/50 text-[10px]">Doers Delivery Coin</p>
-              </div>
-            </div>
-            <Badge className="bg-white/10 text-white/70 border-0 text-[10px]">Energy Exchange</Badge>
+                <Sparkles className="w-5 h-5 mr-2" />
+                {content.cta}
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </motion.div>
           </div>
-          <p className="text-amber-300 text-xs text-center italic">
-            &ldquo;{t('energyHarmony')}&rdquo;
-          </p>
-          <div className="grid grid-cols-3 gap-2 mt-3">
-            {[t('learn'), t('earn'), t('live')].map((item, idx) => (
-              <motion.div 
-                key={item} 
-                className="text-center py-2 bg-white/5 rounded-lg"
-                whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
+        </motion.section>
+
+        {/* WHO ARE YOU? Section */}
+        <motion.section 
+          className="py-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.1 }}
+        >
+          <div className="text-center mb-6">
+            <h2 className="text-white/60 text-sm uppercase tracking-[0.3em] mb-2">{content.whereEnter}</h2>
+            <h3 className="font-display text-3xl font-bold text-white">{content.whoAreYou}</h3>
+          </div>
+
+          {/* 4 Entry Points Grid */}
+          <div className="grid grid-cols-2 gap-3 max-w-lg mx-auto">
+            {entryPoints.map((entry, idx) => (
+              <motion.div
+                key={entry.id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.2 + idx * 0.1 }}
               >
-                <p className="text-white text-xs font-semibold">{item}</p>
+                <Card 
+                  className={`bg-gradient-to-br ${entry.color} border-0 cursor-pointer overflow-hidden group hover:shadow-xl hover:shadow-${entry.color.split('-')[1]}-500/30 transition-all duration-300`}
+                  onClick={() => {
+                    setSelectedEntry(entry.id);
+                    setTimeout(() => navigate(entry.path), 300);
+                  }}
+                  data-testid={`entry-${entry.id}`}
+                >
+                  <CardContent className="p-4">
+                    <motion.div
+                      className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"
+                      whileHover={{ rotate: 5 }}
+                    >
+                      <entry.icon className="w-6 h-6 text-white" />
+                    </motion.div>
+                    <h4 className="font-display font-bold text-white text-lg mb-1">{entry.title}</h4>
+                    <p className="text-white/80 text-xs mb-2">{entry.subtitle}</p>
+                    <p className="text-white/60 text-[10px] leading-tight">{entry.description}</p>
+                    
+                    {/* Features on hover */}
+                    <div className="mt-3 flex flex-wrap gap-1">
+                      {entry.features.slice(0, 2).map((f, i) => (
+                        <Badge key={i} className="bg-white/20 text-white/90 border-0 text-[8px]">
+                          {f}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
               </motion.div>
             ))}
           </div>
-        </div>
-      </motion.div>
+        </motion.section>
 
-      {/* QR Code GTM */}
-      <div className="px-4 py-3">
-        <div className="bg-gradient-to-r from-indigo-600/80 to-purple-600/80 rounded-xl p-4">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center flex-shrink-0">
-              <QrCode className="w-9 h-9 text-indigo-600" />
-            </div>
-            <div className="text-white flex-1">
-              <p className="font-bold text-sm">Scan & Discover WHO YOU ARE</p>
-              <p className="text-white/60 text-xs">HI AI-APP.COM • Every shop • Every pincode</p>
-              <div className="flex items-center gap-1 mt-1">
-                <span className="text-xl">💎</span>
-                <span className="text-amber-300 text-xs font-medium">+100 D-COIN on first scan</span>
-              </div>
+        {/* DOERS WORLD FLYWHEEL */}
+        <motion.section 
+          className="py-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
+        >
+          <div className="text-center mb-4">
+            <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 mb-2">
+              <Zap className="w-3 h-3 mr-1" /> {content.flywheel}
+            </Badge>
+            <h3 className="font-display text-xl font-bold text-white">{content.enterDoersWorld}</h3>
+          </div>
+
+          {/* Animated Flywheel */}
+          <div className="relative w-64 h-64 mx-auto">
+            {/* Outer glow */}
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-orange-500/20 rounded-full blur-2xl" />
+            
+            {/* Rotating wheel with divisions */}
+            <motion.div 
+              className="absolute inset-0"
+              style={{ transform: `rotate(${wheelRotation}deg)` }}
+            >
+              {DIVISIONS.map((div, idx) => {
+                const angle = (idx * 30) * (Math.PI / 180);
+                const radius = 100;
+                const x = Math.cos(angle) * radius;
+                const y = Math.sin(angle) * radius;
+                
+                return (
+                  <motion.div
+                    key={div.id}
+                    className="absolute w-10 h-10 flex items-center justify-center"
+                    style={{
+                      left: `calc(50% + ${x}px - 20px)`,
+                      top: `calc(50% + ${y}px - 20px)`,
+                    }}
+                    whileHover={{ scale: 1.3 }}
+                  >
+                    <div 
+                      className="w-10 h-10 rounded-full flex items-center justify-center text-lg shadow-lg"
+                      style={{ backgroundColor: div.color + '40', boxShadow: `0 0 20px ${div.color}40` }}
+                    >
+                      {div.icon}
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+
+            {/* Center hub */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <motion.div 
+                className="w-28 h-28 rounded-full bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-white/20 flex flex-col items-center justify-center shadow-2xl"
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <Globe className="w-8 h-8 text-white/80 mb-1" />
+                <span className="text-white font-bold text-xs">DOERS</span>
+                <span className="text-white/60 text-[10px]">WORLD</span>
+              </motion.div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Start CTA */}
-      <motion.div 
-        className="px-4 py-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.3 }}
-      >
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <Button 
-            className="w-full h-14 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-base font-semibold flex items-center justify-center gap-2 rounded-xl shadow-lg"
-            onClick={() => navigate("/auth?role=doer")}
-            data-testid="start-btn"
+          {/* WOW - Way of Work */}
+          <motion.div 
+            className="text-center mt-4"
+            animate={{ opacity: [0.7, 1, 0.7] }}
+            transition={{ duration: 2, repeat: Infinity }}
           >
-            <Play className="w-5 h-5" />
-            {t('startJourney')}
-            <ArrowRight className="w-5 h-5" />
-          </Button>
-        </motion.div>
-        <p className="text-center text-white/40 text-xs mt-3">
-          {t('dreamDoDone')} • {t('rightPeople')}
-        </p>
-      </motion.div>
+            <p className="text-amber-400 font-display font-bold text-lg">{content.wow}</p>
+            <p className="text-white/50 text-xs">{content.tagline}</p>
+          </motion.div>
+        </motion.section>
 
-      {/* Footer */}
-      <footer className="px-4 py-6 text-center">
-        <p className="text-white/40 text-xs">
-          © 2025 HI AI-APP.COM • Right Doers World LLP
-        </p>
-        <p className="text-white/30 text-[10px] mt-1">
-          ESG • Exponential Soonicorns Group • Singularity Moonshot
-        </p>
-        <p className="text-white/20 text-[10px] mt-1">
-          Human • AI • Robo — Collaborative System
-        </p>
-      </footer>
+        {/* Bottom CTA */}
+        <motion.section 
+          className="py-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.8 }}
+        >
+          <div className="bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20 rounded-2xl p-4 text-center max-w-lg mx-auto">
+            <p className="text-white/60 text-xs uppercase tracking-wider mb-2">Project Doers</p>
+            <p className="text-white text-sm font-medium">{content.poweredBy}</p>
+            <div className="flex justify-center gap-2 mt-3 text-[10px]">
+              <Badge className="bg-blue-500/20 text-blue-300 border-0">Industry 4.0</Badge>
+              <Badge className="bg-purple-500/20 text-purple-300 border-0">Industry 5.0</Badge>
+              <Badge className="bg-green-500/20 text-green-300 border-0">1 Billion+</Badge>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Inspiration Footer */}
+        <motion.footer 
+          className="py-4 text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2 }}
+        >
+          <p className="text-white/30 text-[10px]">
+            Inspired by: Amazon Day One • Elon First Principles • Steve Jobs Vision
+          </p>
+          <p className="text-white/20 text-[10px] mt-1">
+            HI AI-APP.COM | Right Doers World LLP | ESG Moonshot
+          </p>
+        </motion.footer>
+      </main>
+
+      {/* Scroll indicator */}
+      <motion.div 
+        className="fixed bottom-4 left-1/2 -translate-x-1/2 text-white/30"
+        animate={{ y: [0, 5, 0] }}
+        transition={{ duration: 1.5, repeat: Infinity }}
+      >
+        <ChevronDown className="w-6 h-6" />
+      </motion.div>
     </div>
   );
 }
