@@ -435,10 +435,10 @@ const DIVISIONS_CAPSULES = {
   }
 };
 
-// Duolingo-style lesson content for each module
-const LESSON_CONTENT = {
+// Duolingo-style DAILY CAREER CAPSULE content for each module
+const DAILY_CAPSULE_CONTENT = {
   legal_101: {
-    lessons: [
+    capsules: [
       {
         id: 1,
         type: "intro",
@@ -513,8 +513,8 @@ const LESSON_CONTENT = {
       {
         id: 7,
         type: "complete",
-        title: "Module Complete! 🎉",
-        content: "Congratulations! You've completed Legal Foundations Module 1. You now understand the basics of Indian Legal System.",
+        title: "Daily Capsule Complete! 🎉",
+        content: "Congratulations! You've completed your Daily Career Capsule for Legal Foundations. You now understand the basics of Indian Legal System.",
         achievements: ["Constitution Basics", "Court Hierarchy", "First Role Play"],
         totalDcoin: 50
       }
@@ -522,9 +522,104 @@ const LESSON_CONTENT = {
   }
 };
 
-// Generate generic lessons for modules without specific content
-const generateGenericLessons = (module, division) => ({
-  lessons: [
+// EXPERT GRID STRUCTURE - Industry Influencers for Trust & Validation
+const DIVISION_EXPERTS = {
+  legal: {
+    coordinator: ["Raghavendra", "Parimala Rangaraju"],
+    mentors: ["Venkat Raghavan", "Naveen Nagarjuna", "Darpan Manjunath", "Prof. Rajashree"],
+    influencers: ["Vivek Reddy (Sr. Advocate High Court)", "Shailesh Madiyal (Sr. Advocate)", "Sanjay Nuli"],
+    organizations: ["Advocate Association of Bengaluru", "Justiciable Law Chambers"],
+    aiAgent: "AI Lawyer"
+  },
+  policy: {
+    coordinator: ["Shivakumar Gowda", "Chandrakala MG"],
+    mentors: ["Nikhil Gowda", "Rakshith Shivaram (INC)", "Irasis Acharya (BJP)", "Huda Zariwala (AAP)"],
+    influencers: ["B C Getha", "Dr. Gouri Trivedi", "Tejaswini Shriramesh", "Nayana Motamma"],
+    organizations: ["Best Foundation", "Test Foundation", "Rotary International"],
+    aiAgent: "AI Policy Advisor"
+  },
+  technology: {
+    coordinator: ["Gautham"],
+    mentors: ["Prof. Nanjesh AEA Member", "Pavan Setty", "HOD. Gautham"],
+    influencers: ["Jaishankar Brigade", "Ravishankar Embedded Systems"],
+    organizations: ["Global Village Tech Park", "Bagmane Tech Park"],
+    aiAgent: "AI Tech Mentor"
+  },
+  health: {
+    coordinator: ["Dr. Preetham"],
+    mentors: ["Dr. Vidyasagar", "Dr. Abhishek", "Dr. Padmini", "Dr. Smitha"],
+    influencers: ["Dr. Shekhar Subbiah", "Dr. Vivek Shetty"],
+    organizations: ["Kangaroo Care Hospitals", "Narayana Health"],
+    aiAgent: "AI Doctor"
+  },
+  finance: {
+    coordinator: ["Srinivas Babu"],
+    mentors: ["Bhadrinath Simha Sir", "NBFC Avinash", "Investment Banking Mutthuraj"],
+    influencers: ["KTG Group Kimmane Jairam"],
+    organizations: ["BSKN & Co", "GD Associates", "KMC Bank"],
+    aiAgent: "AI Banker"
+  },
+  education: {
+    coordinator: ["Neha Vivek"],
+    mentors: ["Shravya Abhishek", "Dr. Rakesh", "Dr. Yatindhra"],
+    influencers: ["Srikanthiah", "Naveen", "Vivekanand Siddhaih", "Ashok Gowda"],
+    organizations: ["Trio International", "NPS Jaynagar", "AIT Campus"],
+    aiAgent: "AI Tutor"
+  },
+  science: {
+    coordinator: ["Abhishek"],
+    mentors: ["Dr. Sheethal", "Prof. Mahendra", "Prof. Antony (Botanist)", "Prof. Shilali Gautham"],
+    influencers: ["Dileep Suvarna (Chairman, Micro Labs)"],
+    organizations: ["Nehru Planetarium", "PARSEC Laboratory"],
+    aiAgent: "AI Researcher"
+  },
+  security: {
+    coordinator: ["Srinivas P C", "Shivakumar"],
+    mentors: ["Ex.Army Abijeeth", "IPS Mithun Gowda", "DCP Economic Offence Sharath", "ACP Bharath Reddy"],
+    influencers: ["Commissioner Bhaskar Rao", "Brigadier Ashwin"],
+    organizations: ["Secure Drills", "Detective Agency and Protection Services"],
+    aiAgent: "AI Security Guard"
+  },
+  sport: {
+    coordinator: ["Dileep Kumar"],
+    mentors: ["Sport Therapist Mahati Srinivasan"],
+    influencers: ["Gopi Thonakal (Olympian & Asian Champion)"],
+    organizations: ["Wellness Sports Inc"],
+    aiAgent: "AI Fitness Coach"
+  },
+  food: {
+    coordinator: ["Prasad Anerao", "Shruthi"],
+    mentors: ["Dr. Shyam", "Preetham Shetty"],
+    influencers: ["CCD Dr. Pradeep Kenjige"],
+    organizations: ["The Coast", "Kings Club"],
+    aiAgent: "AI Nutritionist"
+  },
+  art: {
+    coordinator: ["Shreyas", "Suma"],
+    mentors: ["Painter Vinuthan", "Actor Anand"],
+    influencers: ["VC Borlingaiah"],
+    organizations: ["KalaGrama"],
+    aiAgent: "AI Creative Director"
+  },
+  hospitality: {
+    coordinator: ["Avinash"],
+    mentors: ["Racer Vikram"],
+    influencers: ["Rakesh Reddy"],
+    organizations: ["Custom Endless"],
+    aiAgent: "AI Travel Planner"
+  },
+  transport: {
+    coordinator: ["Avinash"],
+    mentors: ["Racer Vikram"],
+    influencers: ["Rakesh Reddy"],
+    organizations: ["Custom Endless"],
+    aiAgent: "AI Travel Planner"
+  }
+};
+
+// Generate generic capsules for modules without specific content
+const generateGenericCapsules = (module, division) => ({
+  capsules: [
     {
       id: 1,
       type: "intro",
@@ -566,7 +661,7 @@ const generateGenericLessons = (module, division) => ({
     {
       id: 5,
       type: "complete",
-      title: "Module Progress! 🎉",
+      title: "Daily Capsule Progress! 🎉",
       content: `Great work! You've made progress in ${module.title}. Keep going to unlock more content!`,
       achievements: module.topics.slice(0, 2),
       totalDcoin: module.dcoin
