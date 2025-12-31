@@ -1,5 +1,5 @@
 // Multi-lingual translations for HI AI-APP.COM
-// Languages: English, Hindi, Kannada, Tamil, Telugu
+// Languages: English, Hindi, Kannada, Tamil, Telugu, Arabic (UAE)
 
 export const LANGUAGES = [
   { code: 'en', name: 'English', native: 'English', flag: '🇬🇧' },
@@ -7,6 +7,7 @@ export const LANGUAGES = [
   { code: 'kn', name: 'Kannada', native: 'ಕನ್ನಡ', flag: '🇮🇳' },
   { code: 'ta', name: 'Tamil', native: 'தமிழ்', flag: '🇮🇳' },
   { code: 'te', name: 'Telugu', native: 'తెలుగు', flag: '🇮🇳' },
+  { code: 'ar', name: 'Arabic', native: 'العربية', flag: '🇦🇪', rtl: true },
 ];
 
 // Pincode-based language detection
