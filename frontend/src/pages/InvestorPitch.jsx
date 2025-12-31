@@ -12,6 +12,45 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+// GLOBAL CURRENCIES - Payment Gateway Style
+const CURRENCIES = {
+  USD: { symbol: "$", name: "US Dollar", flag: "🇺🇸", rate: 1 },
+  AED: { symbol: "د.إ", name: "UAE Dirham", flag: "🇦🇪", rate: 3.67 },
+  INR: { symbol: "₹", name: "Indian Rupee", flag: "🇮🇳", rate: 83.5, upiEnabled: true },
+  EUR: { symbol: "€", name: "Euro", flag: "🇪🇺", rate: 0.92 },
+  GBP: { symbol: "£", name: "British Pound", flag: "🇬🇧", rate: 0.79 },
+  SGD: { symbol: "S$", name: "Singapore Dollar", flag: "🇸🇬", rate: 1.34 },
+  SAR: { symbol: "﷼", name: "Saudi Riyal", flag: "🇸🇦", rate: 3.75 },
+  QAR: { symbol: "﷼", name: "Qatari Riyal", flag: "🇶🇦", rate: 3.64 },
+  KWD: { symbol: "د.ك", name: "Kuwaiti Dinar", flag: "🇰🇼", rate: 0.31 },
+  AUD: { symbol: "A$", name: "Australian Dollar", flag: "🇦🇺", rate: 1.53 },
+  CAD: { symbol: "C$", name: "Canadian Dollar", flag: "🇨🇦", rate: 1.36 }
+};
+
+// UPI QR CODE DATA (Persona-wise)
+const UPI_QR_DATA = {
+  starter: {
+    upiId: "doers.starter@paytm",
+    merchantName: "DOERS STARTER",
+    amount: { monthly: 749, yearly: 8249 }
+  },
+  professional: {
+    upiId: "doers.pro@paytm",
+    merchantName: "DOERS PRO",
+    amount: { monthly: 2419, yearly: 24959 }
+  },
+  enterprise: {
+    upiId: "doers.enterprise@paytm",
+    merchantName: "DOERS ENTERPRISE",
+    amount: { monthly: 16619, yearly: 166919 }
+  },
+  government: {
+    upiId: "doers.nation@paytm",
+    merchantName: "DOERS NATION",
+    amount: { custom: true }
+  }
+};
+
 // PRICING TIERS - LIC Style Bundles (Adaptive to Buying Capacity)
 const PRICING_TIERS = {
   starter: {
