@@ -328,26 +328,38 @@ export default function InvestorPitch() {
         <p className="text-white/60 text-sm">Adaptive bundles for every capacity</p>
       </div>
 
-      {/* Currency & Billing Toggle */}
-      <div className="flex justify-center gap-4">
-        <div className="flex bg-white/10 rounded-lg p-1">
-          <Button
-            size="sm"
-            variant={currency === "USD" ? "default" : "ghost"}
-            className={currency === "USD" ? "bg-purple-500" : "text-white/60"}
-            onClick={() => setCurrency("USD")}
-          >
-            USD $
-          </Button>
-          <Button
-            size="sm"
-            variant={currency === "AED" ? "default" : "ghost"}
-            className={currency === "AED" ? "bg-purple-500" : "text-white/60"}
-            onClick={() => setCurrency("AED")}
-          >
-            AED د.إ
-          </Button>
+      {/* Currency Selector - Global */}
+      <div className="space-y-3">
+        <p className="text-white/60 text-xs text-center">Select Currency</p>
+        <div className="flex flex-wrap justify-center gap-2">
+          {Object.entries(CURRENCIES).map(([code, curr]) => (
+            <Button
+              key={code}
+              size="sm"
+              variant={currency === code ? "default" : "outline"}
+              className={currency === code 
+                ? "bg-purple-500 text-white" 
+                : "border-white/20 text-white/60 text-xs"
+              }
+              onClick={() => setCurrency(code)}
+            >
+              {curr.flag} {code}
+            </Button>
+          ))}
         </div>
+        
+        {/* UPI Badge for INR */}
+        {currency === "INR" && (
+          <div className="flex justify-center">
+            <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+              <Zap className="w-3 h-3 mr-1" /> UPI / GPay / PhonePe / Paytm Enabled
+            </Badge>
+          </div>
+        )}
+      </div>
+
+      {/* Billing Toggle */}
+      <div className="flex justify-center">
         <div className="flex bg-white/10 rounded-lg p-1">
           <Button
             size="sm"
