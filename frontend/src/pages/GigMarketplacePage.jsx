@@ -158,7 +158,7 @@ export default function GigMarketplacePage() {
         <Zap className="w-5 h-5 text-yellow-500" />
         <div>
           <p className="font-semibold">Energy Exchange Initiated! ⚡</p>
-          <p className="text-sm text-slate-600">+{gig.ecoin} E-COIN earned</p>
+          <p className="text-sm text-slate-600">+{gig.ecoin} D-COIN earned</p>
           <p className="text-xs text-slate-500 italic">My Energy = Your Energy = Harmony</p>
         </div>
       </div>,
@@ -189,11 +189,11 @@ export default function GigMarketplacePage() {
           </div>
         </div>
 
-        {/* E-COIN Balance */}
+        {/* D-COIN Balance */}
         <div className="bg-white/10 backdrop-blur rounded-xl p-4 mb-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-white/60 text-xs uppercase tracking-wide">Your E-COIN Balance</p>
+              <p className="text-white/60 text-xs uppercase tracking-wide">Your D-COIN Balance</p>
               <div className="flex items-center gap-2">
                 <Zap className="w-6 h-6 text-yellow-300" />
                 <span className="font-display text-3xl font-bold">{userEcoin.toLocaleString()}</span>
@@ -283,7 +283,7 @@ export default function GigMarketplacePage() {
                       <Zap className="w-4 h-4" />
                       <span>{gig.ecoin}</span>
                     </div>
-                    <p className="text-[10px] text-slate-400">E-COIN</p>
+                    <p className="text-[10px] text-slate-400">D-COIN</p>
                   </div>
                 </div>
 

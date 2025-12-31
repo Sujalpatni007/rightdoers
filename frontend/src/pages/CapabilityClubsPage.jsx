@@ -141,7 +141,7 @@ export default function CapabilityClubsPage() {
               <div className="flex items-center gap-2">
                 <Zap className="w-5 h-5 text-yellow-300" />
                 <span className="font-display text-2xl font-bold">{totalEnergy.toLocaleString()}</span>
-                <span className="text-white/60 text-sm">E-COIN</span>
+                <span className="text-white/60 text-sm">D-COIN</span>
               </div>
             </div>
             <div className="text-right">
@@ -215,7 +215,7 @@ export default function CapabilityClubsPage() {
                             <Users className="w-3 h-3" /> {club.members.toLocaleString()}
                           </span>
                           <span className="flex items-center gap-1 text-amber-600 font-medium">
-                            <Zap className="w-3 h-3" /> {club.energyFlow} E-COIN
+                            <Zap className="w-3 h-3" /> {club.energyFlow} D-COIN
                           </span>
                           <Badge variant="outline" className="text-[10px] px-2 py-0">
                             {club.gigs} Gigs
@@ -248,7 +248,7 @@ export default function CapabilityClubsPage() {
               <div className="flex-1">
                 <p className="text-white/70 text-xs uppercase tracking-wide">Daily Challenge</p>
                 <h3 className="font-semibold">Complete 1 Curiosity Quiz</h3>
-                <p className="text-white/70 text-sm">Earn +50 E-COIN & unlock Gig access</p>
+                <p className="text-white/70 text-sm">Earn +50 D-COIN & unlock Gig access</p>
               </div>
               <Button 
                 className="bg-white text-amber-600 hover:bg-white/90"

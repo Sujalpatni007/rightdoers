@@ -112,7 +112,7 @@ export default function EcoinWalletPage() {
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div className="flex-1">
-            <h1 className="font-display font-bold text-xl">E-COIN Wallet</h1>
+            <h1 className="font-display font-bold text-xl">D-COIN Wallet</h1>
             <p className="text-white/70 text-sm">Energy Exchange • Harmony Balance</p>
           </div>
           <Button 
@@ -130,7 +130,7 @@ export default function EcoinWalletPage() {
           <div className="flex items-center gap-3 mb-4">
             <Zap className="w-10 h-10 text-yellow-300" />
             <span className="font-display text-5xl font-bold">{totalBalance.toLocaleString()}</span>
-            <span className="text-white/60 text-lg">E-COIN</span>
+            <span className="text-white/60 text-lg">D-COIN</span>
           </div>
           
           <div className="grid grid-cols-2 gap-3">
@@ -249,7 +249,7 @@ export default function EcoinWalletPage() {
                     }`}>
                       {tx.type === "earned" ? "+" : "-"}{tx.amount}
                     </p>
-                    <p className="text-slate-400 text-xs">E-COIN</p>
+                    <p className="text-slate-400 text-xs">D-COIN</p>
                   </div>
                 </div>
               </CardContent>
