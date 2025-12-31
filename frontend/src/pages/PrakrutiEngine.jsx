@@ -225,41 +225,41 @@ export default function PrakrutiEngine() {
   const renderPrakrutiDiscovery = () => (
     <div className="space-y-6">
       <div className="text-center">
-        <Badge className="mb-4 bg-purple-500/20 text-purple-300 border-purple-500/30">
-          <Brain className="w-3 h-3 mr-1" /> PRAKRUTI POWER ENGINE
+        <Badge className="mb-4 bg-orange-500/20 text-orange-300 border-orange-500/30">
+          <Brain className="w-3 h-3 mr-1" /> प्रकृति PRAKRUTI PERSONA SELECTOR
         </Badge>
-        <h2 className="text-2xl font-bold text-white mb-2">Discover Your PRAKRUTI</h2>
-        <p className="text-white/60 text-sm">Your unique character energy based on Ayurvedic wisdom</p>
+        <h2 className="text-2xl font-bold text-white mb-2">अपनी प्रकृति जानें</h2>
+        <p className="text-white/60 text-sm">Discover Your Nature • Powered by DOERS-WORLD</p>
       </div>
 
-      {/* THE RIGHT DOERS TRINITY */}
-      <Card className="bg-gradient-to-r from-amber-500/10 via-purple-500/10 to-blue-500/10 border-amber-500/20">
+      {/* THE RIGHT DOERS TRINITY - त्रिमूर्ति */}
+      <Card className="bg-gradient-to-r from-orange-500/10 via-white/5 to-green-500/10 border-orange-500/20">
         <CardContent className="p-4">
           <p className="text-center text-white/60 text-xs uppercase tracking-wider mb-3">
-            THE RIGHT DOERS TRINITY
+            🙏 त्रिमूर्ति • THE RIGHT DOERS TRINITY
           </p>
           <div className="flex justify-around items-center">
             <div className="text-center">
-              <div className="w-14 h-14 rounded-full bg-amber-500/20 flex items-center justify-center mx-auto mb-2">
+              <div className="w-14 h-14 rounded-full bg-orange-500/20 flex items-center justify-center mx-auto mb-2">
                 <span className="text-2xl">🙏</span>
               </div>
-              <p className="text-amber-400 text-xs font-bold">BRAHMA</p>
+              <p className="text-orange-400 text-xs font-bold">ब्रह्मा</p>
               <p className="text-white/50 text-[10px]">Human Expert</p>
             </div>
             <ArrowRight className="w-5 h-5 text-white/30" />
             <div className="text-center">
-              <div className="w-14 h-14 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-2">
+              <div className="w-14 h-14 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-2">
                 <span className="text-2xl">🤖</span>
               </div>
-              <p className="text-purple-400 text-xs font-bold">VISHNU</p>
+              <p className="text-blue-400 text-xs font-bold">विष्णु</p>
               <p className="text-white/50 text-[10px]">AI Agent</p>
             </div>
             <ArrowRight className="w-5 h-5 text-white/30" />
             <div className="text-center">
-              <div className="w-14 h-14 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-2">
+              <div className="w-14 h-14 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-2">
                 <span className="text-2xl">🦾</span>
               </div>
-              <p className="text-blue-400 text-xs font-bold">MAHESHWARA</p>
+              <p className="text-green-400 text-xs font-bold">महेश्वर</p>
               <p className="text-white/50 text-[10px]">Robo Helper</p>
             </div>
           </div>
@@ -509,8 +509,8 @@ export default function PrakrutiEngine() {
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div className="text-center">
-            <h1 className="text-white font-bold">PRAKRUTI ENGINE</h1>
-            <p className="text-white/50 text-xs">GLOCAL GURUKUL • Global Talent NEST</p>
+            <h1 className="text-white font-bold">प्रकृति PERSONA</h1>
+            <p className="text-white/50 text-xs">Powered by DOERS-WORLD • भारत से विश्व तक</p>
           </div>
           <Badge className="bg-amber-500/20 text-amber-400 border-0">
             <Coins className="w-3 h-3 mr-1" /> {userDcoin}
