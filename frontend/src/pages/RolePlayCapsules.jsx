@@ -747,10 +747,10 @@ export default function RolePlayCapsules() {
     <div className="space-y-6">
       <div className="text-center">
         <Badge className="mb-4 bg-purple-500/20 text-purple-300 border-purple-500/30">
-          <BookOpen className="w-3 h-3 mr-1" /> 12 DIVISIONS • 60+ CAPSULES
+          <BookOpen className="w-3 h-3 mr-1" /> 12 DIVISIONS • 60+ DAILY CAPSULES
         </Badge>
         <h2 className="text-2xl font-bold text-white mb-2">Choose Your Division</h2>
-        <p className="text-white/60 text-sm">Select a career cluster to explore Role Play Capsules</p>
+        <p className="text-white/60 text-sm">Select a career cluster for your Daily Career Capsule</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
