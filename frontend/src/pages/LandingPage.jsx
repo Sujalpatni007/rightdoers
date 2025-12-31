@@ -183,25 +183,44 @@ export default function LandingPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 overflow-hidden relative">
       {/* Animated Stars Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(50)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              opacity: [0.2, 1, 0.2],
-              scale: [1, 1.5, 1],
-            }}
-            transition={{
-              duration: 2 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-            }}
-          />
-        ))}
+        {[...Array(50)].map((_, i) => {
+          // Pre-calculate positions for each star
+          const positions = [
+            { left: 15, top: 8 }, { left: 85, top: 12 }, { left: 42, top: 5 }, { left: 73, top: 18 }, { left: 28, top: 25 },
+            { left: 91, top: 32 }, { left: 6, top: 45 }, { left: 55, top: 38 }, { left: 33, top: 52 }, { left: 78, top: 48 },
+            { left: 12, top: 62 }, { left: 67, top: 55 }, { left: 45, top: 68 }, { left: 88, top: 72 }, { left: 22, top: 78 },
+            { left: 95, top: 85 }, { left: 38, top: 88 }, { left: 62, top: 92 }, { left: 8, top: 95 }, { left: 52, top: 15 },
+            { left: 18, top: 35 }, { left: 82, top: 42 }, { left: 48, top: 28 }, { left: 25, top: 58 }, { left: 72, top: 65 },
+            { left: 35, top: 75 }, { left: 58, top: 82 }, { left: 92, top: 22 }, { left: 5, top: 28 }, { left: 68, top: 8 },
+            { left: 42, top: 42 }, { left: 15, top: 52 }, { left: 78, top: 58 }, { left: 32, top: 65 }, { left: 85, top: 75 },
+            { left: 55, top: 22 }, { left: 22, top: 15 }, { left: 65, top: 35 }, { left: 48, top: 48 }, { left: 88, top: 55 },
+            { left: 12, top: 72 }, { left: 75, top: 82 }, { left: 38, top: 95 }, { left: 58, top: 5 }, { left: 95, top: 45 },
+            { left: 28, top: 88 }, { left: 82, top: 92 }, { left: 45, top: 78 }, { left: 68, top: 25 }, { left: 8, top: 38 }
+          ];
+          const pos = positions[i % positions.length];
+          const delays = [0, 0.5, 1, 1.5, 0.3, 0.8, 1.2, 0.2, 0.7, 1.8, 0.4, 0.9, 1.4, 0.6, 1.1, 1.6, 0.1, 1.3, 0.85, 1.7];
+          const durations = [2.5, 3, 3.5, 2.8, 3.2, 2.6, 3.8, 2.4, 3.3, 2.9, 3.6, 2.7, 3.1, 2.3, 3.4, 2.2, 3.7, 2.1, 3.9, 4];
+          
+          return (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-white rounded-full"
+              style={{
+                left: `${pos.left}%`,
+                top: `${pos.top}%`,
+              }}
+              animate={{
+                opacity: [0.2, 1, 0.2],
+                scale: [1, 1.5, 1],
+              }}
+              transition={{
+                duration: durations[i % durations.length],
+                repeat: Infinity,
+                delay: delays[i % delays.length],
+              }}
+            />
+          );
+        })}
       </div>
 
       {/* Floating Astro Doer */}
