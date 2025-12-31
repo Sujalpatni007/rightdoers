@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from
 import axios from "axios";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 // Pages
 import SplashScreen from "@/pages/SplashScreen";
@@ -197,10 +198,11 @@ function AppContent() {
       {/* AI Agents Hub */}
       <Route path="/agents" element={<AgentHubPage />} />
       
-      {/* E-COIN Ecosystem Routes */}
+      {/* D-COIN Ecosystem Routes */}
       <Route path="/clubs" element={<ProtectedRoute><CapabilityClubsPage /></ProtectedRoute>} />
       <Route path="/gigs" element={<ProtectedRoute><GigMarketplacePage /></ProtectedRoute>} />
       <Route path="/ecoin" element={<ProtectedRoute><EcoinWalletPage /></ProtectedRoute>} />
+      <Route path="/dcoin" element={<ProtectedRoute><EcoinWalletPage /></ProtectedRoute>} />
       <Route path="/dream-siip" element={<DoersDreamSIIPPage />} />
       
       {/* Employer Flow */}
@@ -225,12 +227,14 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <div className="min-h-screen bg-background">
-          <AppContent />
-          <Toaster richColors position="top-center" />
-        </div>
-      </BrowserRouter>
+      <LanguageProvider>
+        <BrowserRouter>
+          <div className="min-h-screen bg-background">
+            <AppContent />
+            <Toaster richColors position="top-center" />
+          </div>
+        </BrowserRouter>
+      </LanguageProvider>
     </AuthProvider>
   );
 }
