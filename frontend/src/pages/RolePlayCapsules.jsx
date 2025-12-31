@@ -942,7 +942,7 @@ export default function RolePlayCapsules() {
                     onClick={nextLesson}
                     data-testid="start-lesson-btn"
                   >
-                    Let's Begin! <ArrowRight className="w-4 h-4 ml-2" />
+                    Let&apos;s Begin! <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </CardContent>
               </Card>
