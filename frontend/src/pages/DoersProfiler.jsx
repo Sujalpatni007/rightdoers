@@ -26,7 +26,15 @@ import {
   Lightbulb,
   BarChart3,
   Clock,
-  RefreshCw
+  RefreshCw,
+  MessageCircle,
+  Linkedin,
+  Twitter,
+  Facebook,
+  Mail,
+  Copy,
+  X,
+  Send
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/App";
