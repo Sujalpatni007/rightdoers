@@ -791,7 +791,8 @@ export default function RolePlayCapsules() {
                     isUnlocked ? 'bg-white/5 border-white/10 hover:bg-white/10' :
                     'bg-white/2 border-white/5 opacity-60'
                   }`}
-                  onClick={() => isUnlocked && setSelectedModule(module)}
+                  onClick={() => isUnlocked && startLesson(module)}
+                  data-testid={`module-${module.id}`}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-start gap-4">
