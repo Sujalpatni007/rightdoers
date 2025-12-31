@@ -1192,13 +1192,27 @@ export default function RolePlayCapsules() {
             variant="ghost" 
             size="icon" 
             className="text-white"
-            onClick={() => selectedDivision ? setSelectedDivision(null) : navigate(-1)}
+            onClick={() => {
+              if (lessonMode) {
+                setLessonMode(false);
+                setSelectedModule(null);
+              } else if (selectedDivision) {
+                setSelectedDivision(null);
+              } else {
+                navigate(-1);
+              }
+            }}
+            data-testid="back-btn"
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div className="text-center">
-            <h1 className="text-white font-bold">Role Play Capsules</h1>
-            <p className="text-white/50 text-xs">Skill Up • Level Up • Earn D-COIN</p>
+            <h1 className="text-white font-bold">
+              {lessonMode ? selectedModule?.title : "Role Play Capsules"}
+            </h1>
+            <p className="text-white/50 text-xs">
+              {lessonMode ? `${selectedModule?.level} • ${division?.name}` : "Skill Up • Level Up • Earn D-COIN"}
+            </p>
           </div>
           <Badge className="bg-amber-500/20 text-amber-400 border-0">
             <Coins className="w-3 h-3 mr-1" /> {earnedDcoins}
