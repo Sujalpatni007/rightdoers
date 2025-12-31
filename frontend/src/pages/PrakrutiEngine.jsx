@@ -88,47 +88,47 @@ const CHARACTER_CLUBS = {
   dharma: {
     name: "DHARMA CLUB",
     pandava: "Yudhishthira",
-    quality: "Ethics & Justice",
+    quality: "POWER KEEPER",
     icon: Shield,
     color: "#3B82F6",
     divisions: ["Policy", "Legal"],
-    motto: "Truth is the Foundation"
+    motto: "守护正义与秩序"
   },
   shakti: {
     name: "SHAKTI CLUB",
     pandava: "Bhima",
-    quality: "Strength & Protection",
-    icon: Zap,
+    quality: "WELLNESS SEEKER",
+    icon: Heart,
     color: "#EF4444",
-    divisions: ["Security", "Sports"],
-    motto: "Power with Purpose"
+    divisions: ["Health", "Sports", "Food"],
+    motto: "身心健康是财富"
   },
   vidya: {
     name: "VIDYA CLUB",
     pandava: "Arjuna",
-    quality: "Excellence & Focus",
+    quality: "PROBLEM SOLVER",
     icon: Target,
     color: "#8B5CF6",
-    divisions: ["Technology", "Science"],
-    motto: "Perfection through Practice"
+    divisions: ["Technology", "Science", "Security"],
+    motto: "每个问题都有解决方案"
   },
   kala: {
     name: "KALA CLUB",
     pandava: "Nakula",
-    quality: "Beauty & Harmony",
-    icon: Sparkles,
-    color: "#EC4899",
-    divisions: ["Art", "Hospitality"],
-    motto: "Beauty in Everything"
+    quality: "PROFIT MAXIMIZER",
+    icon: Coins,
+    color: "#F59E0B",
+    divisions: ["Finance", "Art", "Hospitality"],
+    motto: "价值创造与增长"
   },
   gyana: {
     name: "GYANA CLUB",
     pandava: "Sahadeva",
-    quality: "Wisdom & Knowledge",
+    quality: "KNOWLEDGE GIVER",
     icon: Brain,
     color: "#10B981",
-    divisions: ["Education", "Health", "Finance", "Food", "Transport"],
-    motto: "Knowledge is Liberation"
+    divisions: ["Education", "Transport"],
+    motto: "知识就是力量"
   }
 };
 
