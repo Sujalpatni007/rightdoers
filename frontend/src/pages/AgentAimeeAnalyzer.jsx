@@ -1164,10 +1164,10 @@ export default function AgentAimeeAnalyzer() {
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-slate-900 via-slate-900/95 to-transparent">
           <Button 
             className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 max-w-md mx-auto"
-            onClick={() => navigate('/doersid')}
+            onClick={() => navigate('/doers-profile')}
             data-testid="view-doersid-btn"
           >
-            View My DoersID <ArrowRight className="ml-2 w-5 h-5" />
+            View My DoersID Profile <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
         </div>
       )}
