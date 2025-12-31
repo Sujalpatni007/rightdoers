@@ -410,7 +410,7 @@ export default function LandingPage() {
             <Badge className="bg-white/10 text-white/70 border-0 text-[10px]">Energy Exchange</Badge>
           </div>
           <p className="text-amber-300 text-xs text-center italic">
-            "{t('energyHarmony')}"
+            &ldquo;{t('energyHarmony')}&rdquo;
           </p>
           <div className="grid grid-cols-3 gap-2 mt-3">
             {[t('learn'), t('earn'), t('live')].map((item, idx) => (
