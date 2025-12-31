@@ -253,6 +253,7 @@ export default function DoersIDProfile({ profileData }) {
       confidenceLevel: 92,
       lastUpdated: new Date().toISOString()
     }
+  };
   });
 
   const personalityInfo = PERSONALITY_TYPES[profile.personality.type] || PERSONALITY_TYPES.INFP;
