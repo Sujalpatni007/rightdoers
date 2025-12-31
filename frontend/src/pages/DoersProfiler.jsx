@@ -205,6 +205,7 @@ export default function DoersProfiler() {
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showTalentTracker, setShowTalentTracker] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   useEffect(() => {
     // Simulate loading profile data
@@ -226,6 +227,60 @@ export default function DoersProfiler() {
     if (score >= 61) return ASSESSMENT_LEVELS.MANAGER;
     if (score >= 41) return ASSESSMENT_LEVELS.ASSOCIATE;
     return ASSESSMENT_LEVELS.PARA;
+  };
+
+  // Generate shareable content
+  const getShareContent = () => {
+    const shareText = `Check out my TalentCard! DoersScore: ${profile?.doersScore.value}/900 | Efficiency: ${efficiencyValue}% | Level: ${getAdaptiveLevel(efficiencyValue).name}
+
+TALENTON.AI REVOLUTION - Ride the Wave!
+
+Say HI AI. Get your D.P. (Doers Profiler) at:`;
+    const shareUrl = window.location.origin + '/dp';
+    return { shareText, shareUrl };
+  };
+
+  // Share functions
+  const shareToWhatsApp = () => {
+    const { shareText, shareUrl } = getShareContent();
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
+    window.open(whatsappUrl, '_blank');
+    toast.success('Opening WhatsApp...');
+  };
+
+  const shareToLinkedIn = () => {
+    const { shareUrl } = getShareContent();
+    const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+    window.open(linkedInUrl, '_blank');
+    toast.success('Opening LinkedIn...');
+  };
+
+  const shareToTwitter = () => {
+    const { shareText, shareUrl } = getShareContent();
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+    window.open(twitterUrl, '_blank');
+    toast.success('Opening Twitter/X...');
+  };
+
+  const shareToFacebook = () => {
+    const { shareUrl } = getShareContent();
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+    window.open(facebookUrl, '_blank');
+    toast.success('Opening Facebook...');
+  };
+
+  const shareViaEmail = () => {
+    const { shareText, shareUrl } = getShareContent();
+    const subject = `Check out my TalentCard - DoersScore ${profile?.doersScore.value}`;
+    const emailUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(shareText + '\n\n' + shareUrl)}`;
+    window.location.href = emailUrl;
+    toast.success('Opening email...');
+  };
+
+  const copyToClipboard = () => {
+    const { shareText, shareUrl } = getShareContent();
+    navigator.clipboard.writeText(shareText + ' ' + shareUrl);
+    toast.success('Copied to clipboard!');
   };
 
   if (isLoading) {
