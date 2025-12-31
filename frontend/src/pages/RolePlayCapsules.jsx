@@ -857,11 +857,329 @@ export default function RolePlayCapsules() {
           variant="outline"
           className="w-full border-white/20 text-white hover:bg-white/10"
           onClick={() => setSelectedDivision(null)}
+          data-testid="back-to-divisions-btn"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to All Divisions
         </Button>
       </div>
+    );
+  };
+
+  // Render Lesson Mode (Duolingo-style)
+  const renderLessonMode = () => {
+    if (!currentLesson || !selectedModule) return null;
+    
+    const levelInfo = NEST_LEVELS[selectedModule.level];
+    
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="space-y-6"
+      >
+        {/* Lesson Header with Progress */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-white/60 hover:text-white"
+              onClick={() => {
+                setLessonMode(false);
+                setSelectedModule(null);
+              }}
+              data-testid="exit-lesson-btn"
+            >
+              <ArrowLeft className="w-4 h-4 mr-1" /> Exit
+            </Button>
+            <Badge 
+              className="border-0 text-[10px]"
+              style={{ backgroundColor: levelInfo.color + '30', color: levelInfo.color }}
+            >
+              {selectedModule.title} • {selectedModule.level}
+            </Badge>
+            <Badge className="bg-amber-500/20 text-amber-400 border-0">
+              <Coins className="w-3 h-3 mr-1" /> +{currentLesson.dcoin || 0}
+            </Badge>
+          </div>
+          
+          {/* Progress Bar */}
+          <div className="relative">
+            <Progress value={lessonProgress} className="h-2 bg-white/10" />
+            <span className="absolute right-0 top-3 text-white/40 text-[10px]">
+              {currentLessonIndex + 1} / {currentLessons.lessons.length}
+            </span>
+          </div>
+        </div>
+
+        {/* Lesson Content */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentLessonIndex}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* INTRO Type */}
+            {currentLesson.type === "intro" && (
+              <Card className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 border-purple-500/30">
+                <CardContent className="p-6 text-center">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", delay: 0.2 }}
+                    className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-white/10 flex items-center justify-center"
+                  >
+                    <Play className="w-10 h-10 text-purple-400" />
+                  </motion.div>
+                  <h2 className="text-2xl font-bold text-white mb-3">{currentLesson.title}</h2>
+                  <p className="text-white/70 leading-relaxed">{currentLesson.content}</p>
+                  
+                  <Button
+                    className="mt-6 bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                    onClick={nextLesson}
+                    data-testid="start-lesson-btn"
+                  >
+                    Let's Begin! <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* LEARN Type */}
+            {currentLesson.type === "learn" && (
+              <Card className="bg-white/5 border-white/10">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <BookOpen className="w-5 h-5 text-blue-400" />
+                    <h2 className="text-xl font-bold text-white">{currentLesson.title}</h2>
+                  </div>
+                  
+                  <p className="text-white/70 mb-4 leading-relaxed">{currentLesson.content}</p>
+                  
+                  {currentLesson.keyPoints && (
+                    <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 space-y-2">
+                      <p className="text-blue-400 text-sm font-semibold flex items-center gap-2">
+                        <Target className="w-4 h-4" /> Key Points
+                      </p>
+                      {currentLesson.keyPoints.map((point, idx) => (
+                        <motion.div
+                          key={idx}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: idx * 0.1 }}
+                          className="flex items-start gap-2 text-white/80 text-sm"
+                        >
+                          <Check className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
+                          <span>{point}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  <Button
+                    className="w-full mt-6 bg-blue-500 hover:bg-blue-600 text-white"
+                    onClick={nextLesson}
+                    data-testid="continue-lesson-btn"
+                  >
+                    Got it! Continue <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* QUIZ Type */}
+            {currentLesson.type === "quiz" && (
+              <Card className="bg-white/5 border-white/10">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Brain className="w-5 h-5 text-amber-400" />
+                    <h2 className="text-xl font-bold text-white">{currentLesson.title}</h2>
+                  </div>
+                  
+                  <p className="text-white text-lg mb-6">{currentLesson.question}</p>
+                  
+                  <div className="space-y-3">
+                    {currentLesson.options.map((option) => {
+                      const isSelected = selectedAnswer === option.id;
+                      const showResult = showExplanation;
+                      const isCorrect = option.correct || option.id === currentLesson.correctId;
+                      
+                      return (
+                        <motion.button
+                          key={option.id}
+                          whileTap={{ scale: 0.98 }}
+                          className={`w-full p-4 rounded-xl text-left transition-all flex items-center gap-3 ${
+                            showResult
+                              ? isCorrect
+                                ? 'bg-green-500/20 border-2 border-green-500'
+                                : isSelected
+                                  ? 'bg-red-500/20 border-2 border-red-500'
+                                  : 'bg-white/5 border border-white/10'
+                              : isSelected
+                                ? 'bg-purple-500/20 border-2 border-purple-500'
+                                : 'bg-white/5 border border-white/10 hover:bg-white/10'
+                          }`}
+                          onClick={() => !showExplanation && handleQuizAnswer(option)}
+                          disabled={showExplanation}
+                          data-testid={`quiz-option-${option.id}`}
+                        >
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                            showResult
+                              ? isCorrect
+                                ? 'bg-green-500 text-white'
+                                : isSelected
+                                  ? 'bg-red-500 text-white'
+                                  : 'bg-white/10 text-white/60'
+                              : isSelected
+                                ? 'bg-purple-500 text-white'
+                                : 'bg-white/10 text-white/60'
+                          }`}>
+                            {option.id.toUpperCase()}
+                          </div>
+                          <span className="text-white flex-1">{option.text}</span>
+                          {showResult && isCorrect && <Check className="w-5 h-5 text-green-400" />}
+                        </motion.button>
+                      );
+                    })}
+                  </div>
+                  
+                  {showExplanation && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-4 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl"
+                    >
+                      <p className="text-amber-400 text-sm font-semibold mb-1">💡 Explanation</p>
+                      <p className="text-white/70 text-sm">{currentLesson.explanation}</p>
+                    </motion.div>
+                  )}
+                  
+                  {showExplanation && (
+                    <Button
+                      className="w-full mt-4 bg-green-500 hover:bg-green-600 text-white"
+                      onClick={nextLesson}
+                      data-testid="next-after-quiz-btn"
+                    >
+                      Continue <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+
+            {/* ROLEPLAY Type */}
+            {currentLesson.type === "roleplay" && (
+              <Card className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-orange-500/20">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <MessageCircle className="w-5 h-5 text-orange-400" />
+                    <h2 className="text-xl font-bold text-white">{currentLesson.title}</h2>
+                  </div>
+                  
+                  <div className="bg-white/5 rounded-xl p-4 mb-4">
+                    <p className="text-white/60 text-xs uppercase tracking-wider mb-2">Scenario</p>
+                    <p className="text-white">{currentLesson.scenario}</p>
+                  </div>
+                  
+                  <div className="bg-orange-500/10 rounded-xl p-4 mb-4">
+                    <p className="text-orange-400 text-sm font-semibold mb-2">🎯 Your Task</p>
+                    <p className="text-white/80">{currentLesson.task}</p>
+                  </div>
+                  
+                  {currentLesson.hints && (
+                    <div className="mb-4">
+                      <p className="text-white/50 text-xs mb-2">💡 Hints:</p>
+                      <div className="flex flex-wrap gap-2">
+                        {currentLesson.hints.map((hint, idx) => (
+                          <Badge key={idx} className="bg-white/10 text-white/70 border-0 text-xs">
+                            {hint}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  <textarea
+                    className="w-full h-32 bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder-white/30 resize-none focus:outline-none focus:border-orange-500/50"
+                    placeholder="Type your response here... (This is a practice exercise)"
+                    value={rolePlayResponse}
+                    onChange={(e) => setRolePlayResponse(e.target.value)}
+                    data-testid="roleplay-textarea"
+                  />
+                  
+                  <Button
+                    className="w-full mt-4 bg-gradient-to-r from-orange-500 to-red-500 text-white"
+                    onClick={nextLesson}
+                    disabled={rolePlayResponse.length < 10}
+                    data-testid="submit-roleplay-btn"
+                  >
+                    <Mic className="w-4 h-4 mr-2" />
+                    Submit Response <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* COMPLETE Type */}
+            {currentLesson.type === "complete" && (
+              <Card className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-500/30">
+                <CardContent className="p-6 text-center">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring" }}
+                    className="w-24 h-24 mx-auto mb-4 rounded-full bg-green-500/20 flex items-center justify-center"
+                  >
+                    <Award className="w-12 h-12 text-green-400" />
+                  </motion.div>
+                  
+                  <h2 className="text-2xl font-bold text-white mb-2">{currentLesson.title}</h2>
+                  <p className="text-white/70 mb-4">{currentLesson.content}</p>
+                  
+                  {currentLesson.achievements && (
+                    <div className="flex flex-wrap justify-center gap-2 mb-4">
+                      {currentLesson.achievements.map((achievement, idx) => (
+                        <motion.div
+                          key={idx}
+                          initial={{ opacity: 0, scale: 0 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: idx * 0.1 }}
+                        >
+                          <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                            <Star className="w-3 h-3 mr-1" /> {achievement}
+                          </Badge>
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="bg-amber-500/20 rounded-xl p-4 inline-flex items-center gap-2"
+                  >
+                    <Coins className="w-6 h-6 text-amber-400" />
+                    <span className="text-2xl font-bold text-amber-400">+{currentLesson.totalDcoin}</span>
+                    <span className="text-amber-400/70">D-COIN Earned!</span>
+                  </motion.div>
+                  
+                  <Button
+                    className="w-full mt-6 bg-gradient-to-r from-green-500 to-emerald-500 text-white"
+                    onClick={nextLesson}
+                    data-testid="complete-module-btn"
+                  >
+                    <Award className="w-4 h-4 mr-2" /> Claim Rewards & Continue
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </motion.div>
     );
   };
 
