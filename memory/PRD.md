@@ -1,5 +1,5 @@
 # HI AI-APP.COM - Product Requirements Document
-## Version 3.0 | December 31, 2025
+## Version 3.1 | December 31, 2025
 
 ---
 
@@ -34,7 +34,7 @@ Build **HI AI-APP.COM** - A Human Potential Management & Transformation Company 
 
 ---
 
-## What's Been Implemented (PWA Update - Dec 31, 2025)
+## What's Been Implemented (Dec 31, 2025)
 
 ### ✅ PWA Architecture
 - Progressive Web App setup with `manifest.json`
@@ -49,39 +49,35 @@ Build **HI AI-APP.COM** - A Human Potential Management & Transformation Company 
 - Pincode-based language auto-detection
 - localStorage persistence
 
+### ✅ Agent AIMEE AI Analyzer (NEW)
+- **3-Section Assessment**:
+  1. CHARACTER (Core Concerns - Maslow-based)
+  2. CAREER CHOICE (Why This Career? - Maslow Growth Matrix)
+  3. SKILLS-SALARY MATCHER (L1-L5 Framework)
+- Multi-lingual questions (English + Hindi)
+- D-COIN rewards at milestones (+5 per question, +25 per section, +50 completion)
+- PASS Code calculation (PSY Score + SKILL Score)
+- Astro Doer guide throughout
+- Results page with career match and salary analysis
+
 ### ✅ Framer-Motion Animations
 - Landing page entrance animations
 - Persona card swipe transitions (AnimatePresence)
 - 5 Wheels Engine rotating animation
-- Super App icon grid staggered animation
-- D-COIN section hover effects
-- CTA button spring animations
+- Assessment question transitions
+- D-COIN celebration effects
 
 ### ✅ Astro Doer Mascot
 - FloatingAstro component in bottom-right
 - Multi-language greeting messages
 - Bouncing animation with emoji cycling
-- Speech bubble with playful messages
-- Streak badge indicator
+- CelebrationAstro for D-COIN rewards
 
-### ✅ D-COIN Rebranding (E-COIN → D-COIN)
-- Global rename across all frontend files
-- Pages updated: Landing, Dashboard, Profile, Wallet, Gigs, Clubs, Dream SIIP
-- "Doers Delivery Coin" branding
-- Energy Exchange philosophy
+### ✅ D-COIN Rebranding
+- Global rename from E-COIN to D-COIN
+- All pages updated
 
-### ✅ Landing Page (IDFC First Bank Style)
-- HI AI-APP.COM logo with orange gradient
-- Domain story banner (.COM → APP → AI → HI)
-- "Will AI replace me or empower me?" question
-- 3 Swipeable persona cards with navigation dots
-- 8 Super App icon grid with badges
-- 5 Wheels Engine visualization
-- D-COIN flywheel section
-- QR Code GTM banner
-- Start Journey CTA
-
-### ✅ Testing Results (All Passed)
+### ✅ Testing Results (All Passed - 9/9)
 - Landing page branding ✓
 - Language selector (5 languages) ✓
 - Language switching ✓
@@ -94,34 +90,26 @@ Build **HI AI-APP.COM** - A Human Potential Management & Transformation Company 
 
 ---
 
-## Technical Stack
-- **Frontend**: React 19 + Tailwind CSS + shadcn/ui + framer-motion
-- **Backend**: FastAPI (Python) - Mocked for demo
-- **Database**: MongoDB
-- **PWA**: manifest.json + service-worker.js
-- **i18n**: Custom context + translations.js
-
----
-
 ## Prioritized Backlog
 
-### P0 (Critical - Next Sprint)
-- [ ] Build Agent AIMEE AI Analyzer (conversational assessment)
-- [ ] Integrate Razorpay for payments
-- [ ] Real OTP authentication (Twilio/Plavio)
-- [ ] Backend APIs for D-COIN transactions
+### P0 (Critical - Awaiting Captain's Input)
+- [ ] Wait for 100+ real profiles for case studies
+- [ ] Build complete Assessment Report (EduMilestones format)
+- [ ] Daily Streak System (Duolingo-style)
+- [ ] Cosmic Design Refresh (landing page)
 
 ### P1 (High - Month 1)
+- [ ] Integrate Razorpay for payments
+- [ ] Real OTP authentication (Twilio/Plavio)
 - [ ] Build Role Play skill capsules
+- [ ] PDF Report Generation
 - [ ] Connect Agent AIMEE to Google Gemini
-- [ ] Government/Corporate dashboards
-- [ ] Push notifications
 
 ### P2 (Medium - Quarter 1)
+- [ ] Backend APIs for D-COIN transactions
 - [ ] Video resume feature
 - [ ] Advanced AI-powered matching
-- [ ] Referral system
-- [ ] Voice input for AIMEE
+- [ ] Push notifications
 
 ### P3 (Future)
 - [ ] Web 3.0 integration
@@ -132,27 +120,21 @@ Build **HI AI-APP.COM** - A Human Potential Management & Transformation Company 
 
 ## Key Files Reference
 ```
-/app/frontend/
-├── public/
-│   ├── manifest.json         # PWA config
-│   ├── service-worker.js     # Offline support
-│   └── icons/                # App icons
-├── src/
-│   ├── App.js               # Root with LanguageProvider
-│   ├── context/
-│   │   └── LanguageContext.jsx
-│   ├── i18n/
-│   │   └── translations.js   # 5 language translations
-│   ├── components/
-│   │   ├── AstroDoer.jsx    # Mascot component
-│   │   ├── LanguageSelector.jsx
-│   │   └── BottomNavNew.jsx
-│   └── pages/
-│       ├── LandingPage.jsx   # Main with animations
-│       ├── EcoinWalletPage.jsx (D-COIN Wallet)
-│       ├── GigMarketplacePage.jsx
-│       ├── CapabilityClubsPage.jsx
-│       └── DoersDreamSIIPPage.jsx
+/app/frontend/src/
+├── pages/
+│   ├── LandingPage.jsx           # Main landing with animations
+│   ├── AgentAimeeAnalyzer.jsx    # Complete assessment flow (NEW)
+│   ├── WorldWheelPage.jsx        # 12 Clusters
+│   ├── WorkWheelPage.jsx         # Human-AI-Robo modes
+│   └── ... (45+ pages)
+├── components/
+│   ├── AstroDoer.jsx             # Mascot
+│   └── LanguageSelector.jsx      # i18n dropdown
+└── i18n/translations.js          # 5 languages
+
+/app/memory/
+├── PRD.md                        # This document
+└── ARCHITECT_STUDY_NOTES.md      # Deep study summary (NEW)
 ```
 
 ---
@@ -161,14 +143,16 @@ Build **HI AI-APP.COM** - A Human Potential Management & Transformation Company 
 - **Phone**: Any number except 9876543210 (hardcoded as employer)
 - **OTP**: Any 6-digit code
 - **Test User**: Create via /auth?role=doer
+- **Assessment**: /aimee-analyzer (no auth required)
 
 ---
 
-## Mocked Components
-- Backend APIs (auth, jobs, applications)
-- AI features (Agent AIMEE)
-- Payments (Razorpay pending)
-- OTP (mock success)
+## Benchmarks to Beat
+| Category | Competitors | Our Edge |
+|----------|-------------|----------|
+| Assessment | EduMilestones, MyAnatomy, MeritTrac | Multi-lingual + Gamified + D-COIN |
+| Skilling | Duolingo | Job-role specific + AI-powered |
+| Jobs | Mercor, Fiverr, LinkedIn, Naukri, Apna | L1-L5 matrix + PASS Code matching |
 
 ---
 
