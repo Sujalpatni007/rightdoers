@@ -681,7 +681,7 @@ export default function RolePlayCapsules() {
   const [earnedDcoins, setEarnedDcoins] = useState(0);
   
   // Lesson state
-  const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
+  const [currentCapsuleIndex, setCurrentLessonIndex] = useState(0);
   const [lessonMode, setLessonMode] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showExplanation, setShowExplanation] = useState(false);
@@ -702,7 +702,7 @@ export default function RolePlayCapsules() {
   };
   
   const currentCapsules = selectedModule ? getCapsulesForModule(selectedModule) : { capsules: [] };
-  const currentCapsule = currentCapsules.capsules[currentLessonIndex];
+  const currentCapsule = currentCapsules.capsules[currentCapsuleIndex];
   
   // Start a capsule
   const startLesson = (module) => {
@@ -721,12 +721,12 @@ export default function RolePlayCapsules() {
       setEarnedDcoins(prev => prev + currentCapsule.dcoin);
     }
     
-    if (currentLessonIndex < currentCapsules.capsules.length - 1) {
+    if (currentCapsuleIndex < currentCapsules.capsules.length - 1) {
       setCurrentLessonIndex(prev => prev + 1);
       setSelectedAnswer(null);
       setShowExplanation(false);
       setRolePlayResponse("");
-      setLessonProgress(((currentLessonIndex + 1) / currentCapsules.capsules.length) * 100);
+      setLessonProgress(((currentCapsuleIndex + 1) / currentCapsules.capsules.length) * 100);
     } else {
       // Module complete
       setCompletedModules(prev => [...prev, selectedModule.id]);
@@ -1004,7 +1004,7 @@ export default function RolePlayCapsules() {
           <div className="relative">
             <Progress value={lessonProgress} className="h-2 bg-white/10" />
             <span className="absolute right-0 top-3 text-white/40 text-[10px]">
-              {currentLessonIndex + 1} / {currentCapsules.capsules.length}
+              {currentCapsuleIndex + 1} / {currentCapsules.capsules.length}
             </span>
           </div>
         </div>
@@ -1012,7 +1012,7 @@ export default function RolePlayCapsules() {
         {/* Capsule Content */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={currentLessonIndex}
+            key={currentCapsuleIndex}
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -50 }}
@@ -1030,8 +1030,8 @@ export default function RolePlayCapsules() {
                   >
                     <Play className="w-10 h-10 text-purple-400" />
                   </motion.div>
-                  <h2 className="text-2xl font-bold text-white mb-3">{currentLesson.title}</h2>
-                  <p className="text-white/70 leading-relaxed">{currentLesson.content}</p>
+                  <h2 className="text-2xl font-bold text-white mb-3">{currentCapsule.title}</h2>
+                  <p className="text-white/70 leading-relaxed">{currentCapsule.content}</p>
                   
                   <Button
                     className="mt-6 bg-gradient-to-r from-purple-500 to-pink-500 text-white"
@@ -1045,22 +1045,22 @@ export default function RolePlayCapsules() {
             )}
 
             {/* LEARN Type */}
-            {currentLesson.type === "learn" && (
+            {currentCapsule.type === "learn" && (
               <Card className="bg-white/5 border-white/10">
                 <CardContent className="p-6">
                   <div className="flex items-center gap-2 mb-4">
                     <BookOpen className="w-5 h-5 text-blue-400" />
-                    <h2 className="text-xl font-bold text-white">{currentLesson.title}</h2>
+                    <h2 className="text-xl font-bold text-white">{currentCapsule.title}</h2>
                   </div>
                   
-                  <p className="text-white/70 mb-4 leading-relaxed">{currentLesson.content}</p>
+                  <p className="text-white/70 mb-4 leading-relaxed">{currentCapsule.content}</p>
                   
-                  {currentLesson.keyPoints && (
+                  {currentCapsule.keyPoints && (
                     <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 space-y-2">
                       <p className="text-blue-400 text-sm font-semibold flex items-center gap-2">
                         <Target className="w-4 h-4" /> Key Points
                       </p>
-                      {currentLesson.keyPoints.map((point, idx) => (
+                      {currentCapsule.keyPoints.map((point, idx) => (
                         <motion.div
                           key={idx}
                           initial={{ opacity: 0, x: -20 }}
@@ -1087,21 +1087,21 @@ export default function RolePlayCapsules() {
             )}
 
             {/* QUIZ Type */}
-            {currentLesson.type === "quiz" && (
+            {currentCapsule.type === "quiz" && (
               <Card className="bg-white/5 border-white/10">
                 <CardContent className="p-6">
                   <div className="flex items-center gap-2 mb-4">
                     <Brain className="w-5 h-5 text-amber-400" />
-                    <h2 className="text-xl font-bold text-white">{currentLesson.title}</h2>
+                    <h2 className="text-xl font-bold text-white">{currentCapsule.title}</h2>
                   </div>
                   
-                  <p className="text-white text-lg mb-6">{currentLesson.question}</p>
+                  <p className="text-white text-lg mb-6">{currentCapsule.question}</p>
                   
                   <div className="space-y-3">
-                    {currentLesson.options.map((option) => {
+                    {currentCapsule.options.map((option) => {
                       const isSelected = selectedAnswer === option.id;
                       const showResult = showExplanation;
-                      const isCorrect = option.correct || option.id === currentLesson.correctId;
+                      const isCorrect = option.correct || option.id === currentCapsule.correctId;
                       
                       return (
                         <motion.button
@@ -1149,7 +1149,7 @@ export default function RolePlayCapsules() {
                       className="mt-4 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl"
                     >
                       <p className="text-amber-400 text-sm font-semibold mb-1">💡 Explanation</p>
-                      <p className="text-white/70 text-sm">{currentLesson.explanation}</p>
+                      <p className="text-white/70 text-sm">{currentCapsule.explanation}</p>
                     </motion.div>
                   )}
                   
@@ -1167,29 +1167,29 @@ export default function RolePlayCapsules() {
             )}
 
             {/* ROLEPLAY Type */}
-            {currentLesson.type === "roleplay" && (
+            {currentCapsule.type === "roleplay" && (
               <Card className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-orange-500/20">
                 <CardContent className="p-6">
                   <div className="flex items-center gap-2 mb-4">
                     <MessageCircle className="w-5 h-5 text-orange-400" />
-                    <h2 className="text-xl font-bold text-white">{currentLesson.title}</h2>
+                    <h2 className="text-xl font-bold text-white">{currentCapsule.title}</h2>
                   </div>
                   
                   <div className="bg-white/5 rounded-xl p-4 mb-4">
                     <p className="text-white/60 text-xs uppercase tracking-wider mb-2">Scenario</p>
-                    <p className="text-white">{currentLesson.scenario}</p>
+                    <p className="text-white">{currentCapsule.scenario}</p>
                   </div>
                   
                   <div className="bg-orange-500/10 rounded-xl p-4 mb-4">
                     <p className="text-orange-400 text-sm font-semibold mb-2">🎯 Your Task</p>
-                    <p className="text-white/80">{currentLesson.task}</p>
+                    <p className="text-white/80">{currentCapsule.task}</p>
                   </div>
                   
-                  {currentLesson.hints && (
+                  {currentCapsule.hints && (
                     <div className="mb-4">
                       <p className="text-white/50 text-xs mb-2">💡 Hints:</p>
                       <div className="flex flex-wrap gap-2">
-                        {currentLesson.hints.map((hint, idx) => (
+                        {currentCapsule.hints.map((hint, idx) => (
                           <Badge key={idx} className="bg-white/10 text-white/70 border-0 text-xs">
                             {hint}
                           </Badge>
@@ -1220,7 +1220,7 @@ export default function RolePlayCapsules() {
             )}
 
             {/* COMPLETE Type */}
-            {currentLesson.type === "complete" && (
+            {currentCapsule.type === "complete" && (
               <Card className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-500/30">
                 <CardContent className="p-6 text-center">
                   <motion.div
@@ -1232,12 +1232,12 @@ export default function RolePlayCapsules() {
                     <Award className="w-12 h-12 text-green-400" />
                   </motion.div>
                   
-                  <h2 className="text-2xl font-bold text-white mb-2">{currentLesson.title}</h2>
-                  <p className="text-white/70 mb-4">{currentLesson.content}</p>
+                  <h2 className="text-2xl font-bold text-white mb-2">{currentCapsule.title}</h2>
+                  <p className="text-white/70 mb-4">{currentCapsule.content}</p>
                   
-                  {currentLesson.achievements && (
+                  {currentCapsule.achievements && (
                     <div className="flex flex-wrap justify-center gap-2 mb-4">
-                      {currentLesson.achievements.map((achievement, idx) => (
+                      {currentCapsule.achievements.map((achievement, idx) => (
                         <motion.div
                           key={idx}
                           initial={{ opacity: 0, scale: 0 }}
@@ -1259,7 +1259,7 @@ export default function RolePlayCapsules() {
                     className="bg-amber-500/20 rounded-xl p-4 inline-flex items-center gap-2"
                   >
                     <Coins className="w-6 h-6 text-amber-400" />
-                    <span className="text-2xl font-bold text-amber-400">+{currentLesson.totalDcoin}</span>
+                    <span className="text-2xl font-bold text-amber-400">+{currentCapsule.totalDcoin}</span>
                     <span className="text-amber-400/70">D-COIN Earned!</span>
                   </motion.div>
                   
