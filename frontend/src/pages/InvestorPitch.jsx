@@ -383,8 +383,9 @@ export default function InvestorPitch() {
       {/* Pricing Cards */}
       <div className="space-y-4">
         {Object.values(PRICING_TIERS).map((tier) => {
-          const priceData = currency === "USD" ? tier.price : tier.priceAED;
-          const price = priceData.custom ? priceData.startingFrom : priceData[billingCycle];
+          const basePrice = tier.price.custom ? tier.price.startingFrom : tier.price[billingCycle];
+          const price = getPrice(basePrice, currency);
+          const currencyData = CURRENCIES[currency];
           const isSelected = selectedTier === tier.id;
           
           return (
@@ -422,18 +423,18 @@ export default function InvestorPitch() {
                       </Badge>
                     </div>
                     <div className="text-right">
-                      {priceData.custom ? (
+                      {tier.price.custom ? (
                         <div>
                           <p className="text-white/50 text-xs">Starting from</p>
                           <p className="text-2xl font-bold text-white">
-                            {currency === "USD" ? "$" : "د.إ"}{price.toLocaleString()}
+                            {currencyData.symbol}{price.toLocaleString()}
                           </p>
                           <p className="text-white/50 text-xs">/year</p>
                         </div>
                       ) : (
                         <div>
                           <p className="text-2xl font-bold text-white">
-                            {currency === "USD" ? "$" : "د.إ"}{price}
+                            {currencyData.symbol}{price.toLocaleString()}
                           </p>
                           <p className="text-white/50 text-xs">/{billingCycle === "monthly" ? "mo" : "yr"}</p>
                         </div>
@@ -455,12 +456,31 @@ export default function InvestorPitch() {
                           </div>
                         ))}
                       </div>
-                      <Button 
-                        className="w-full mt-4 bg-gradient-to-r from-purple-500 to-pink-500"
-                        onClick={() => toast.success(`${tier.name} selected! Contact for demo.`)}
-                      >
-                        Get Started <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
+                      
+                      {/* Payment Buttons */}
+                      <div className="mt-4 space-y-2">
+                        <Button 
+                          className="w-full bg-gradient-to-r from-purple-500 to-pink-500"
+                          onClick={() => toast.success(`${tier.name} selected! Redirecting to payment...`)}
+                        >
+                          Pay with Card <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                        
+                        {/* UPI Option for INR */}
+                        {currency === "INR" && !tier.price.custom && (
+                          <Button 
+                            variant="outline"
+                            className="w-full border-green-500/50 text-green-400 hover:bg-green-500/20"
+                            onClick={() => {
+                              setQrTier(tier.id);
+                              setShowQR(true);
+                              toast.success("Scan QR with GPay/PhonePe/Paytm");
+                            }}
+                          >
+                            <span className="mr-2">📱</span> Pay with UPI / GPay
+                          </Button>
+                        )}
+                      </div>
                     </motion.div>
                   )}
                 </CardContent>
@@ -469,6 +489,60 @@ export default function InvestorPitch() {
           );
         })}
       </div>
+
+      {/* UPI QR Modal */}
+      {showQR && qrTier && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
+          onClick={() => setShowQR(false)}
+        >
+          <Card className="bg-white max-w-sm w-full" onClick={e => e.stopPropagation()}>
+            <CardContent className="p-6 text-center">
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Scan to Pay</h3>
+              <p className="text-gray-600 text-sm mb-4">
+                {PRICING_TIERS[qrTier].name} - {billingCycle === "monthly" ? "Monthly" : "Yearly"}
+              </p>
+              
+              {/* QR Code Placeholder - In production, generate real QR */}
+              <div className="w-48 h-48 mx-auto bg-gray-100 rounded-xl flex items-center justify-center mb-4 border-2 border-dashed border-gray-300">
+                <div className="text-center">
+                  <span className="text-4xl">📱</span>
+                  <p className="text-gray-500 text-xs mt-2">QR Code</p>
+                  <p className="text-gray-400 text-[10px]">GPay • PhonePe • Paytm</p>
+                </div>
+              </div>
+              
+              <div className="bg-green-50 rounded-lg p-3 mb-4">
+                <p className="text-green-800 font-bold text-lg">
+                  ₹{UPI_QR_DATA[qrTier]?.amount[billingCycle]?.toLocaleString() || "Custom"}
+                </p>
+                <p className="text-green-600 text-xs">{UPI_QR_DATA[qrTier]?.upiId}</p>
+              </div>
+              
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={() => setShowQR(false)}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  className="flex-1 bg-green-500 hover:bg-green-600"
+                  onClick={() => {
+                    toast.success("Payment verified! Welcome to DOERS!");
+                    setShowQR(false);
+                  }}
+                >
+                  I have Paid
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
     </div>
   );
 
