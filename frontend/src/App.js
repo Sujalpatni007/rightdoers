@@ -56,6 +56,7 @@ import DoersIDProfile from "@/pages/DoersIDProfile";
 import RolePlayCapsules from "@/pages/RolePlayCapsules";
 import PrakrutiEngine from "@/pages/PrakrutiEngine";
 import InvestorPitch from "@/pages/InvestorPitch";
+import CareerRoadmapGenerator from "@/pages/CareerRoadmapGenerator";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
@@ -174,6 +175,7 @@ function AppContent() {
       <Route path="/role-play/:divisionId" element={<RolePlayCapsules />} />
       <Route path="/prakruti" element={<PrakrutiEngine />} />
       <Route path="/investor" element={<InvestorPitch />} />
+      <Route path="/career-roadmap" element={<CareerRoadmapGenerator />} />
       <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
       <Route path="/learn" element={<ProtectedRoute><LearnPage /></ProtectedRoute>} />
       
