@@ -59,6 +59,7 @@ import InvestorPitch from "@/pages/InvestorPitch";
 import CareerRoadmapGenerator from "@/pages/CareerRoadmapGenerator";
 import TalentOnGlocals from "@/pages/TalentOnGlocals";
 import FounderDashboard from "@/pages/FounderDashboard";
+import DoersProfiler from "@/pages/DoersProfiler";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
@@ -173,6 +174,10 @@ function AppContent() {
       <Route path="/aimee" element={<ProtectedRoute><AimeePage /></ProtectedRoute>} />
       <Route path="/aimee-analyzer" element={<AgentAimeeAnalyzer />} />
       <Route path="/doers-profile" element={<DoersIDProfile />} />
+      <Route path="/dp" element={<DoersProfiler />} />
+      <Route path="/doers-profiler" element={<DoersProfiler />} />
+      <Route path="/talent-card" element={<DoersProfiler />} />
+      <Route path="/captain-command" element={<FounderDashboard />} />
       <Route path="/role-play" element={<RolePlayCapsules />} />
       <Route path="/role-play/:divisionId" element={<RolePlayCapsules />} />
       <Route path="/prakruti" element={<PrakrutiEngine />} />
