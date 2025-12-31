@@ -961,11 +961,12 @@ export default function RolePlayCapsules() {
     );
   };
 
-  // Render Lesson Mode (Duolingo-style)
+  // Render Capsule Mode (Duolingo-style Daily Career Capsules)
   const renderLessonMode = () => {
-    if (!currentLesson || !selectedModule) return null;
+    if (!currentCapsule || !selectedModule) return null;
     
     const levelInfo = NEST_LEVELS[selectedModule.level];
+    const experts = DIVISION_EXPERTS[selectedDivision] || {};
     
     return (
       <motion.div
@@ -973,7 +974,7 @@ export default function RolePlayCapsules() {
         animate={{ opacity: 1 }}
         className="space-y-6"
       >
-        {/* Lesson Header with Progress */}
+        {/* Capsule Header with Progress */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <Button
@@ -995,7 +996,7 @@ export default function RolePlayCapsules() {
               {selectedModule.title} • {selectedModule.level}
             </Badge>
             <Badge className="bg-amber-500/20 text-amber-400 border-0">
-              <Coins className="w-3 h-3 mr-1" /> +{currentLesson.dcoin || 0}
+              <Coins className="w-3 h-3 mr-1" /> +{currentCapsule.dcoin || 0}
             </Badge>
           </div>
           
@@ -1003,7 +1004,7 @@ export default function RolePlayCapsules() {
           <div className="relative">
             <Progress value={lessonProgress} className="h-2 bg-white/10" />
             <span className="absolute right-0 top-3 text-white/40 text-[10px]">
-              {currentLessonIndex + 1} / {currentLessons.lessons.length}
+              {currentLessonIndex + 1} / {currentCapsules.capsules.length}
             </span>
           </div>
         </div>
