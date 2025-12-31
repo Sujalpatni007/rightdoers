@@ -164,6 +164,7 @@ function AppContent() {
       <Route path="/dashboard" element={<ProtectedRoute allowedRoles={["doer"]}><DoerDashboard /></ProtectedRoute>} />
       <Route path="/jobs" element={<ProtectedRoute allowedRoles={["doer"]}><JobsPage /></ProtectedRoute>} />
       <Route path="/aimee" element={<ProtectedRoute><AimeePage /></ProtectedRoute>} />
+      <Route path="/aimee-analyzer" element={<AgentAimeeAnalyzer />} />
       <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
       <Route path="/learn" element={<ProtectedRoute><LearnPage /></ProtectedRoute>} />
       
