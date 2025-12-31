@@ -54,6 +54,7 @@ import DoersDreamSIIPPage from "@/pages/DoersDreamSIIPPage";
 import AgentAimeeAnalyzer from "@/pages/AgentAimeeAnalyzer";
 import DoersIDProfile from "@/pages/DoersIDProfile";
 import RolePlayCapsules from "@/pages/RolePlayCapsules";
+import PrakrutiEngine from "@/pages/PrakrutiEngine";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
@@ -170,6 +171,7 @@ function AppContent() {
       <Route path="/doers-profile" element={<DoersIDProfile />} />
       <Route path="/role-play" element={<RolePlayCapsules />} />
       <Route path="/role-play/:divisionId" element={<RolePlayCapsules />} />
+      <Route path="/prakruti" element={<PrakrutiEngine />} />
       <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
       <Route path="/learn" element={<ProtectedRoute><LearnPage /></ProtectedRoute>} />
       
