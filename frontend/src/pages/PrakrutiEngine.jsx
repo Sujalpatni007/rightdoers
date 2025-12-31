@@ -10,7 +10,7 @@ import {
   Brain, Sparkles, Globe, Building, Heart, Shield, CircleDot,
   Flame, Wind, Droplets, Mountain, Sun, Moon, Crown, Gem
 } from "lucide-react";
-import { useLanguage } from "../contexts/LanguageContext";
+import { useLanguage } from "../context/LanguageContext";
 import AstroDoer from "../components/AstroDoer";
 import { toast } from "sonner";
 
