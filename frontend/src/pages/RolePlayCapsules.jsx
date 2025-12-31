@@ -861,7 +861,96 @@ export default function RolePlayCapsules() {
           </CardContent>
         </Card>
 
-        {/* Role Play Capsules */}
+        {/* DOERS DIVISION EXPERT DASHBOARD - THE TRINITY */}
+        {DIVISION_EXPERTS[selectedDivision] && (
+          <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-white text-sm flex items-center gap-2">
+                <Users className="w-4 h-4 text-purple-400" /> 
+                Doers Division Expert Dashboard
+              </CardTitle>
+              <p className="text-white/50 text-[10px]">Human Expert ↔ AI Agent ↔ Robo Helper</p>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* AI AGENT - The Super Agentic AI */}
+              <div className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-xl p-3 border border-blue-500/30">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-blue-500/30 flex items-center justify-center">
+                    <Brain className="w-6 h-6 text-blue-400" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-blue-400 text-[10px] uppercase tracking-wider">Your Personal AI Agent</p>
+                    <h4 className="text-white font-bold">{DIVISION_EXPERTS[selectedDivision].aiAgent}</h4>
+                    <p className="text-white/50 text-[10px]">Powered by Google DeepMind Nested Learning</p>
+                  </div>
+                  <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 text-[10px]">
+                    <Zap className="w-3 h-3 mr-1" /> ACTIVE
+                  </Badge>
+                </div>
+              </div>
+
+              {/* HUMAN EXPERTS - Industry Influencers */}
+              <div className="space-y-2">
+                <p className="text-amber-400 text-[10px] uppercase tracking-wider flex items-center gap-1">
+                  <Star className="w-3 h-3" /> Industry Influencers (Trust Guardrails)
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {DIVISION_EXPERTS[selectedDivision].influencers.map((expert, idx) => (
+                    <Badge key={idx} className="bg-amber-500/20 text-amber-300 border-amber-500/30 text-[10px]">
+                      {expert}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              {/* MENTORS */}
+              <div className="space-y-2">
+                <p className="text-green-400 text-[10px] uppercase tracking-wider flex items-center gap-1">
+                  <GraduationCap className="w-3 h-3" /> Academic Tutors & Mentors
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {DIVISION_EXPERTS[selectedDivision].mentors.slice(0, 4).map((mentor, idx) => (
+                    <Badge key={idx} className="bg-green-500/20 text-green-300 border-green-500/30 text-[10px]">
+                      {mentor}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              {/* ORGANIZATIONS */}
+              <div className="space-y-2">
+                <p className="text-purple-400 text-[10px] uppercase tracking-wider flex items-center gap-1">
+                  <Briefcase className="w-3 h-3" /> Partner Organizations
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {DIVISION_EXPERTS[selectedDivision].organizations.map((org, idx) => (
+                    <Badge key={idx} className="bg-purple-500/20 text-purple-300 border-purple-500/30 text-[10px]">
+                      {org}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              {/* ROBO HELPER - Coming Soon */}
+              <div className="bg-white/5 rounded-xl p-3 border border-white/10 opacity-60">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                    <Target className="w-5 h-5 text-white/40" />
+                  </div>
+                  <div>
+                    <p className="text-white/40 text-[10px] uppercase">Robo Helper</p>
+                    <p className="text-white/60 text-sm">Physical Execution Agent</p>
+                  </div>
+                  <Badge className="bg-white/10 text-white/40 border-0 text-[10px] ml-auto">
+                    COMING 2027
+                  </Badge>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Daily Career Capsules */}
         <div className="space-y-4">
           <h3 className="text-white font-semibold flex items-center gap-2">
             <BookOpen className="w-5 h-5" style={{ color: division.color }} />
