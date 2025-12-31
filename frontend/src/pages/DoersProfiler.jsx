@@ -1002,64 +1002,80 @@ Say HI AI. Get your D.P. (Doers Profiler) at:`;
               {/* Share Options */}
               <div className="px-4 pb-4">
                 <p className="text-white/50 text-xs uppercase tracking-wider mb-2">Share via</p>
-                <div className="grid grid-cols-3 gap-3 mb-4">
+                <div className="grid grid-cols-3 gap-2 mb-3">
                   <Button
                     onClick={shareToWhatsApp}
-                    className="h-16 flex-col gap-1 bg-green-600 hover:bg-green-700"
+                    className="h-14 flex-col gap-1 bg-green-600 hover:bg-green-700"
                     data-testid="share-whatsapp"
                   >
-                    <MessageCircle className="w-6 h-6" />
-                    <span className="text-xs">WhatsApp</span>
+                    <MessageCircle className="w-5 h-5" />
+                    <span className="text-[10px]">WhatsApp</span>
                   </Button>
                   <Button
                     onClick={shareToLinkedIn}
-                    className="h-16 flex-col gap-1 bg-blue-700 hover:bg-blue-800"
+                    className="h-14 flex-col gap-1 bg-blue-700 hover:bg-blue-800"
                     data-testid="share-linkedin"
                   >
-                    <Linkedin className="w-6 h-6" />
-                    <span className="text-xs">LinkedIn</span>
+                    <Linkedin className="w-5 h-5" />
+                    <span className="text-[10px]">LinkedIn</span>
                   </Button>
                   <Button
                     onClick={shareToTwitter}
-                    className="h-16 flex-col gap-1 bg-slate-800 hover:bg-slate-700"
+                    className="h-14 flex-col gap-1 bg-slate-800 hover:bg-slate-700"
                     data-testid="share-twitter"
                   >
-                    <Twitter className="w-6 h-6" />
-                    <span className="text-xs">X/Twitter</span>
+                    <Twitter className="w-5 h-5" />
+                    <span className="text-[10px]">X/Twitter</span>
                   </Button>
                 </div>
-                <div className="grid grid-cols-3 gap-3 mb-4">
+                <div className="grid grid-cols-3 gap-2 mb-3">
                   <Button
                     onClick={shareToFacebook}
-                    className="h-16 flex-col gap-1 bg-blue-600 hover:bg-blue-700"
+                    className="h-14 flex-col gap-1 bg-blue-600 hover:bg-blue-700"
                     data-testid="share-facebook"
                   >
-                    <Facebook className="w-6 h-6" />
-                    <span className="text-xs">Facebook</span>
+                    <Facebook className="w-5 h-5" />
+                    <span className="text-[10px]">Facebook</span>
                   </Button>
                   <Button
                     onClick={shareViaEmail}
-                    className="h-16 flex-col gap-1 bg-orange-600 hover:bg-orange-700"
+                    className="h-14 flex-col gap-1 bg-orange-600 hover:bg-orange-700"
                     data-testid="share-email"
                   >
-                    <Mail className="w-6 h-6" />
-                    <span className="text-xs">Email</span>
+                    <Mail className="w-5 h-5" />
+                    <span className="text-[10px]">Email</span>
                   </Button>
                   <Button
                     onClick={copyToClipboard}
-                    className="h-16 flex-col gap-1 bg-slate-700 hover:bg-slate-600"
+                    className="h-14 flex-col gap-1 bg-slate-700 hover:bg-slate-600"
                     data-testid="share-copy"
                   >
-                    <Copy className="w-6 h-6" />
-                    <span className="text-xs">Copy Link</span>
+                    <Copy className="w-5 h-5" />
+                    <span className="text-[10px]">Copy</span>
                   </Button>
                 </div>
 
+                {/* Big 5 Report Download */}
+                <Button
+                  onClick={() => {
+                    toast.success('Generating Big 5 Report PDF...');
+                    // Future: Generate actual PDF
+                  }}
+                  className="w-full h-12 bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 mb-3"
+                  data-testid="download-big5-report"
+                >
+                  <Download className="w-5 h-5 mr-2" />
+                  Download Big 5 Report (PDF)
+                </Button>
+
                 {/* Viral CTA */}
-                <div className="bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-xl p-4 text-center">
-                  <p className="text-amber-400 text-sm font-medium mb-1">Ride the Wave!</p>
-                  <p className="text-white/60 text-xs">
-                    Tell your friends, family & colleagues about your talent
+                <div className="bg-gradient-to-r from-red-500/20 to-orange-500/20 rounded-xl p-3 text-center border border-red-500/20">
+                  <p className="text-red-400 text-xs font-bold uppercase tracking-wider">College Campaign</p>
+                  <p className="text-white text-sm font-medium mt-1">
+                    From FAKE D.P. → Real D.P.
+                  </p>
+                  <p className="text-white/50 text-[10px] mt-1">
+                    Your Doers Profiler is your TRUE Display Picture
                   </p>
                 </div>
               </div>
