@@ -92,12 +92,12 @@ export default function LandingPage() {
 
   // Super App Icons - 8 Icon Grid
   const appIcons = [
-    { id: "aimee", icon: "🤖", label: "Agent AIMEE", sublabel: "AI Analyzer", path: "/aimee", badge: "+100" },
+    { id: "aimee", icon: "🤖", label: "Agent AIMEE", sublabel: "AI Analyzer", path: "/aimee-analyzer", badge: "+100" },
     { id: "doersid", icon: "🆔", label: "DoersID", sublabel: "Who Are You?", path: "/auth?role=doer", badge: null },
     { id: "roleplay", icon: "🎮", label: "Role Play", sublabel: "Simulation", path: "/clubs", badge: "D-COIN" },
     { id: "jobs4me", icon: "💼", label: "Jobs4Me", sublabel: "L1-L5", path: "/gigs", badge: "₹" },
     { id: "worldwheel", icon: "🌍", label: "World Wheel", sublabel: "1000+ Roles", path: "/world-wheel", badge: null },
-    { id: "dcoin", icon: "💎", label: "D-COIN", sublabel: "Deliver Value", path: "/ecoin", badge: null },
+    { id: "dcoin", icon: "💎", label: "D-COIN", sublabel: "Deliver Value", path: "/dcoin", badge: null },
     { id: "clubs", icon: "🎪", label: "5 Clubs", sublabel: "5C Framework", path: "/clubs", badge: "5C" },
     { id: "siip", icon: "🏠", label: "Dream SIIP", sublabel: "Family Plan", path: "/dream-siip", badge: "₹3K" },
   ];
