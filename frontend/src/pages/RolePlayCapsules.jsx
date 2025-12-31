@@ -1304,10 +1304,10 @@ export default function RolePlayCapsules() {
           </Button>
           <div className="text-center">
             <h1 className="text-white font-bold">
-              {lessonMode ? selectedModule?.title : "Role Play Capsules"}
+              {lessonMode ? selectedModule?.title : "Daily Career Capsules"}
             </h1>
             <p className="text-white/50 text-xs">
-              {lessonMode ? `${selectedModule?.level} • ${division?.name}` : "Skill Up • Level Up • Earn D-COIN"}
+              {lessonMode ? `${selectedModule?.level} • ${division?.name}` : "Dream → Do → Done • Earn D-COIN"}
             </p>
           </div>
           <Badge className="bg-amber-500/20 text-amber-400 border-0">
