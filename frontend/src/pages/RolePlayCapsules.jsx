@@ -865,7 +865,7 @@ export default function RolePlayCapsules() {
         <div className="space-y-4">
           <h3 className="text-white font-semibold flex items-center gap-2">
             <BookOpen className="w-5 h-5" style={{ color: division.color }} />
-            Role Play Capsules (L1 → L5)
+            Daily Career Capsules (L1 → L5)
           </h3>
           
           {division.modules.map((module, idx) => {
