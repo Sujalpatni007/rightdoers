@@ -920,6 +920,140 @@ Say HI AI. Get your D.P. (Doers Profiler) at:`;
           </p>
         </div>
       </div>
+
+      {/* SEND YOUR PROFILER - Viral Share Modal */}
+      <AnimatePresence>
+        {showShareModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-4"
+            onClick={() => setShowShareModal(false)}
+          >
+            <motion.div
+              initial={{ y: 100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 100, opacity: 0 }}
+              className="bg-gradient-to-br from-slate-900 via-purple-900/50 to-slate-900 rounded-3xl w-full max-w-md border border-white/20 overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="p-6 text-center border-b border-white/10">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                  <Send className="w-8 h-8 text-white" />
+                </div>
+                <h2 className="text-white text-xl font-bold mb-1">Send Your Profiler</h2>
+                <p className="text-white/60 text-sm">Share your TalentCard with the world!</p>
+                <Badge className="mt-2 bg-amber-500/20 text-amber-400 border-0">
+                  TALENTON.AI REVOLUTION
+                </Badge>
+              </div>
+
+              {/* Preview Card */}
+              <div className="px-6 py-4">
+                <div className="bg-gradient-to-br from-indigo-600/30 to-purple-600/30 rounded-2xl p-4 border border-white/10">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl">
+                      🎯
+                    </div>
+                    <div>
+                      <p className="text-white font-bold">{profile?.name}</p>
+                      <p className="text-white/60 text-xs">{profile?.doersId}</p>
+                    </div>
+                    <div className="ml-auto text-right">
+                      <p className="text-2xl font-bold text-white">{profile?.doersScore.value}</p>
+                      <p className="text-white/50 text-xs">DoersScore</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-white/60">Efficiency: <span className="text-green-400 font-bold">{efficiencyValue}%</span></span>
+                    <Badge className="bg-purple-500/30 text-purple-300 border-0 text-xs">
+                      {getAdaptiveLevel(efficiencyValue).name}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+
+              {/* Share Options */}
+              <div className="px-6 pb-6">
+                <p className="text-white/50 text-xs uppercase tracking-wider mb-3">Share via</p>
+                <div className="grid grid-cols-3 gap-3 mb-4">
+                  <Button
+                    onClick={shareToWhatsApp}
+                    className="h-16 flex-col gap-1 bg-green-600 hover:bg-green-700"
+                    data-testid="share-whatsapp"
+                  >
+                    <MessageCircle className="w-6 h-6" />
+                    <span className="text-xs">WhatsApp</span>
+                  </Button>
+                  <Button
+                    onClick={shareToLinkedIn}
+                    className="h-16 flex-col gap-1 bg-blue-700 hover:bg-blue-800"
+                    data-testid="share-linkedin"
+                  >
+                    <Linkedin className="w-6 h-6" />
+                    <span className="text-xs">LinkedIn</span>
+                  </Button>
+                  <Button
+                    onClick={shareToTwitter}
+                    className="h-16 flex-col gap-1 bg-slate-800 hover:bg-slate-700"
+                    data-testid="share-twitter"
+                  >
+                    <Twitter className="w-6 h-6" />
+                    <span className="text-xs">X/Twitter</span>
+                  </Button>
+                </div>
+                <div className="grid grid-cols-3 gap-3 mb-4">
+                  <Button
+                    onClick={shareToFacebook}
+                    className="h-16 flex-col gap-1 bg-blue-600 hover:bg-blue-700"
+                    data-testid="share-facebook"
+                  >
+                    <Facebook className="w-6 h-6" />
+                    <span className="text-xs">Facebook</span>
+                  </Button>
+                  <Button
+                    onClick={shareViaEmail}
+                    className="h-16 flex-col gap-1 bg-orange-600 hover:bg-orange-700"
+                    data-testid="share-email"
+                  >
+                    <Mail className="w-6 h-6" />
+                    <span className="text-xs">Email</span>
+                  </Button>
+                  <Button
+                    onClick={copyToClipboard}
+                    className="h-16 flex-col gap-1 bg-slate-700 hover:bg-slate-600"
+                    data-testid="share-copy"
+                  >
+                    <Copy className="w-6 h-6" />
+                    <span className="text-xs">Copy Link</span>
+                  </Button>
+                </div>
+
+                {/* Viral CTA */}
+                <div className="bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-xl p-4 text-center">
+                  <p className="text-amber-400 text-sm font-medium mb-1">Ride the Wave!</p>
+                  <p className="text-white/60 text-xs">
+                    Tell your friends, family & colleagues about your talent
+                  </p>
+                </div>
+              </div>
+
+              {/* Close Button */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute top-4 right-4 text-white/60 hover:text-white"
+                onClick={() => setShowShareModal(false)}
+                data-testid="share-modal-close"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
