@@ -86,49 +86,49 @@ const PRAKRUTI_TYPES = {
 // 5 CHARACTER CLUBS - PANCHA PANDAVAS (Order: Internal → External)
 const CHARACTER_CLUBS = {
   dharma: {
-    name: "DHARMA CLUB",
-    pandava: "Yudhishthira",
-    quality: "POWER KEEPER",
+    name: "धर्म DHARMA CLUB",
+    pandava: "युधिष्ठिर Yudhishthira",
+    quality: "POWER KEEPER • शक्ति रक्षक",
     icon: Shield,
     color: "#3B82F6",
     divisions: ["Policy", "Legal"],
-    motto: "Foundation of All Power"
+    motto: "सत्यमेव जयते • Truth Alone Triumphs"
   },
   shakti: {
-    name: "SHAKTI CLUB",
-    pandava: "Bhima",
-    quality: "WELLNESS SEEKER",
+    name: "शक्ति SHAKTI CLUB",
+    pandava: "भीम Bhima",
+    quality: "WELLNESS SEEKER • स्वास्थ्य साधक",
     icon: Heart,
     color: "#EF4444",
     divisions: ["Health", "Sports", "Food"],
-    motto: "Health is True Wealth"
+    motto: "शरीरमाद्यं खलु धर्मसाधनम्"
   },
   vidya: {
-    name: "VIDYA CLUB",
-    pandava: "Arjuna",
-    quality: "PROBLEM SOLVER",
+    name: "विद्या VIDYA CLUB",
+    pandava: "अर्जुन Arjuna",
+    quality: "PROBLEM SOLVER • समस्या समाधक",
     icon: Target,
     color: "#8B5CF6",
     divisions: ["Technology", "Science", "Security"],
-    motto: "Every Problem Has a Solution"
+    motto: "कर्मण्येवाधिकारस्ते • Focus on Action"
   },
   gyana: {
-    name: "GYANA CLUB",
-    pandava: "Sahadeva",
-    quality: "KNOWLEDGE GIVER",
+    name: "ज्ञान GYANA CLUB",
+    pandava: "सहदेव Sahadeva",
+    quality: "KNOWLEDGE GIVER • ज्ञान दाता",
     icon: Brain,
     color: "#10B981",
     divisions: ["Education", "Transport"],
-    motto: "Knowledge is Liberation"
+    motto: "विद्या ददाति विनयम् • Knowledge Gives Humility"
   },
   kala: {
-    name: "KALA CLUB",
-    pandava: "Nakula",
-    quality: "PROFIT MAXIMIZER",
+    name: "कला KALA CLUB",
+    pandava: "नकुल Nakula",
+    quality: "PROFIT MAXIMIZER • लाभ अधिकतमक",
     icon: Coins,
     color: "#F59E0B",
     divisions: ["Finance", "Art", "Hospitality"],
-    motto: "Talent Creates Value"
+    motto: "अर्थस्य मूलं धर्मः • Dharma is Root of Wealth"
   }
 };
 
