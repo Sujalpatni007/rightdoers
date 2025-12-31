@@ -564,7 +564,7 @@ export default function DoersProfiler() {
                 
                 <p className="text-white/60 text-xs mt-3 text-center">
                   💡 This shows that <span className="text-white">ANYONE</span> can achieve excellence through skill development,
-                  even if personality isn't a natural fit!
+                  even if personality is not a natural fit!
                 </p>
               </CardContent>
             </Card>
