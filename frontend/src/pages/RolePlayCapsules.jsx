@@ -704,7 +704,7 @@ export default function RolePlayCapsules() {
   const currentCapsules = selectedModule ? getCapsulesForModule(selectedModule) : { capsules: [] };
   const currentCapsule = currentCapsules.capsules[currentLessonIndex];
   
-  // Start a lesson
+  // Start a capsule
   const startLesson = (module) => {
     setSelectedModule(module);
     setCurrentLessonIndex(0);
@@ -715,24 +715,24 @@ export default function RolePlayCapsules() {
     setLessonProgress(0);
   };
   
-  // Handle next lesson
+  // Handle next capsule
   const nextLesson = () => {
-    if (currentLesson?.dcoin) {
-      setEarnedDcoins(prev => prev + currentLesson.dcoin);
+    if (currentCapsule?.dcoin) {
+      setEarnedDcoins(prev => prev + currentCapsule.dcoin);
     }
     
-    if (currentLessonIndex < currentLessons.lessons.length - 1) {
+    if (currentLessonIndex < currentCapsules.capsules.length - 1) {
       setCurrentLessonIndex(prev => prev + 1);
       setSelectedAnswer(null);
       setShowExplanation(false);
       setRolePlayResponse("");
-      setLessonProgress(((currentLessonIndex + 1) / currentLessons.lessons.length) * 100);
+      setLessonProgress(((currentLessonIndex + 1) / currentCapsules.capsules.length) * 100);
     } else {
       // Module complete
       setCompletedModules(prev => [...prev, selectedModule.id]);
       setLessonMode(false);
       setSelectedModule(null);
-      toast.success(`Module Complete! +${selectedModule.dcoin} D-COIN earned!`);
+      toast.success(`Daily Capsule Complete! +${selectedModule.dcoin} D-COIN earned!`);
     }
   };
   
