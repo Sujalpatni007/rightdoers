@@ -1208,7 +1208,12 @@ export default function RolePlayCapsules() {
 
       {/* Main Content */}
       <main className="max-w-2xl mx-auto px-4 py-6">
-        {selectedDivision ? renderDivisionDetail() : renderDivisionGrid()}
+        {lessonMode 
+          ? renderLessonMode() 
+          : selectedDivision 
+            ? renderDivisionDetail() 
+            : renderDivisionGrid()
+        }
       </main>
 
       {/* Floating Astro */}
