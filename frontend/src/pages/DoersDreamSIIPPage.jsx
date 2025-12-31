@@ -155,28 +155,28 @@ export default function DoersDreamSIIPPage() {
                 className="mb-2"
               />
               <div className="flex justify-between text-xs text-slate-400">
-                <span>₹1,000</span>
-                <span>₹10,000</span>
+                <span>Starter</span>
+                <span>Premium</span>
               </div>
             </div>
 
-            {/* Results Grid */}
+            {/* Results Grid - Without explicit years */}
             <div className="grid grid-cols-2 gap-3 mb-4">
               <div className="bg-amber-50 rounded-xl p-3 text-center">
-                <p className="text-slate-500 text-xs mb-1">Total Invested (30 yrs)</p>
+                <p className="text-slate-500 text-xs mb-1">Your Investment</p>
                 <p className="font-bold text-lg text-amber-700">₹{(totalInvested/100000).toFixed(1)} Lac</p>
               </div>
               <div className="bg-green-50 rounded-xl p-3 text-center">
-                <p className="text-slate-500 text-xs mb-1">Maturity Value</p>
+                <p className="text-slate-500 text-xs mb-1">Grows To</p>
                 <p className="font-bold text-lg text-green-700">₹{(maturityValue/10000000).toFixed(2)} Cr</p>
               </div>
               <div className="bg-purple-50 rounded-xl p-3 text-center">
-                <p className="text-slate-500 text-xs mb-1">Monthly Pension</p>
+                <p className="text-slate-500 text-xs mb-1">Monthly Returns</p>
                 <p className="font-bold text-lg text-purple-700">₹{monthlyPension.toLocaleString()}</p>
               </div>
               <div className="bg-blue-50 rounded-xl p-3 text-center">
-                <p className="text-slate-500 text-xs mb-1">Pension Duration</p>
-                <p className="font-bold text-lg text-blue-700">30 Years</p>
+                <p className="text-slate-500 text-xs mb-1">Secure Future</p>
+                <p className="font-bold text-lg text-blue-700">Forever</p>
               </div>
             </div>
 
