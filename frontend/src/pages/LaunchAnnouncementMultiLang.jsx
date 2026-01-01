@@ -394,6 +394,16 @@ export default function LaunchAnnouncementMultiLang() {
     ? "🚀 HI AI APP ينطلق في قمة دبي العالمية للابتكار 2026! #HIAI #دبي"
     : `🚀 HI AI APP launching at Dubai Global Innovation Summit 2026! #HIAI #DubaiLaunch`;
 
+  // Get localized WhatsApp message
+  const whatsappMessage = WHATSAPP_MESSAGES[currentLang] || WHATSAPP_MESSAGES.en;
+  const fullWhatsappMessage = whatsappMessage + shareUrl;
+
+  const handleWhatsAppShare = () => {
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(fullWhatsappMessage)}`;
+    window.open(whatsappUrl, "_blank");
+    toast.success("Opening WhatsApp...");
+  };
+
   const handleShare = (platform) => {
     const urls = {
       twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
