@@ -64,6 +64,8 @@ import DoersOneFamily from "@/pages/DoersOneFamily";
 import ProfileComparison from "@/pages/ProfileComparison";
 import DivisionDashboards from "@/pages/DivisionDashboards";
 import StreakSystem from "@/pages/StreakSystem";
+import ProvenProfiles from "@/pages/ProvenProfiles";
+import Jobs4Me from "@/pages/Jobs4Me";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
