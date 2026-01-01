@@ -617,3 +617,275 @@ async def get_kata_system():
         "orbit_definition": "Self-sustaining productivity with minimal supervision",
         "total_duration": "~2 weeks to orbit"
     }
+
+# ============================================
+# MISSION BOARD - Dubai Launch Live Tracker
+# ============================================
+
+class MilestoneType(str, Enum):
+    LEADER_ASSIGNED = "leader_assigned"
+    KATA_STARTED = "kata_started"
+    KATA_COMPLETED = "kata_completed"
+    ORBIT_ACHIEVED = "orbit_achieved"
+    TEAM_EXPANDED = "team_expanded"
+    FIRST_WIN = "first_win"
+
+class ActivityLog(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    vertical: str
+    milestone_type: MilestoneType
+    title: str
+    description: str
+    leader_name: Optional[str] = None
+    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    points: int = 0
+
+# Dubai Launch Target Date
+DUBAI_LAUNCH_DATE = "2026-01-09T00:00:00+04:00"  # Dubai timezone
+
+@router.get("/mission-board")
+async def get_mission_board():
+    """Get real-time mission board for Dubai launch - all 7 verticals progress"""
+    
+    # Calculate days to launch
+    launch_date = datetime.fromisoformat(DUBAI_LAUNCH_DATE)
+    now = datetime.now(timezone.utc)
+    days_to_launch = max(0, (launch_date - now).days)
+    hours_to_launch = max(0, int((launch_date - now).total_seconds() / 3600))
+    
+    # Get vertical progress
+    verticals_progress = []
+    total_progress = 0
+    
+    for vertical in BusinessVertical:
+        config = VERTICAL_CONFIG[vertical]
+        
+        # Get leader and their progress
+        leader = None
+        kata_progress = 0
+        status = "vacant"
+        team_size = 0
+        
+        if db is not None:
+            leader_doc = await db.vertical_leaders.find_one(
+                {"vertical": vertical.value, "status": "active"},
+                {"_id": 0}
+            )
+            if leader_doc:
+                leader = leader_doc
+                team_size = leader_doc.get("team_size", 0)
+                
+                # Get onboarding progress
+                session = await db.onboarding_sessions.find_one(
+                    {"vertical": vertical.value, "status": {"$ne": "not_started"}},
+                    {"_id": 0},
+                    sort=[("started_at", -1)]
+                )
+                if session:
+                    current_kata = session.get("current_kata", 1)
+                    kata_progress = current_kata * 25  # 25% per kata
+                    status = session.get("status", "in_progress")
+                else:
+                    status = "assigned"
+                    kata_progress = 10  # Just assigned
+        
+        # Calculate vertical readiness
+        readiness = 0
+        if leader:
+            readiness += 30  # Leader assigned = 30%
+            readiness += kata_progress * 0.5  # Kata progress contributes up to 50%
+            readiness += min(team_size * 5, 20)  # Team size contributes up to 20%
+        
+        verticals_progress.append({
+            "code": vertical.value,
+            "name": config["name"],
+            "icon": config["icon"],
+            "color": config["color"],
+            "mission": config["mission"],
+            "leader_name": leader.get("leader_name") if leader else None,
+            "leader_designation": leader.get("designation") if leader else None,
+            "status": status,
+            "kata_progress": kata_progress,
+            "team_size": team_size,
+            "readiness_percent": min(100, int(readiness)),
+            "is_orbit": status == "orbit"
+        })
+        
+        total_progress += readiness
+    
+    # Calculate overall launch readiness
+    launch_readiness = int(total_progress / len(BusinessVertical))
+    
+    # Determine mission status
+    if launch_readiness >= 90:
+        mission_status = "LAUNCH_READY"
+        status_color = "#00ff88"
+    elif launch_readiness >= 70:
+        mission_status = "FINAL_PREP"
+        status_color = "#22c55e"
+    elif launch_readiness >= 50:
+        mission_status = "ON_TRACK"
+        status_color = "#eab308"
+    elif launch_readiness >= 30:
+        mission_status = "ACCELERATE"
+        status_color = "#f97316"
+    else:
+        mission_status = "MOBILIZING"
+        status_color = "#ef4444"
+    
+    return {
+        "launch_target": "DUBAI GLOBAL LAUNCH",
+        "launch_date": DUBAI_LAUNCH_DATE,
+        "days_to_launch": days_to_launch,
+        "hours_to_launch": hours_to_launch,
+        "countdown_active": days_to_launch > 0,
+        "mission_status": mission_status,
+        "status_color": status_color,
+        "launch_readiness_percent": launch_readiness,
+        "verticals_progress": verticals_progress,
+        "verticals_ready": sum(1 for v in verticals_progress if v["readiness_percent"] >= 80),
+        "verticals_total": len(BusinessVertical),
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
+@router.get("/mission-board/activity")
+async def get_mission_activity():
+    """Get recent activity feed for mission board"""
+    
+    activities = []
+    
+    if db is not None:
+        # Get recent leader assignments
+        cursor = db.vertical_leaders.find(
+            {"status": "active"},
+            {"_id": 0}
+        ).sort("assigned_at", -1).limit(10)
+        
+        async for leader in cursor:
+            config = VERTICAL_CONFIG.get(BusinessVertical(leader["vertical"]), {})
+            activities.append({
+                "id": leader.get("id", str(uuid.uuid4())),
+                "type": "leader_assigned",
+                "icon": "🎖️",
+                "title": f"Leader Assigned to {leader['vertical']}",
+                "description": f"{leader['leader_name']} appointed as {leader.get('designation', 'Director')}",
+                "vertical": leader["vertical"],
+                "vertical_color": config.get("color", "#00ff88"),
+                "timestamp": leader.get("assigned_at", datetime.now(timezone.utc).isoformat()),
+                "points": 100
+            })
+        
+        # Get recent onboarding milestones
+        cursor = db.onboarding_sessions.find(
+            {"status": {"$ne": "not_started"}},
+            {"_id": 0}
+        ).sort("started_at", -1).limit(10)
+        
+        async for session in cursor:
+            config = VERTICAL_CONFIG.get(BusinessVertical(session["vertical"]), {})
+            milestone_type = "kata_started"
+            icon = "📚"
+            points = 50
+            
+            if session.get("status") == "orbit":
+                milestone_type = "orbit_achieved"
+                icon = "🚀"
+                points = 500
+                title = f"ORBIT Achieved! {session['vertical']}"
+                desc = f"{session['user_name']} reached self-sustaining productivity"
+            else:
+                current_kata = session.get("current_kata", 1)
+                title = f"Kata {current_kata} Progress - {session['vertical']}"
+                desc = f"{session['user_name']} advancing through onboarding"
+            
+            activities.append({
+                "id": session.get("id", str(uuid.uuid4())),
+                "type": milestone_type,
+                "icon": icon,
+                "title": title,
+                "description": desc,
+                "vertical": session["vertical"],
+                "vertical_color": config.get("color", "#00ff88"),
+                "timestamp": session.get("started_at", datetime.now(timezone.utc).isoformat()),
+                "points": points
+            })
+    
+    # Sort by timestamp and limit
+    activities.sort(key=lambda x: x["timestamp"], reverse=True)
+    activities = activities[:15]
+    
+    # Calculate total points
+    total_points = sum(a["points"] for a in activities)
+    
+    return {
+        "activities": activities,
+        "total_activities": len(activities),
+        "total_points": total_points,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
+@router.post("/mission-board/log-milestone")
+async def log_milestone(
+    vertical: str,
+    milestone_type: str,
+    title: str,
+    description: str,
+    leader_name: Optional[str] = None,
+    points: int = 50
+):
+    """Log a custom milestone to the mission board"""
+    
+    try:
+        v = BusinessVertical(vertical)
+    except ValueError:
+        raise HTTPException(status_code=400, detail=f"Invalid vertical: {vertical}")
+    
+    activity = ActivityLog(
+        vertical=vertical,
+        milestone_type=MilestoneType(milestone_type) if milestone_type in [e.value for e in MilestoneType] else MilestoneType.FIRST_WIN,
+        title=title,
+        description=description,
+        leader_name=leader_name,
+        points=points
+    )
+    
+    if db is not None:
+        await db.mission_activities.insert_one(activity.model_dump())
+    
+    return {
+        "success": True,
+        "activity": activity.model_dump(),
+        "message": "Milestone logged to mission board"
+    }
+
+@router.get("/mission-board/leaderboard")
+async def get_vertical_leaderboard():
+    """Get leaderboard ranking verticals by readiness"""
+    
+    board = await get_mission_board()
+    
+    # Sort verticals by readiness
+    ranked = sorted(
+        board["verticals_progress"],
+        key=lambda x: (x["readiness_percent"], x["kata_progress"]),
+        reverse=True
+    )
+    
+    # Add rankings
+    for i, v in enumerate(ranked):
+        v["rank"] = i + 1
+        if i == 0:
+            v["badge"] = "🥇"
+        elif i == 1:
+            v["badge"] = "🥈"
+        elif i == 2:
+            v["badge"] = "🥉"
+        else:
+            v["badge"] = f"#{i+1}"
+    
+    return {
+        "leaderboard": ranked,
+        "leader_vertical": ranked[0]["code"] if ranked else None,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
