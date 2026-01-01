@@ -291,17 +291,189 @@ async def get_jobs(
     jobs = await db.jobs.find(query, {"_id": 0}).sort("created_at", -1).limit(limit).to_list(limit)
     return jobs
 
+@api_router.get("/jobs/employer/{employer_id}", response_model=List[Job])
+async def get_employer_jobs(employer_id: str):
+    jobs = await db.jobs.find({"employer_id": employer_id}, {"_id": 0}).to_list(100)
+    return jobs
+
+# ============================================
+# JOB AGGREGATOR APIs (must come before /jobs/{job_id})
+# ============================================
+
+from job_aggregator import job_aggregator, SAMPLE_INDIAN_JOBS, AggregatedJob
+
+@api_router.get("/jobs/aggregated")
+async def search_aggregated_jobs(
+    query: str = "jobs",
+    location: str = "India",
+    page: int = 1,
+    include_sample: bool = True
+):
+    """
+    Search jobs from multiple sources (LinkedIn, Indeed, Naukri, etc.)
+    """
+    try:
+        jobs = await job_aggregator.search_all_sources(query, location, page, include_sample)
+        return {
+            "jobs": [job.model_dump() for job in jobs],
+            "total": len(jobs),
+            "query": query,
+            "location": location,
+            "sources": ["jsearch", "adzuna", "naukri", "mercor", "quikr", "internal"]
+        }
+    except Exception as e:
+        logger.error(f"Job aggregation error: {e}")
+        # Return sample jobs on error
+        return {
+            "jobs": [job.model_dump() for job in SAMPLE_INDIAN_JOBS],
+            "total": len(SAMPLE_INDIAN_JOBS),
+            "query": query,
+            "location": location,
+            "sources": ["internal"],
+            "error": "External APIs unavailable, showing sample jobs"
+        }
+
+@api_router.get("/jobs/sources")
+async def get_job_sources():
+    """Get list of job sources and their status"""
+    return {
+        "sources": [
+            {"name": "JSearch", "description": "LinkedIn, Indeed, Glassdoor aggregator", "status": "configured" if os.environ.get("RAPIDAPI_KEY") else "needs_api_key"},
+            {"name": "Adzuna", "description": "Official job board aggregator (16 countries)", "status": "configured" if os.environ.get("ADZUNA_APP_ID") else "needs_api_key"},
+            {"name": "Naukri", "description": "India's #1 job portal", "status": "coming_soon"},
+            {"name": "Mercor", "description": "AI-powered job matching", "status": "coming_soon"},
+            {"name": "Quikr", "description": "Local jobs and gigs", "status": "coming_soon"},
+            {"name": "Internal", "description": "Right Doers job listings", "status": "active"}
+        ]
+    }
+
+# ============================================
+# AI JOB MATCHER APIs
+# ============================================
+
+from ai_matcher import ai_matcher, ProfileMatchInput, JobMatchResult
+
+class MatchJobsRequest(BaseModel):
+    # Profile data
+    doers_score: int = 650
+    efficiency_value: int = 70
+    adaptive_level: str = "ASSOCIATE"
+    career_interests: Dict[str, int] = Field(default_factory=dict)
+    skills: List[str] = Field(default_factory=list)
+    skills_scores: Dict[str, int] = Field(default_factory=dict)
+    preferred_location: str = "India"
+    salary_expectation_min: Optional[int] = None
+    salary_expectation_max: Optional[int] = None
+    open_to_remote: bool = True
+    # Search params
+    query: str = ""
+
+@api_router.post("/jobs/match")
+async def match_jobs_to_profile(request: MatchJobsRequest):
+    """
+    AI-powered job matching based on DoersScore™ and profile data
+    """
+    try:
+        # Create profile input
+        profile = ProfileMatchInput(
+            doers_score=request.doers_score,
+            efficiency_value=request.efficiency_value,
+            adaptive_level=request.adaptive_level,
+            career_interests=request.career_interests,
+            skills=request.skills,
+            skills_scores=request.skills_scores,
+            preferred_location=request.preferred_location,
+            salary_expectation_min=request.salary_expectation_min,
+            salary_expectation_max=request.salary_expectation_max,
+            open_to_remote=request.open_to_remote
+        )
+        
+        # Get jobs from aggregator
+        query = request.query or "jobs"
+        jobs = await job_aggregator.search_all_sources(query, request.preferred_location)
+        
+        # Convert to dict for matcher
+        jobs_dict = [job.model_dump() for job in jobs]
+        
+        # Rank jobs by match score
+        matched_jobs = ai_matcher.rank_jobs_for_profile(profile, jobs_dict)
+        
+        # Separate by recommendation
+        perfect_matches = [j for j in matched_jobs if j["recommendation"] == "perfect_match"]
+        good_matches = [j for j in matched_jobs if j["recommendation"] == "good_match"]
+        stretch_roles = [j for j in matched_jobs if j["recommendation"] == "stretch_role"]
+        
+        return {
+            "matched_jobs": matched_jobs[:20],  # Top 20
+            "summary": {
+                "total_jobs": len(matched_jobs),
+                "perfect_matches": len(perfect_matches),
+                "good_matches": len(good_matches),
+                "stretch_roles": len(stretch_roles),
+                "avg_match_score": sum(j["match_score"] for j in matched_jobs) // max(1, len(matched_jobs))
+            },
+            "profile_summary": {
+                "doers_score": request.doers_score,
+                "adaptive_level": request.adaptive_level,
+                "top_skills": request.skills[:5],
+                "top_interests": sorted(request.career_interests.items(), key=lambda x: x[1], reverse=True)[:3]
+            }
+        }
+    except Exception as e:
+        logger.error(f"Job matching error: {e}")
+        raise HTTPException(status_code=500, detail=f"Job matching failed: {str(e)}")
+
+@api_router.post("/jobs/match-single")
+async def match_single_job(profile_data: Dict[str, Any], job_data: Dict[str, Any]):
+    """
+    Match a single job to a profile
+    """
+    profile = ProfileMatchInput(**profile_data)
+    match_result = ai_matcher.match_job_to_profile(profile, job_data)
+    return match_result.model_dump()
+
+@api_router.get("/jobs/match/anushree")
+async def get_anushree_job_matches():
+    """
+    Get job matches for Anushree's profile (demo)
+    """
+    # Use Anushree's profile data
+    profile = ProfileMatchInput(
+        doers_score=820,
+        efficiency_value=85,
+        adaptive_level="PROFESSIONAL",
+        career_interests={
+            "Artistic": 73,
+            "Enterprising": 64,
+            "Social": 60
+        },
+        skills=["Fashion Design", "Sustainability", "ESG", "Project Management", "Adobe Suite"],
+        preferred_location="Bengaluru",
+        salary_expectation_min=1200000,
+        open_to_remote=True
+    )
+    
+    # Get fashion/sustainability jobs
+    jobs = await job_aggregator.search_all_sources("fashion design sustainability", "India")
+    jobs_dict = [job.model_dump() for job in jobs]
+    
+    # Match and rank
+    matched_jobs = ai_matcher.rank_jobs_for_profile(profile, jobs_dict)
+    
+    return {
+        "profile_name": "Anushree R. Hosalli",
+        "doers_score": 820,
+        "matched_jobs": matched_jobs[:10],
+        "recommendation": "Based on your DoersScore™ of 820 and expertise in sustainable fashion, you're qualified for senior roles in circular economy and ESG consulting."
+    }
+
+# Dynamic job ID route must be AFTER specific routes
 @api_router.get("/jobs/{job_id}", response_model=Job)
 async def get_job(job_id: str):
     job = await db.jobs.find_one({"id": job_id}, {"_id": 0})
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
     return job
-
-@api_router.get("/jobs/employer/{employer_id}", response_model=List[Job])
-async def get_employer_jobs(employer_id: str):
-    jobs = await db.jobs.find({"employer_id": employer_id}, {"_id": 0}).to_list(100)
-    return jobs
 
 # Job Application Routes
 @api_router.post("/applications")
