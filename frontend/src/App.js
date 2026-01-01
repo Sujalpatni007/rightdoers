@@ -72,6 +72,7 @@ import DoerTeensDashboard from "@/pages/DoerTeensDashboard";
 import ContentCommandCentre from "@/pages/ContentCommandCentre";
 import GemmaOffline from "@/pages/GemmaOffline";
 import WhatsAppSigning from "@/pages/WhatsAppSigning";
+import CaptainCommandCentre from "@/pages/CaptainCommandCentre";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
@@ -294,6 +295,12 @@ function AppContent() {
       <Route path="/whatsapp" element={<WhatsAppSigning />} />
       <Route path="/whatsapp-signing" element={<WhatsAppSigning />} />
       <Route path="/nda-signing" element={<WhatsAppSigning />} />
+      
+      {/* Captain Command Centre - 7 Business Verticals */}
+      <Route path="/command-centre" element={<CaptainCommandCentre />} />
+      <Route path="/captain" element={<CaptainCommandCentre />} />
+      <Route path="/verticals" element={<CaptainCommandCentre />} />
+      <Route path="/hq" element={<CaptainCommandCentre />} />
       
       {/* Employer Flow */}
       <Route path="/employer" element={<ProtectedRoute allowedRoles={["employer"]}><EmployerDashboard /></ProtectedRoute>} />
