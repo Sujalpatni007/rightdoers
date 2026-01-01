@@ -1,5 +1,5 @@
 # HI AI-APP.COM - Product Requirements Document
-## Version 14.0 | January 1, 2026
+## Version 15.0 | January 1, 2026
 
 ---
 
@@ -22,68 +22,78 @@ Bangalore, India
 
 ## What's Been Implemented
 
-### ✅ NEW: WhatsApp NDA Signing - DOERS LEGAL AI (January 1, 2026)
-**Purpose:** Direct Founder → Command Centre → Candidate Onboarding via WhatsApp
+### ✅ NEW: Captain Command Centre (January 1, 2026)
+**Purpose:** Central HQ for 7 Business Verticals - DOERS Trinity Vision
 
-**Flow:**
-```
-Founder WhatsApp → Command Centre Contract Signing → Candidate Onboarding Complete
-```
+**7 Business Verticals:**
+| Code | Name | Mission |
+|------|------|---------|
+| B2G | Business to Government | Jobs for Locals Focus |
+| B2A | Business to Associations | Association Partnerships |
+| B2B | Business to Business | Corporate Services |
+| B2C | Business to Consumers | Direct Talent Services |
+| B2D | Business to Digital | Creative & Digital Services |
+| D2D | Doers to Doers | Peer Network |
+| A2A | Agent to Agent | AI Agent Operations |
 
 **Features:**
 
-#### 1. NDA Signing via WhatsApp 📜
-- Send NDA documents via WhatsApp
-- OTP-based digital signatures (6-digit, 24-hour expiry)
-- Signature hash generated using SHA256
-- Document tracking: initiated → otp_sent → verified → signed
+#### 1. Dynamic Leader Assignment 🎖️
+- Assign leaders to any of 7 verticals
+- Track onboarding status (Not Started → In Progress → ORBIT)
+- Team size and metrics tracking
 
-#### 2. Offer Letter via WhatsApp 💼
-- Send offer letters for digital acceptance
-- Position and Division selection
-- 48-hour OTP expiry for offers
-- Confirmation messages with signature ID
+#### 2. 16-Kata Onboarding System (Varun Mayya Inspired) 📚
+- **Kata 1 (Day 1):** Context Loading - Understand mission, meet Captain
+- **Kata 2 (Day 2-3):** System Orientation - Master dashboard, set up AI assistant
+- **Kata 3 (Week 1):** Vertical Deep Dive - Study playbook, shadow operations
+- **Kata 4 (Week 2):** First Mission - Execute task, build 30-day roadmap
+- **ORBIT Status:** Self-sustaining productivity with minimal supervision
 
-#### 3. Founder Approval Workflow ✅
-- Request approval directly via WhatsApp
-- Approval types: New Hire, Contract, Budget, Partnership
-- Commands: APPROVE <ID> / REJECT <ID>
+#### 3. AI Onboarding Kit (Hybrid Mode) 🤖
+- **Online:** AI-powered contextual responses
+- **Offline:** Cached responses for each vertical
+- Welcome messages, first tasks, pro tips per vertical
+- Chat interface with source indicators (Cached/AI)
 
-#### 4. WhatsApp Commands
-| Command | Action |
-|---------|--------|
-| SIGN <OTP> | Sign NDA with OTP |
-| ACCEPT <OTP> | Accept offer with OTP |
-| REJECT | Decline document |
-| APPROVE <ID> | Approve request (founder) |
-| STATUS <ID> | Check document status |
-| HELP | Show available commands |
+#### 4. Military Command Style Design 🎯
+- Dark navy (#0a1628) background
+- Tactical green (#00ff88) accents
+- Font: Monospace for military aesthetic
+- Status badges: ASSIGNED, VACANT, ORBIT
 
-**Routes:** `/whatsapp`, `/whatsapp-signing`, `/nda-signing`
+**Routes:** `/command-centre`, `/captain`, `/verticals`, `/hq`
 
 **APIs:**
-- `GET /api/whatsapp/status` - Service status
-- `POST /api/whatsapp/nda/send` - Send NDA for signing
-- `POST /api/whatsapp/offer/send` - Send offer for acceptance
-- `GET /api/whatsapp/nda/view/{id}` - View NDA document
-- `GET /api/whatsapp/offer/view/{id}` - View offer document
-- `POST /api/whatsapp/verify` - Verify OTP signature
-- `POST /api/whatsapp/incoming` - Handle incoming messages (webhook)
-- `POST /api/whatsapp/approval/request` - Request founder approval
-- `GET /api/whatsapp/signings` - List all signings
-- `POST /api/whatsapp/welcome` - Send welcome notification
+- `GET /api/captain/status` - Command Centre status
+- `GET /api/captain/verticals` - All 7 verticals
+- `GET /api/captain/vertical/{code}` - Specific vertical details
+- `POST /api/captain/assign-leader` - Assign leader to vertical
+- `GET /api/captain/leaders` - All assigned leaders
+- `POST /api/captain/onboarding/start` - Start onboarding session
+- `POST /api/captain/onboarding/chat` - Chat with AI onboarding
+- `POST /api/captain/onboarding/progress` - Update kata progress
+- `GET /api/captain/dashboard-metrics` - Dashboard metrics
+- `GET /api/captain/kata-system` - 16-Kata system info
 
+**Files:** `/app/backend/captain_command.py`, `/app/frontend/src/pages/CaptainCommandCentre.jsx`
+
+**MongoDB Collections:** `vertical_leaders`, `onboarding_sessions`
+
+**Testing:** 100% (19/19 backend tests passed, all frontend tests passed)
+
+---
+
+### ✅ WhatsApp NDA Signing - DOERS LEGAL AI (January 1, 2026)
 **Status:** Running in **SIMULATION MODE** (Twilio not configured)
 
-**For Production:** Configure in backend/.env:
-```
-TWILIO_ACCOUNT_SID=your_sid
-TWILIO_AUTH_TOKEN=your_token
-TWILIO_WHATSAPP_NUMBER=whatsapp:+1415...
-FOUNDER_WHATSAPP=+91...
-```
+**Features:**
+- NDA Signing via WhatsApp
+- Offer Letter via WhatsApp
+- OTP-based digital signatures
+- Founder approval workflow
 
-**Files:** `/app/backend/whatsapp_service.py`, `/app/frontend/src/pages/WhatsAppSigning.jsx`
+**Routes:** `/whatsapp`, `/whatsapp-signing`, `/nda-signing`
 
 ---
 
@@ -92,7 +102,6 @@ FOUNDER_WHATSAPP=+91...
 - IndexedDB for conversation persistence
 - Background sync for queued actions
 - Install prompts for rural users
-- Pre-cached Telugu/Kannada career guidance
 
 ---
 
@@ -116,6 +125,7 @@ FOUNDER_WHATSAPP=+91...
 
 | Feature | Color | Badge | Route |
 |---------|-------|-------|-------|
+| Captain Command Centre | Tactical Green | 🎖️ HQ | /command-centre |
 | Content Command Centre | Purple | NEW | /content |
 | Gemma Offline AI | Emerald | 🇮🇳 Rural | /gemma |
 | WhatsApp NDA Signing | Green | ⚖️ Legal | /whatsapp |
@@ -124,11 +134,13 @@ FOUNDER_WHATSAPP=+91...
 ---
 
 ## Testing Status
+- **Captain Command Centre:** 100% (19/19 tests)
 - **WhatsApp NDA Signing:** 100% (18/18 tests)
 - **Gemma Offline AI:** 100% (17/17 tests)
 - **Content Command Centre:** 100% (12/12 tests)
 
 **Latest Test Reports:**
+- `/app/test_reports/iteration_12.json` (Captain Command)
 - `/app/test_reports/iteration_11.json` (WhatsApp)
 - `/app/test_reports/iteration_10.json` (Gemma)
 - `/app/test_reports/iteration_9.json` (Content)
@@ -137,6 +149,8 @@ FOUNDER_WHATSAPP=+91...
 
 ## Key Routes Reference
 ```
+/command-centre  → Captain Command Centre (7 Verticals HQ)
+/captain         → Captain Command Centre (alias)
 /whatsapp        → WhatsApp NDA Signing (DOERS LEGAL AI)
 /gemma           → Gemma Offline AI (Rural India)
 /content         → Content Command Centre (GTM)
@@ -153,6 +167,7 @@ FOUNDER_WHATSAPP=+91...
 | Feature | Status | What's Working | For Production |
 |---------|--------|----------------|----------------|
 | WhatsApp Messages | SIMULATED | OTPs, signatures, DB storage | Configure Twilio credentials |
+| AI Onboarding Chat | HYBRID | Cached responses + AI fallback | Full LLM integration |
 | Job Aggregator | SCAFFOLDED | Structure ready | Integrate Naukri, Mercor APIs |
 | CRM | SCAFFOLDED | Basic structure | Complete lead management |
 
@@ -161,11 +176,12 @@ FOUNDER_WHATSAPP=+91...
 ## Upcoming Tasks (Priority Order)
 
 ### P0: Critical
-1. ✅ **WhatsApp NDA Signing** - COMPLETE (SIMULATED)
-2. ✅ **Gemma Offline AI** - COMPLETE
-3. ✅ **Content Command Centre** - COMPLETE
-4. ✅ **PWA Service Worker** - COMPLETE
-5. **Configure Twilio** - For live WhatsApp
+1. ✅ **Captain Command Centre** - COMPLETE
+2. ✅ **WhatsApp NDA Signing** - COMPLETE (SIMULATED)
+3. ✅ **Gemma Offline AI** - COMPLETE
+4. ✅ **Content Command Centre** - COMPLETE
+5. ✅ **PWA Service Worker** - COMPLETE
+6. **Configure Twilio** - For live WhatsApp
 
 ### P1: High Priority
 1. **Full Job Aggregator** - Naukri, Quikr, Mercor
@@ -180,12 +196,12 @@ FOUNDER_WHATSAPP=+91...
 ---
 
 ## Notes
-- **WhatsApp NDA Signing** works end-to-end in simulation mode
-- OTP-based digital signatures generate SHA256 hash
-- Documents stored in MongoDB `legal_documents` collection
-- Signing requests tracked in `whatsapp_signings` collection
-- Landing page now shows all 3 major features prominently
+- **Captain Command Centre** is the central hub for all 7 business verticals
+- **16-Kata Onboarding System** inspired by Varun Mayya's "Company as Organism" philosophy
+- **Hybrid AI Mode:** Online AI + Offline cached responses for onboarding
+- **Military Theme:** Dark navy (#0a1628), tactical green (#00ff88)
+- All major features have 100% test coverage
 
 ---
 
-*HI AI-APP.COM | DOERS LEGAL AI ⚖️ | Digital Signatures via WhatsApp | IPO 2031 🚀*
+*HI AI-APP.COM | CAPTAIN COMMAND CENTRE 🎖️ | DOERS TRINITY | IPO 2031 🚀*
