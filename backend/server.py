@@ -489,6 +489,213 @@ async def seed_data():
     
     return {"message": "Seed data created successfully", "jobs_created": len(sample_jobs)}
 
+# ============================================
+# DOERS PROFILER / TALENT CARD APIs
+# ============================================
+
+class DoersProfileCreate(BaseModel):
+    user_id: str
+    name: str
+    
+class DoersProfile(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: f"DP-{str(uuid.uuid4())[:8].upper()}")
+    user_id: str
+    name: str
+    
+    # DoersScore (CIBIL-style: 300-900)
+    doers_score: int = Field(default=650)
+    doers_score_percentile: int = Field(default=50)
+    doers_score_trend: str = Field(default="stable")
+    
+    # Efficiency Value Components
+    natural_fit_score: int = Field(default=70)
+    developed_skills_score: int = Field(default=60)
+    learning_agility_score: int = Field(default=75)
+    efficiency_value: int = Field(default=0)  # Calculated
+    
+    # 6 Dimension Scores (EduMilestones)
+    dimensions: Dict[str, Dict[str, Any]] = Field(default_factory=lambda: {
+        "personality": {"score": 0, "level": "PARA"},
+        "interest": {"score": 0, "level": "PARA"},
+        "learning": {"score": 0, "level": "PARA"},
+        "eq": {"score": 0, "level": "PARA"},
+        "intelligence": {"score": 0, "level": "PARA"},
+        "aptitude": {"score": 0, "level": "PARA"}
+    })
+    
+    # Skill Journey
+    skills: List[Dict[str, Any]] = Field(default_factory=list)
+    skill_milestones: List[Dict[str, Any]] = Field(default_factory=list)
+    
+    # Career Suitability
+    current_role: Optional[str] = None
+    role_match_score: int = Field(default=0)
+    alternate_roles: List[Dict[str, Any]] = Field(default_factory=list)
+    
+    # Adaptive Level
+    adaptive_level: str = Field(default="PARA")  # PARA, ASSOCIATE, MANAGER, PROFESSIONAL, EXPERT
+    
+    # Verification
+    is_verified: bool = Field(default=False)
+    credential_id: str = Field(default_factory=lambda: f"RDVC-{str(uuid.uuid4())[:8].upper()}")
+    
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    updated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+def calculate_efficiency(natural_fit: int, developed_skills: int, learning_agility: int) -> int:
+    """Efficiency = (Skills × 0.6) + (NaturalFit × 0.3) + (LearningAgility × 0.1)"""
+    return round((developed_skills * 0.6) + (natural_fit * 0.3) + (learning_agility * 0.1))
+
+def get_adaptive_level(score: int) -> str:
+    if score >= 91: return "EXPERT"
+    if score >= 76: return "PROFESSIONAL"
+    if score >= 61: return "MANAGER"
+    if score >= 41: return "ASSOCIATE"
+    return "PARA"
+
+@api_router.post("/profiles", response_model=DoersProfile)
+async def create_profile(data: DoersProfileCreate):
+    """Create a new Doers Profile / Talent Card"""
+    
+    # Calculate initial efficiency
+    natural_fit = random.randint(60, 80)
+    developed_skills = random.randint(50, 75)
+    learning_agility = random.randint(65, 85)
+    efficiency = calculate_efficiency(natural_fit, developed_skills, learning_agility)
+    
+    # Generate DoersScore (300-900 range, like CIBIL)
+    base_score = 500 + (efficiency * 4) + random.randint(-50, 50)
+    doers_score = max(300, min(900, base_score))
+    
+    profile = DoersProfile(
+        user_id=data.user_id,
+        name=data.name,
+        doers_score=doers_score,
+        doers_score_percentile=min(99, max(1, (doers_score - 300) // 6)),
+        natural_fit_score=natural_fit,
+        developed_skills_score=developed_skills,
+        learning_agility_score=learning_agility,
+        efficiency_value=efficiency,
+        adaptive_level=get_adaptive_level(efficiency),
+        dimensions={
+            "personality": {"score": random.randint(60, 90), "level": get_adaptive_level(random.randint(60, 90))},
+            "interest": {"score": random.randint(60, 90), "level": get_adaptive_level(random.randint(60, 90))},
+            "learning": {"score": random.randint(55, 85), "level": get_adaptive_level(random.randint(55, 85))},
+            "eq": {"score": random.randint(60, 90), "level": get_adaptive_level(random.randint(60, 90))},
+            "intelligence": {"score": random.randint(65, 95), "level": get_adaptive_level(random.randint(65, 95))},
+            "aptitude": {"score": random.randint(55, 85), "level": get_adaptive_level(random.randint(55, 85))}
+        },
+        skills=[
+            {"name": "Problem Solving", "level": random.randint(70, 95), "growth": f"+{random.randint(5, 20)}%"},
+            {"name": "Communication", "level": random.randint(65, 90), "growth": f"+{random.randint(5, 15)}%"},
+            {"name": "Technical Skills", "level": random.randint(60, 95), "growth": f"+{random.randint(8, 25)}%"},
+            {"name": "Team Collaboration", "level": random.randint(70, 90), "growth": f"+{random.randint(5, 18)}%"}
+        ]
+    )
+    
+    doc = profile.model_dump()
+    await db.profiles.insert_one(doc)
+    return profile
+
+@api_router.get("/profiles/{profile_id}")
+async def get_profile(profile_id: str):
+    """Get a Doers Profile by ID"""
+    profile = await db.profiles.find_one({"id": profile_id}, {"_id": 0})
+    if not profile:
+        raise HTTPException(status_code=404, detail="Profile not found")
+    return profile
+
+@api_router.get("/profiles/user/{user_id}")
+async def get_profile_by_user(user_id: str):
+    """Get a Doers Profile by User ID"""
+    profile = await db.profiles.find_one({"user_id": user_id}, {"_id": 0})
+    if not profile:
+        raise HTTPException(status_code=404, detail="Profile not found")
+    return profile
+
+@api_router.put("/profiles/{profile_id}/dimensions")
+async def update_profile_dimensions(profile_id: str, dimensions: Dict[str, Dict[str, Any]]):
+    """Update 6 dimensions after assessment"""
+    # Recalculate scores based on dimensions
+    avg_score = sum(d.get("score", 0) for d in dimensions.values()) // len(dimensions)
+    adaptive_level = get_adaptive_level(avg_score)
+    
+    await db.profiles.update_one(
+        {"id": profile_id},
+        {"$set": {
+            "dimensions": dimensions,
+            "adaptive_level": adaptive_level,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    return {"message": "Dimensions updated", "adaptive_level": adaptive_level}
+
+# ============================================
+# FAMILY DASHBOARD APIs (DOERS ONE)
+# ============================================
+
+class FamilyMemberCreate(BaseModel):
+    family_id: str
+    name: str
+    role: str  # father, mother, daughter, son, etc.
+    needs: List[Dict[str, Any]]
+
+class FamilyCreate(BaseModel):
+    name: str
+    members: List[Dict[str, Any]]
+
+class Family(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: f"FAM-{str(uuid.uuid4())[:8].upper()}")
+    name: str
+    family_doers_score: int = Field(default=700)
+    members: List[Dict[str, Any]] = Field(default_factory=list)
+    goals: List[Dict[str, Any]] = Field(default_factory=list)
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+@api_router.post("/families", response_model=Family)
+async def create_family(data: FamilyCreate):
+    """Create a new Family Dashboard"""
+    family = Family(
+        name=data.name,
+        members=data.members,
+        family_doers_score=sum(m.get("doers_score", 700) for m in data.members) // max(1, len(data.members))
+    )
+    doc = family.model_dump()
+    await db.families.insert_one(doc)
+    return family
+
+@api_router.get("/families/{family_id}")
+async def get_family(family_id: str):
+    """Get a Family Dashboard by ID"""
+    family = await db.families.find_one({"id": family_id}, {"_id": 0})
+    if not family:
+        raise HTTPException(status_code=404, detail="Family not found")
+    return family
+
+@api_router.put("/families/{family_id}/member/{member_id}")
+async def update_family_member(family_id: str, member_id: str, updates: Dict[str, Any]):
+    """Update a family member's progress"""
+    family = await db.families.find_one({"id": family_id})
+    if not family:
+        raise HTTPException(status_code=404, detail="Family not found")
+    
+    members = family.get("members", [])
+    for i, member in enumerate(members):
+        if member.get("id") == member_id:
+            members[i].update(updates)
+            break
+    
+    # Recalculate family score
+    family_score = sum(m.get("doers_score", 700) for m in members) // max(1, len(members))
+    
+    await db.families.update_one(
+        {"id": family_id},
+        {"$set": {"members": members, "family_doers_score": family_score}}
+    )
+    return {"message": "Member updated", "family_doers_score": family_score}
+
 # Include router
 app.include_router(api_router)
 
