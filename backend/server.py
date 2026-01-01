@@ -1050,8 +1050,12 @@ Keep responses concise (under 200 words) and end with a helpful suggestion or qu
         if not llm_key:
             return {"response": "I'm here to help! While my full AI capabilities are loading, you can explore your DoersProfile, check Jobs4Me for opportunities, or view Proven Profiles for inspiration. What interests you most?"}
         
+        import uuid
+        session_id = str(uuid.uuid4())
+        
         chat = LlmChat(
             api_key=llm_key,
+            session_id=session_id,
             system_message=system_prompt
         )
         
