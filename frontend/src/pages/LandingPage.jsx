@@ -156,6 +156,32 @@ export default function LandingPage() {
             </Card>
           </motion.div>
           
+          {/* WhatsApp NDA Signing - DOERS LEGAL AI */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.51 }}
+          >
+            <Card 
+              className="bg-gradient-to-r from-green-600/30 to-emerald-600/20 border-green-500/30 cursor-pointer hover:border-green-400/50 transition-all"
+              onClick={() => navigate('/whatsapp')}
+              data-testid="whatsapp-signing-btn"
+            >
+              <CardContent className="p-4 flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-green-500/30 flex items-center justify-center">
+                  <Share2 className="w-6 h-6 text-green-300" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-green-300 font-bold">WhatsApp NDA Signing</p>
+                  <p className="text-white/50 text-xs">Digital Signatures • DOERS LEGAL AI</p>
+                </div>
+                <Badge className="bg-emerald-500/30 text-emerald-300 border-0">
+                  ⚖️ Legal
+                </Badge>
+              </CardContent>
+            </Card>
+          </motion.div>
+          
           {/* Junicorn Finder + ISF */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
