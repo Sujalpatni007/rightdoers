@@ -15,7 +15,8 @@ import {
   Play,
   Globe,
   Zap,
-  ChevronDown
+  ChevronDown,
+  IdCard
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import LanguageSelector from "@/components/LanguageSelector";
