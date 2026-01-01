@@ -910,6 +910,100 @@ async def get_proven_profile(profile_id: str):
         raise HTTPException(status_code=404, detail="Proven profile not found")
     return profile
 
+# ============================================
+# VOICE AI APIs - 8 T's TALK Component
+# ============================================
+
+from voice_ai import voice_ai, VoiceResponse
+
+@api_router.get("/voice/status")
+async def voice_ai_status():
+    """Check if Voice AI is available"""
+    return {
+        "available": voice_ai.is_available(),
+        "model": "whisper-1",
+        "features": ["transcription", "command_parsing", "navigation", "search"]
+    }
+
+@api_router.post("/voice/transcribe")
+async def transcribe_audio(file: UploadFile = File(...)):
+    """
+    Transcribe audio file to text using Whisper
+    Supports: mp3, mp4, mpeg, mpga, m4a, wav, webm
+    Max size: 25MB
+    """
+    if not voice_ai.is_available():
+        raise HTTPException(status_code=503, detail="Voice AI not available. Check API key configuration.")
+    
+    # Validate file type
+    allowed_types = ["audio/webm", "audio/mp3", "audio/mpeg", "audio/wav", "audio/mp4", "audio/m4a", "audio/ogg"]
+    if file.content_type and not any(t in file.content_type for t in ["audio", "webm", "ogg"]):
+        raise HTTPException(status_code=400, detail=f"Invalid file type: {file.content_type}. Supported: {allowed_types}")
+    
+    # Read file
+    audio_data = await file.read()
+    
+    # Check size (25MB limit)
+    if len(audio_data) > 25 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="File too large. Max size: 25MB")
+    
+    try:
+        transcription = await voice_ai.transcribe_audio(audio_data, file.filename or "audio.webm")
+        return {"success": True, "transcription": transcription.model_dump()}
+    except Exception as e:
+        logger.error(f"Transcription error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/voice/command")
+async def process_voice_command(file: UploadFile = File(...)):
+    """
+    Full voice command pipeline:
+    1. Transcribe audio to text
+    2. Parse intent and action
+    3. Return navigation/action suggestion
+    
+    Voice Commands Supported:
+    - Navigation: "Go to pricing", "Show my profile", "Open jobs"
+    - Search: "Search jobs for fashion designer", "Find software developer jobs"
+    - Actions: "Create my profile", "Start assessment", "Share my talent card"
+    - Questions: "What is my Doer score?"
+    """
+    if not voice_ai.is_available():
+        raise HTTPException(status_code=503, detail="Voice AI not available")
+    
+    audio_data = await file.read()
+    
+    if len(audio_data) > 25 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="File too large. Max size: 25MB")
+    
+    try:
+        response = await voice_ai.process_voice_command(audio_data, file.filename or "audio.webm")
+        return response.model_dump()
+    except Exception as e:
+        logger.error(f"Voice command error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/voice/parse-text")
+async def parse_voice_text(text: str):
+    """
+    Parse text as if it were a voice command (for testing)
+    """
+    command = voice_ai.parser.parse(text)
+    response_text = voice_ai.parser.get_response_text(command)
+    
+    suggested_action = None
+    if command.intent == "navigate":
+        suggested_action = f"NAVIGATE:{command.parameters.get('target', '/')}"
+    elif command.intent == "search":
+        query = command.parameters.get("query", "")
+        suggested_action = f"NAVIGATE:/jobs4me?q={query}"
+    
+    return {
+        "command": command.model_dump(),
+        "response_text": response_text,
+        "suggested_action": suggested_action
+    }
+
 # Include router
 app.include_router(api_router)
 
