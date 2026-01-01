@@ -113,7 +113,7 @@ export default function AIMEEChat({ isOpen, onClose }) {
     
     try {
       // Call AIMEE chat API
-      const response = await axios.post(`${API}/aimee/chat`, {
+      const response = await axios.post(`${API}/aimee/chat-simple`, {
         message: text,
         context: messages.slice(-10).map(m => ({ role: m.role, content: m.content }))
       });
