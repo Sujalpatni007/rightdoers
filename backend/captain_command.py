@@ -945,7 +945,10 @@ async def trigger_notification(payload: NotificationPayload):
     
     # Store notification in DB for history
     if db is not None:
-        await db.notifications.insert_one(notification_data)
+        # Create copy without the MongoDB _id issue
+        db_notification = notification_data.copy()
+        db_notification["_id"] = str(uuid.uuid4())  # Use our own ID
+        await db.notifications.insert_one(db_notification)
     
     return {
         "success": True,
