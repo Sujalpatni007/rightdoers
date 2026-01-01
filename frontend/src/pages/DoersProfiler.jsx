@@ -384,7 +384,34 @@ Say HI AI. Get your D.P. (Doers Profiler) at:`;
             <Brain className="w-10 h-10 text-white" />
           </motion.div>
           <h2 className="text-white text-xl font-bold mb-2">Loading Doers Profiler</h2>
-          <p className="text-white/50">Preparing your D.P. (Doers Profiler)...</p>
+          <p className="text-white/50">Connecting to backend...</p>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // Show error with retry option
+  if (error && !profile) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 flex items-center justify-center p-4">
+        <motion.div 
+          className="text-center max-w-md"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-red-500/20 flex items-center justify-center">
+            <AlertCircle className="w-10 h-10 text-red-400" />
+          </div>
+          <h2 className="text-white text-xl font-bold mb-2">Connection Error</h2>
+          <p className="text-white/50 mb-6">{error}</p>
+          <Button 
+            onClick={fetchProfile}
+            className="bg-gradient-to-r from-purple-500 to-pink-500"
+            data-testid="dp-retry-btn"
+          >
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Retry
+          </Button>
         </motion.div>
       </div>
     );
