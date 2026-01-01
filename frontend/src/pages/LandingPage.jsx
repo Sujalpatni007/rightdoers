@@ -276,7 +276,7 @@ export default function LandingPage() {
       {/* Main Content */}
       <main className="relative z-10 px-4 pb-8">
         
-        {/* THE HOOK QUESTION */}
+        {/* THE HOOK QUESTION - MINI FLYWHEEL */}
         <motion.section 
           className="text-center py-6"
           initial={{ opacity: 0, scale: 0.9 }}
@@ -297,32 +297,73 @@ export default function LandingPage() {
               </Badge>
             </motion.div>
 
-            <h1 className="font-display text-2xl md:text-3xl font-bold text-white mb-4 leading-tight">
-              <motion.span 
-                className="text-green-400 block"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 }}
+            {/* MINI FLYWHEEL for AI Question */}
+            <div className="relative w-64 h-64 mx-auto mb-6">
+              {/* Outer glow */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/20 via-purple-500/20 to-rose-500/20 blur-2xl" />
+              
+              {/* Rotating ring */}
+              <motion.div
+                className="absolute inset-0"
+                animate={{ rotate: -360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
               >
-                {content.question1}
-              </motion.span>
-              <motion.span 
-                className="text-red-400 block"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 }}
-              >
-                {content.question2}
-              </motion.span>
-              <motion.span 
-                className="text-amber-400 block text-3xl md:text-4xl mt-2"
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.7, type: "spring" }}
-              >
-                {content.question3}
-              </motion.span>
-            </h1>
+                {/* Orbit path */}
+                <div className="absolute inset-4 rounded-full border border-dashed border-white/20" />
+                
+                {/* Question 1: Take Away Jobs - Top */}
+                <motion.div
+                  className="absolute left-1/2 top-2 -translate-x-1/2 cursor-pointer"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  whileHover={{ scale: 1.1 }}
+                  onClick={() => navigate("/aimee-analyzer")}
+                >
+                  <div className="px-4 py-2 rounded-full bg-gradient-to-r from-rose-500 to-red-600 shadow-lg shadow-rose-500/30">
+                    <span className="text-white text-xs font-bold whitespace-nowrap">
+                      {content.question2.replace("OR ", "")}
+                    </span>
+                  </div>
+                </motion.div>
+                
+                {/* Question 2: Make Life Better - Bottom */}
+                <motion.div
+                  className="absolute left-1/2 bottom-2 -translate-x-1/2 cursor-pointer"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  whileHover={{ scale: 1.1 }}
+                  onClick={() => navigate("/aimee-analyzer")}
+                >
+                  <div className="px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/30">
+                    <span className="text-white text-xs font-bold whitespace-nowrap">
+                      {content.question1}
+                    </span>
+                  </div>
+                </motion.div>
+              </motion.div>
+
+              {/* CENTER - Will AI? */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <motion.div
+                  className="w-28 h-28 rounded-full bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-700 shadow-xl flex flex-col items-center justify-center cursor-pointer border-2 border-white/20"
+                  whileHover={{ scale: 1.1, boxShadow: "0 0 40px rgba(139, 92, 246, 0.5)" }}
+                  whileTap={{ scale: 0.95 }}
+                  animate={{ 
+                    boxShadow: [
+                      "0 0 15px rgba(139, 92, 246, 0.3)",
+                      "0 0 30px rgba(139, 92, 246, 0.5)",
+                      "0 0 15px rgba(139, 92, 246, 0.3)"
+                    ]
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  onClick={() => navigate("/aimee-analyzer")}
+                >
+                  <span className="text-white/80 text-xs">Will</span>
+                  <span className="text-white font-bold text-2xl">AI</span>
+                  <span className="text-white/80 text-[10px]">...?</span>
+                </motion.div>
+              </div>
+            </div>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
