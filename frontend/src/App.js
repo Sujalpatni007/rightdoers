@@ -296,13 +296,22 @@ function AppContent() {
 }
 
 import VoiceAssistant, { VoiceButton } from "@/components/VoiceAssistant";
+import AIMEEChat, { AIMEEButton } from "@/components/AIMEEChat";
 
 function AppWithVoice() {
   const [showVoice, setShowVoice] = useState(false);
+  const [showAIMEE, setShowAIMEE] = useState(false);
   
   return (
     <>
       <AppContent />
+      {/* AIMEE Chat - Left side */}
+      <AIMEEButton onClick={() => setShowAIMEE(true)} />
+      <AIMEEChat 
+        isOpen={showAIMEE} 
+        onClose={() => setShowAIMEE(false)} 
+      />
+      {/* Voice Assistant - Right side */}
       <VoiceButton onClick={() => setShowVoice(true)} />
       <VoiceAssistant 
         isOpen={showVoice} 
