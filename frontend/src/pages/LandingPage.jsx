@@ -351,133 +351,139 @@ export default function LandingPage() {
           transition={{ delay: 1.1 }}
         >
           <div className="text-center mb-6">
-            <Badge className="mb-2 bg-orange-500/20 text-orange-300 border-orange-500/30 px-3 py-1">
-              पंच पांडव • PANCHA PANDAVA
-            </Badge>
-            <h2 className="text-white/60 text-sm uppercase tracking-[0.3em] mb-2">{content.whereEnter}</h2>
             <h3 className="font-display text-3xl font-bold text-white">{content.whoAreYou}</h3>
           </div>
 
-          {/* 5 Entry Points - PANCHA PANDAVA Grid */}
+          {/* 5 Entry Points - COSMIC FLYWHEEL Grid */}
           <div className="max-w-lg mx-auto">
-            {/* First row - 2 items */}
-            <div className="grid grid-cols-2 gap-3 mb-3">
-              {entryPoints.slice(0, 2).map((entry, idx) => (
-                <motion.div
-                  key={entry.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.2 + idx * 0.1 }}
-                >
-                  <Card 
-                    className={`bg-gradient-to-br ${entry.color} border-0 cursor-pointer overflow-hidden group hover:shadow-xl transition-all duration-300`}
-                    onClick={() => {
-                      setSelectedEntry(entry.id);
-                      setTimeout(() => navigate(entry.path), 300);
-                    }}
-                    data-testid={`entry-${entry.id}`}
-                  >
-                    <CardContent className="p-4">
-                      <motion.div
-                        className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"
-                        whileHover={{ rotate: 5 }}
-                      >
-                        <entry.icon className="w-6 h-6 text-white" />
-                      </motion.div>
-                      <h4 className="font-display font-bold text-white text-lg mb-1">{entry.title}</h4>
-                      <p className="text-white/80 text-xs mb-2">{entry.subtitle}</p>
-                      <p className="text-white/60 text-[10px] leading-tight">{entry.description}</p>
-                      <div className="mt-3 flex flex-wrap gap-1">
-                        {entry.features.slice(0, 2).map((f, i) => (
-                          <Badge key={i} className="bg-white/20 text-white/90 border-0 text-[8px]">
-                            {f}
-                          </Badge>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-            
-            {/* Center - PROFILES (The 5th P - Hero) */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1.4 }}
-              className="mb-3"
-            >
-              <Card 
-                className={`bg-gradient-to-br ${entryPoints[2]?.color} border-2 border-pink-400/50 cursor-pointer overflow-hidden group hover:shadow-xl hover:shadow-pink-500/30 transition-all duration-300`}
-                onClick={() => {
-                  setSelectedEntry('profiles');
-                  setTimeout(() => navigate('/dp'), 300);
-                }}
-                data-testid="entry-profiles"
-              >
-                <CardContent className="p-4 flex items-center gap-4">
+            {/* Cosmic rotating container */}
+            <div className="relative">
+              {/* Outer glow */}
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-orange-500/20 rounded-full blur-3xl" />
+              
+              {/* First row - 2 items */}
+              <div className="grid grid-cols-2 gap-3 mb-3 relative">
+                {entryPoints.slice(0, 2).map((entry, idx) => (
                   <motion.div
-                    className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform"
-                    whileHover={{ rotate: 5 }}
-                    animate={{ scale: [1, 1.05, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    key={entry.id}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 1.2 + idx * 0.1 }}
+                    whileHover={{ scale: 1.05, rotate: 2 }}
                   >
-                    <IdCard className="w-8 h-8 text-white" />
+                    <Card 
+                      className={`bg-gradient-to-br ${entry.color} border-0 cursor-pointer overflow-hidden group hover:shadow-xl transition-all duration-300`}
+                      onClick={() => {
+                        setSelectedEntry(entry.id);
+                        setTimeout(() => navigate(entry.path), 300);
+                      }}
+                      data-testid={`entry-${entry.id}`}
+                    >
+                      <CardContent className="p-4">
+                        <motion.div
+                          className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"
+                          animate={{ rotate: [0, 5, -5, 0] }}
+                          transition={{ duration: 4, repeat: Infinity }}
+                        >
+                          <entry.icon className="w-6 h-6 text-white" />
+                        </motion.div>
+                        <h4 className="font-display font-bold text-white text-lg mb-1">{entry.title}</h4>
+                        <p className="text-white/80 text-xs mb-2">{entry.subtitle}</p>
+                        <p className="text-white/60 text-[10px] leading-tight">{entry.description}</p>
+                        <div className="mt-3 flex flex-wrap gap-1">
+                          {entry.features.slice(0, 2).map((f, i) => (
+                            <Badge key={i} className="bg-white/20 text-white/90 border-0 text-[8px]">
+                              {f}
+                            </Badge>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
                   </motion.div>
-                  <div className="flex-1">
-                    <Badge className="mb-1 bg-white/20 text-white border-0 text-[10px]">
-                      NEW • D.P. Doers Profiler
-                    </Badge>
-                    <h4 className="font-display font-bold text-white text-xl mb-1">{entryPoints[2]?.title}</h4>
-                    <p className="text-white/80 text-xs mb-1">{entryPoints[2]?.subtitle}</p>
-                    <p className="text-white/60 text-[10px]">{entryPoints[2]?.description}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-white font-bold text-2xl">847</p>
-                    <p className="text-white/60 text-[9px]">DoersScore™</p>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-            
-            {/* Last row - 2 items */}
-            <div className="grid grid-cols-2 gap-3">
-              {entryPoints.slice(3, 5).map((entry, idx) => (
-                <motion.div
-                  key={entry.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.5 + idx * 0.1 }}
+                ))}
+              </div>
+              
+              {/* Center - PROFILES (The 5th P - Hero) */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1.4 }}
+                className="mb-3 relative"
+                whileHover={{ scale: 1.02 }}
+              >
+                <Card 
+                  className={`bg-gradient-to-br ${entryPoints[2]?.color} border-2 border-pink-400/50 cursor-pointer overflow-hidden group hover:shadow-xl hover:shadow-pink-500/30 transition-all duration-300`}
+                  onClick={() => {
+                    setSelectedEntry('profiles');
+                    setTimeout(() => navigate('/dp'), 300);
+                  }}
+                  data-testid="entry-profiles"
                 >
-                  <Card 
-                    className={`bg-gradient-to-br ${entry.color} border-0 cursor-pointer overflow-hidden group hover:shadow-xl transition-all duration-300`}
-                    onClick={() => {
-                      setSelectedEntry(entry.id);
-                      setTimeout(() => navigate(entry.path), 300);
-                    }}
-                    data-testid={`entry-${entry.id}`}
+                  <CardContent className="p-4 flex items-center gap-4">
+                    <motion.div
+                      className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform"
+                      animate={{ scale: [1, 1.05, 1], rotate: [0, 5, -5, 0] }}
+                      transition={{ duration: 3, repeat: Infinity }}
+                    >
+                      <IdCard className="w-8 h-8 text-white" />
+                    </motion.div>
+                    <div className="flex-1">
+                      <Badge className="mb-1 bg-white/20 text-white border-0 text-[10px]">
+                        D.P. Doers Profiler
+                      </Badge>
+                      <h4 className="font-display font-bold text-white text-xl mb-1">{entryPoints[2]?.title}</h4>
+                      <p className="text-white/80 text-xs mb-1">{entryPoints[2]?.subtitle}</p>
+                      <p className="text-white/60 text-[10px]">{entryPoints[2]?.description}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-white font-bold text-2xl">847</p>
+                      <p className="text-white/60 text-[9px]">DoersScore™</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+              
+              {/* Last row - 2 items */}
+              <div className="grid grid-cols-2 gap-3 relative">
+                {entryPoints.slice(3, 5).map((entry, idx) => (
+                  <motion.div
+                    key={entry.id}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 1.5 + idx * 0.1 }}
+                    whileHover={{ scale: 1.05, rotate: -2 }}
                   >
-                    <CardContent className="p-4">
-                      <motion.div
-                        className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"
-                        whileHover={{ rotate: 5 }}
-                      >
-                        <entry.icon className="w-6 h-6 text-white" />
-                      </motion.div>
-                      <h4 className="font-display font-bold text-white text-lg mb-1">{entry.title}</h4>
-                      <p className="text-white/80 text-xs mb-2">{entry.subtitle}</p>
-                      <p className="text-white/60 text-[10px] leading-tight">{entry.description}</p>
-                      <div className="mt-3 flex flex-wrap gap-1">
-                        {entry.features.slice(0, 2).map((f, i) => (
-                          <Badge key={i} className="bg-white/20 text-white/90 border-0 text-[8px]">
-                            {f}
-                          </Badge>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
+                    <Card 
+                      className={`bg-gradient-to-br ${entry.color} border-0 cursor-pointer overflow-hidden group hover:shadow-xl transition-all duration-300`}
+                      onClick={() => {
+                        setSelectedEntry(entry.id);
+                        setTimeout(() => navigate(entry.path), 300);
+                      }}
+                      data-testid={`entry-${entry.id}`}
+                    >
+                      <CardContent className="p-4">
+                        <motion.div
+                          className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"
+                          animate={{ rotate: [0, -5, 5, 0] }}
+                          transition={{ duration: 4, repeat: Infinity }}
+                        >
+                          <entry.icon className="w-6 h-6 text-white" />
+                        </motion.div>
+                        <h4 className="font-display font-bold text-white text-lg mb-1">{entry.title}</h4>
+                        <p className="text-white/80 text-xs mb-2">{entry.subtitle}</p>
+                        <p className="text-white/60 text-[10px] leading-tight">{entry.description}</p>
+                        <div className="mt-3 flex flex-wrap gap-1">
+                          {entry.features.slice(0, 2).map((f, i) => (
+                            <Badge key={i} className="bg-white/20 text-white/90 border-0 text-[8px]">
+                              {f}
+                            </Badge>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
         </motion.section>
