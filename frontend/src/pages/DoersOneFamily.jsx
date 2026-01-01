@@ -546,8 +546,8 @@ export default function DoersOneFamily() {
           </Button>
         </section>
 
-        {/* Special Badge for Daughter */}
-        {selectedMember === "daughter" && (
+        {/* Special Badge for First Student */}
+        {activeMember?.isFirstStudent && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
