@@ -23,9 +23,13 @@ import {
   Download,
   Smartphone,
   Signal,
-  Building2
+  Building2,
+  CloudOff,
+  HardDrive,
+  Zap
 } from "lucide-react";
 import axios from "axios";
+import { usePWA, useOfflineStorage } from "@/hooks/usePWA";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
