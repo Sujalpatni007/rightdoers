@@ -1,12 +1,13 @@
 /**
  * HI AI-APP.COM - Profile Comparison ("DoersScore Battle")
  * Multi-dimensional comparison experience - Inception/Interstellar inspired
+ * SHARE IT • KEEP IT • LIKE IT Journey
  * 4 Mechanisms: QR Code, Share Link, Phone Lookup, Family Leaderboard
  */
 
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -36,11 +37,60 @@ import {
   ChevronRight,
   RefreshCw,
   MessageCircle,
-  Send
+  Send,
+  Heart,
+  Bookmark,
+  ThumbsUp,
+  X,
+  ArrowRight
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth, API } from "@/App";
 import axios from "axios";
+
+// SHARE IT • KEEP IT • LIKE IT Journey Cards
+const JOURNEY_CARDS = [
+  {
+    id: "share",
+    action: "SHARE IT",
+    title: "Share with those who didn't believe YOU",
+    description: "Send your Talent Card to prove your potential",
+    icon: Share2,
+    color: "#3B82F6",
+    gradient: "from-blue-500/30 to-indigo-500/20",
+    swipeDirection: "right"
+  },
+  {
+    id: "keep",
+    action: "KEEP IT",
+    title: "Keep as your PERSONAL G.P.S",
+    description: "Your career compass for the journey ahead",
+    icon: Bookmark,
+    color: "#8B5CF6",
+    gradient: "from-purple-500/30 to-pink-500/20",
+    swipeDirection: "up"
+  },
+  {
+    id: "like",
+    action: "LIKE IT",
+    title: "Show your support",
+    description: "Encourage others in their career journey",
+    icon: Heart,
+    color: "#EC4899",
+    gradient: "from-pink-500/30 to-rose-500/20",
+    swipeDirection: "left"
+  },
+  {
+    id: "match",
+    action: "MATCH IT",
+    title: "See MULTIPLIER X EFFECT",
+    description: "Compare and compete with friends",
+    icon: Trophy,
+    color: "#F59E0B",
+    gradient: "from-amber-500/30 to-orange-500/20",
+    swipeDirection: "right"
+  }
+];
 
 // Dimension comparison data
 const DIMENSIONS = [
