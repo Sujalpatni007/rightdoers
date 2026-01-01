@@ -306,7 +306,166 @@ const ESG_METRICS = {
 
 export default function FounderDashboard() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("office");
+  const [activeTab, setActiveTab] = useState("decisions");
+  const [selectedC, setSelectedC] = useState("campaigns");
+
+  // Render 5C Decision Making Dashboard
+  const renderDecisions = () => (
+    <div className="space-y-4">
+      {/* Neil Patel Reference Header */}
+      <Card className="bg-gradient-to-r from-orange-500/20 to-red-500/20 border-orange-500/30">
+        <CardContent className="p-4">
+          <div className="flex items-start gap-3">
+            <div className="w-12 h-12 rounded-xl bg-orange-500/30 flex items-center justify-center">
+              <Brain className="w-6 h-6 text-orange-400" />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <h3 className="text-white font-bold">{NEIL_PATEL_INSIGHTS.name}</h3>
+                <Badge className="bg-orange-500/30 text-orange-300 border-0 text-[10px]">
+                  Marketing Strategist
+                </Badge>
+              </div>
+              <p className="text-orange-300 text-xs mt-1">{NEIL_PATEL_INSIGHTS.framework}</p>
+              <div className="mt-2 flex flex-wrap gap-1">
+                {NEIL_PATEL_INSIGHTS.keyInsights.slice(0, 2).map((insight, idx) => (
+                  <Badge key={idx} className="bg-white/10 text-white/70 border-0 text-[9px]">
+                    {insight}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* 5C Framework Grid */}
+      <div className="grid grid-cols-5 gap-2">
+        {FIVE_C_FRAMEWORK.map((c) => (
+          <Button
+            key={c.id}
+            variant="ghost"
+            className={`h-auto py-3 flex-col gap-1 rounded-xl transition-all ${
+              selectedC === c.id 
+                ? 'bg-white/20 border-2' 
+                : 'bg-white/5 hover:bg-white/10'
+            }`}
+            style={{ borderColor: selectedC === c.id ? c.color : 'transparent' }}
+            onClick={() => setSelectedC(c.id)}
+            data-testid={`5c-${c.id}`}
+          >
+            <c.icon className="w-5 h-5" style={{ color: c.color }} />
+            <span className="text-[9px] text-white/80 text-center leading-tight">
+              {c.name.replace('MY ', '')}
+            </span>
+          </Button>
+        ))}
+      </div>
+
+      {/* Selected C Details */}
+      {FIVE_C_FRAMEWORK.filter(c => c.id === selectedC).map((c) => (
+        <Card 
+          key={c.id} 
+          className="border-2 bg-white/5"
+          style={{ borderColor: c.color + '50' }}
+        >
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-white flex items-center gap-2">
+                <c.icon className="w-5 h-5" style={{ color: c.color }} />
+                {c.name}
+              </CardTitle>
+              <Badge 
+                className="border-0 text-white text-[10px]"
+                style={{ backgroundColor: c.color + '30' }}
+              >
+                {c.tagline}
+              </Badge>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Metrics Grid */}
+            <div className="grid grid-cols-3 gap-2">
+              {c.metrics.map((metric, idx) => (
+                <div 
+                  key={idx} 
+                  className="bg-white/5 rounded-xl p-3 text-center"
+                >
+                  <p className="text-white font-bold text-lg">{metric.value}</p>
+                  <p className="text-white/50 text-[10px]">{metric.label}</p>
+                  <Badge className="mt-1 bg-green-500/20 text-green-400 border-0 text-[9px]">
+                    {metric.trend}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+
+            {/* Quick Actions */}
+            <div className="space-y-2">
+              <p className="text-white/50 text-xs uppercase tracking-wider">Quick Actions</p>
+              <div className="flex flex-wrap gap-2">
+                {c.actions.map((action, idx) => (
+                  <Button
+                    key={idx}
+                    size="sm"
+                    className="text-xs h-8"
+                    style={{ backgroundColor: c.color }}
+                    onClick={() => toast.success(`Launching: ${action}`)}
+                  >
+                    {action}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+
+      {/* Feedback-Fix-Fax Cycle */}
+      <Card className="bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-orange-500/10 border-white/10">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-white text-sm flex items-center gap-2">
+            <RefreshCw className="w-4 h-4 text-purple-400" />
+            FEEDBACK → FIX → FAX TO FOUNDER
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-3 gap-3">
+            {Object.values(FFF_CYCLE).map((phase, idx) => (
+              <div 
+                key={idx}
+                className="bg-white/5 rounded-xl p-3 text-center"
+              >
+                <Badge className={`mb-2 border-0 text-white text-[10px] ${
+                  idx === 0 ? 'bg-purple-500/30' : 
+                  idx === 1 ? 'bg-pink-500/30' : 'bg-orange-500/30'
+                }`}>
+                  {phase.title}
+                </Badge>
+                <p className="text-white/60 text-[10px] mb-2">{phase.desc}</p>
+                <div className="space-y-1">
+                  {phase.items.map((item, i) => (
+                    <p key={i} className="text-white/40 text-[9px]">{item}</p>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Decision Intelligence Quote */}
+      <div className="bg-gradient-to-r from-amber-500/20 to-yellow-500/20 rounded-xl p-4 text-center border border-amber-500/30">
+        <Lightbulb className="w-6 h-6 text-amber-400 mx-auto mb-2" />
+        <p className="text-amber-300 text-sm font-medium">
+          "Decision-Making Behavior-Based Multiple Marketing"
+        </p>
+        <p className="text-white/50 text-xs mt-1">
+          We are the DECISION. Gone are the days of Influencer Marketing.
+        </p>
+      </div>
+    </div>
+  );
 
   const renderOffice = () => (
     <div className="space-y-6">
