@@ -175,6 +175,32 @@ Bangalore, India
 
 ---
 
+### ✅ NEW: Multi-Lingual Launch Announcement (January 1, 2026)
+**Purpose:** Launch announcement in 5 languages for maximum global reach
+
+**Languages Supported:**
+| Language | Route | Flag | Direction |
+|----------|-------|------|-----------|
+| English | `/announce/en` | 🇬🇧 | LTR |
+| Hindi | `/announce/hi` | 🇮🇳 | LTR |
+| Kannada | `/announce/kn` | 🇮🇳 | LTR |
+| Telugu | `/announce/te` | 🇮🇳 | LTR |
+| Arabic | `/announce/ar` | 🇦🇪 | RTL |
+
+**Features:**
+- Language selector in header
+- Proper Indic font support (Noto Sans)
+- Arabic RTL (Right-to-Left) support
+- All content fully translated
+- Quick language switch buttons at bottom
+- Social share with localized text
+
+**Routes:** `/announce/:lang`, `/announce`
+
+**Files:** `/app/frontend/src/pages/LaunchAnnouncementMultiLang.jsx`
+
+---
+
 ### ✅ WhatsApp NDA Signing - DOERS LEGAL AI (January 1, 2026)
 **Status:** Running in **SIMULATION MODE** (Twilio not configured)
 
