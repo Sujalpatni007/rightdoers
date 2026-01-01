@@ -262,7 +262,7 @@ async def get_all_verticals():
         
         # Get leader if assigned
         leader = None
-        if db:
+        if db is not None:
             leader_doc = await db.vertical_leaders.find_one(
                 {"vertical": vertical.value, "status": "active"},
                 {"_id": 0}
@@ -304,7 +304,7 @@ async def get_vertical_details(vertical_code: str):
     
     # Get leader
     leader = None
-    if db:
+    if db is not None:
         leader_doc = await db.vertical_leaders.find_one(
             {"vertical": vertical.value, "status": "active"},
             {"_id": 0}
@@ -367,7 +367,7 @@ async def assign_vertical_leader(request: AssignLeaderRequest):
         designation=request.designation
     )
     
-    if db:
+    if db is not None:
         # Deactivate any existing leader for this vertical
         await db.vertical_leaders.update_many(
             {"vertical": vertical.value, "status": "active"},
@@ -389,7 +389,7 @@ async def get_all_leaders():
     """Get all assigned vertical leaders"""
     leaders = []
     
-    if db:
+    if db is not None:
         cursor = db.vertical_leaders.find({"status": "active"}, {"_id": 0})
         async for doc in cursor:
             leaders.append(doc)
@@ -435,7 +435,7 @@ async def start_onboarding(request: StartOnboardingRequest):
         "kata_tips": CACHED_ONBOARDING_RESPONSES["kata_tips"].get(vertical.value, "")
     }
     
-    if db:
+    if db is not None:
         await db.onboarding_sessions.insert_one(session.model_dump())
     
     return {
@@ -459,7 +459,7 @@ async def onboarding_chat(request: OnboardingChatRequest):
     
     # Get session
     session_doc = None
-    if db:
+    if db is not None:
         session_doc = await db.onboarding_sessions.find_one(
             {"id": request.session_id},
             {"_id": 0}
@@ -499,7 +499,7 @@ async def onboarding_chat(request: OnboardingChatRequest):
         response_source = "cached"
     
     # Store conversation
-    if db:
+    if db is not None:
         await db.onboarding_sessions.update_one(
             {"id": request.session_id},
             {"$push": {
@@ -541,7 +541,7 @@ async def update_kata_progress(request: UpdateKataProgressRequest):
     elif request.kata_number == 4:
         status = OnboardingStatus.ORBIT
     
-    if db:
+    if db is not None:
         await db.onboarding_sessions.update_one(
             {"id": request.session_id},
             {"$set": {
@@ -577,7 +577,7 @@ async def get_dashboard_metrics():
         "health_score": 0
     }
     
-    if db:
+    if db is not None:
         # Count assigned leaders
         metrics["leaders_assigned"] = await db.vertical_leaders.count_documents({"status": "active"})
         
