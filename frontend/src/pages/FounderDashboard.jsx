@@ -794,8 +794,9 @@ export default function FounderDashboard() {
       </header>
 
       {/* Tabs */}
-      <div className="flex justify-center gap-2 p-4 bg-slate-900/50">
+      <div className="flex justify-center gap-2 p-4 bg-slate-900/50 overflow-x-auto">
         {[
+          { id: "decisions", label: "5C DECISIONS", icon: "🧠" },
           { id: "office", label: "OFFICE", icon: "🏢" },
           { id: "challenges", label: "CHALLENGES", icon: "🎯" },
           { id: "dashboard", label: "DASHBOARD", icon: "📊" }
@@ -805,10 +806,11 @@ export default function FounderDashboard() {
             variant={activeTab === tab.id ? "default" : "outline"}
             size="sm"
             className={activeTab === tab.id 
-              ? "bg-purple-500 text-white" 
-              : "border-white/20 text-white/60"
+              ? "bg-purple-500 text-white flex-shrink-0" 
+              : "border-white/20 text-white/60 flex-shrink-0"
             }
             onClick={() => setActiveTab(tab.id)}
+            data-testid={`tab-${tab.id}`}
           >
             <span className="mr-1">{tab.icon}</span> {tab.label}
           </Button>
@@ -824,6 +826,7 @@ export default function FounderDashboard() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
           >
+            {activeTab === "decisions" && renderDecisions()}
             {activeTab === "office" && renderOffice()}
             {activeTab === "challenges" && renderChallenges()}
             {activeTab === "dashboard" && renderDashboard()}
