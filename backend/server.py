@@ -1004,6 +1004,179 @@ async def parse_voice_text(text: str):
         "suggested_action": suggested_action
     }
 
+# ============================================
+# AIMEE TEXT-TO-SPEECH APIs
+# ============================================
+
+from aimee_voice import aimee_voice
+from fastapi.responses import Response
+
+@api_router.get("/aimee/voice/status")
+async def aimee_voice_status():
+    """Check if AIMEE TTS is available"""
+    return {
+        "available": aimee_voice.is_available(),
+        "model": "tts-1",
+        "default_voice": "nova",
+        "voices": aimee_voice.get_available_voices()
+    }
+
+@api_router.post("/aimee/speak")
+async def aimee_speak(
+    text: str,
+    voice: str = "nova",
+    speed: float = 1.0
+):
+    """
+    Generate speech from text for AIMEE
+    Returns audio as base64 string for web embedding
+    """
+    if not aimee_voice.is_available():
+        raise HTTPException(status_code=503, detail="AIMEE Voice not available. Check API key.")
+    
+    if len(text) > 4096:
+        raise HTTPException(status_code=400, detail="Text too long. Max 4096 characters.")
+    
+    try:
+        audio_base64 = await aimee_voice.speak_base64(text, voice=voice, speed=speed)
+        return {
+            "success": True,
+            "audio_base64": audio_base64,
+            "format": "mp3",
+            "text": text,
+            "voice": voice
+        }
+    except Exception as e:
+        logger.error(f"AIMEE TTS error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/aimee/speak/audio")
+async def aimee_speak_audio(
+    text: str,
+    voice: str = "nova",
+    speed: float = 1.0
+):
+    """
+    Generate speech and return as audio file
+    """
+    if not aimee_voice.is_available():
+        raise HTTPException(status_code=503, detail="AIMEE Voice not available")
+    
+    try:
+        audio_bytes = await aimee_voice.speak(text, voice=voice, speed=speed)
+        return Response(
+            content=audio_bytes,
+            media_type="audio/mpeg",
+            headers={"Content-Disposition": "attachment; filename=aimee_response.mp3"}
+        )
+    except Exception as e:
+        logger.error(f"AIMEE audio error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# ============================================
+# PDF REPORT GENERATION APIs
+# ============================================
+
+from pdf_report import report_generator
+
+class ReportRequest(BaseModel):
+    name: str = "Doer"
+    doers_score: int = 650
+    adaptive_level: str = "ASSOCIATE"
+    natural_fit: int = 70
+    developed_skills: int = 75
+    learning_agility: int = 80
+    efficiency_value: int = 78
+    career_interests: Dict[str, int] = Field(default_factory=dict)
+    skills_abilities: Dict[str, int] = Field(default_factory=dict)
+    career_clusters: List[Dict[str, Any]] = Field(default_factory=list)
+    next_steps: List[str] = Field(default_factory=list)
+
+@api_router.post("/report/generate")
+async def generate_report(request: ReportRequest):
+    """
+    Generate the BIG 5 DOERS REPORT PDF
+    Returns PDF as base64 string
+    """
+    try:
+        pdf_bytes = report_generator.generate_report(request.model_dump())
+        pdf_base64 = base64.b64encode(pdf_bytes).decode('utf-8')
+        
+        return {
+            "success": True,
+            "pdf_base64": pdf_base64,
+            "filename": f"Big5_Report_{request.name.replace(' ', '_')}_{datetime.now().strftime('%Y%m%d')}.pdf"
+        }
+    except Exception as e:
+        logger.error(f"PDF generation error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/report/download")
+async def download_report(request: ReportRequest):
+    """
+    Generate and download the BIG 5 DOERS REPORT PDF
+    """
+    try:
+        pdf_bytes = report_generator.generate_report(request.model_dump())
+        
+        filename = f"Big5_Report_{request.name.replace(' ', '_')}_{datetime.now().strftime('%Y%m%d')}.pdf"
+        
+        return Response(
+            content=pdf_bytes,
+            media_type="application/pdf",
+            headers={"Content-Disposition": f"attachment; filename={filename}"}
+        )
+    except Exception as e:
+        logger.error(f"PDF download error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/report/generate/{user_id}")
+async def generate_user_report(user_id: str):
+    """
+    Generate report for a specific user from their profile
+    """
+    # Get user's profile
+    profile = await db.profiles.find_one({"user_id": user_id}, {"_id": 0})
+    
+    if not profile:
+        raise HTTPException(status_code=404, detail="Profile not found")
+    
+    # Get user info
+    user = await db.users.find_one({"id": user_id}, {"_id": 0})
+    
+    # Build report data
+    report_data = {
+        "name": user.get("name", "Doer") if user else "Doer",
+        "doers_score": profile.get("doers_score", 650),
+        "adaptive_level": profile.get("adaptive_level", "ASSOCIATE"),
+        "natural_fit": profile.get("natural_fit_score", 70),
+        "developed_skills": profile.get("developed_skills_score", 75),
+        "learning_agility": profile.get("learning_agility_score", 80),
+        "efficiency_value": profile.get("efficiency_value", 78),
+        "career_interests": profile.get("career_interests", {}),
+        "skills_abilities": {s.get("name", ""): s.get("level", 50) for s in profile.get("skills", [])},
+        "career_clusters": profile.get("career_clusters", []),
+        "next_steps": profile.get("recommended_next_steps", [])
+    }
+    
+    try:
+        pdf_bytes = report_generator.generate_report(report_data)
+        pdf_base64 = base64.b64encode(pdf_bytes).decode('utf-8')
+        
+        return {
+            "success": True,
+            "pdf_base64": pdf_base64,
+            "filename": f"Big5_Report_{report_data['name'].replace(' ', '_')}_{datetime.now().strftime('%Y%m%d')}.pdf",
+            "profile_summary": {
+                "name": report_data["name"],
+                "doers_score": report_data["doers_score"],
+                "adaptive_level": report_data["adaptive_level"]
+            }
+        }
+    except Exception as e:
+        logger.error(f"User report generation error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 # Include router
 app.include_router(api_router)
 
