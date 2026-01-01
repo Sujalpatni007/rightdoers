@@ -265,6 +265,17 @@ function AppContent() {
       <Route path="/job-match" element={<Jobs4Me />} />
       <Route path="/ai-jobs" element={<Jobs4Me />} />
       
+      {/* Pricing & Subscription */}
+      <Route path="/pricing" element={<PricingPage />} />
+      <Route path="/subscribe" element={<PricingPage />} />
+      <Route path="/plans" element={<PricingPage />} />
+      
+      {/* DOER Tier Dashboards */}
+      <Route path="/kidz" element={<DoerKidzDashboard />} />
+      <Route path="/doer-kidz" element={<DoerKidzDashboard />} />
+      <Route path="/teens" element={<DoerTeensDashboard />} />
+      <Route path="/doer-teens" element={<DoerTeensDashboard />} />
+      
       {/* Employer Flow */}
       <Route path="/employer" element={<ProtectedRoute allowedRoles={["employer"]}><EmployerDashboard /></ProtectedRoute>} />
       <Route path="/employer/post" element={<ProtectedRoute allowedRoles={["employer"]}><PostJobPage /></ProtectedRoute>} />
