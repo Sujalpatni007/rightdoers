@@ -358,16 +358,24 @@ export default function DivisionDashboards() {
 
   // Fetch/generate metrics for selected division
   useEffect(() => {
-    setIsLoading(true);
+    let isMounted = true;
+    
     // Simulate API call - in production this would be a real backend call
-    setTimeout(() => {
-      const newMetrics = {};
-      DIVISIONS.forEach(div => {
-        newMetrics[div.id] = generateDivisionMetrics(div);
-      });
-      setMetrics(newMetrics);
-      setIsLoading(false);
-    }, 500);
+    const loadMetrics = async () => {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      if (isMounted) {
+        const newMetrics = {};
+        DIVISIONS.forEach(div => {
+          newMetrics[div.id] = generateDivisionMetrics(div);
+        });
+        setMetrics(newMetrics);
+        setIsLoading(false);
+      }
+    };
+    
+    loadMetrics();
+    
+    return () => { isMounted = false; };
   }, []);
 
   const divisionMetrics = metrics[selectedDivision] || generateDivisionMetrics(division);
