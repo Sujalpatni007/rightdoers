@@ -329,22 +329,49 @@ function AppContent() {
 
 import VoiceAssistant, { VoiceButton } from "@/components/VoiceAssistant";
 import AIMEEChat, { AIMEEButton } from "@/components/AIMEEChat";
+import CentralTalkHub from "@/components/CentralTalkHub";
+import { requestNotificationPermission, missionNotifier } from "@/services/pushNotifications";
 
 function AppWithVoice() {
   const [showVoice, setShowVoice] = useState(false);
   const [showAIMEE, setShowAIMEE] = useState(false);
+  const [hasNotification, setHasNotification] = useState(false);
+  
+  // Initialize push notifications on mount
+  useEffect(() => {
+    const initNotifications = async () => {
+      const granted = await requestNotificationPermission();
+      if (granted) {
+        // Start monitoring mission board for updates
+        missionNotifier.start(60000); // Check every minute
+      }
+    };
+    
+    initNotifications();
+    
+    return () => {
+      missionNotifier.stop();
+    };
+  }, []);
   
   return (
     <>
       <AppContent />
-      {/* AIMEE Chat - Left side */}
-      <AIMEEButton onClick={() => setShowAIMEE(true)} />
+      
+      {/* Central Talk Hub - Main CTA at bottom center */}
+      <CentralTalkHub 
+        onOpenAIMEE={() => setShowAIMEE(true)}
+        onOpenVoice={() => setShowVoice(true)}
+        hasNewNotification={hasNotification}
+      />
+      
+      {/* AIMEE Chat Panel */}
       <AIMEEChat 
         isOpen={showAIMEE} 
         onClose={() => setShowAIMEE(false)} 
       />
-      {/* Voice Assistant - Right side */}
-      <VoiceButton onClick={() => setShowVoice(true)} />
+      
+      {/* Voice Assistant Panel */}
       <VoiceAssistant 
         isOpen={showVoice} 
         onClose={() => setShowVoice(false)} 
