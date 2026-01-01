@@ -295,13 +295,31 @@ function AppContent() {
   );
 }
 
+import VoiceAssistant, { VoiceButton } from "@/components/VoiceAssistant";
+
+function AppWithVoice() {
+  const [showVoice, setShowVoice] = useState(false);
+  
+  return (
+    <>
+      <AppContent />
+      <VoiceButton onClick={() => setShowVoice(true)} />
+      <VoiceAssistant 
+        isOpen={showVoice} 
+        onClose={() => setShowVoice(false)} 
+        position="bottom-right"
+      />
+    </>
+  );
+}
+
 function App() {
   return (
     <AuthProvider>
       <LanguageProvider>
         <BrowserRouter>
           <div className="min-h-screen bg-background">
-            <AppContent />
+            <AppWithVoice />
             <Toaster richColors position="top-center" />
           </div>
         </BrowserRouter>
