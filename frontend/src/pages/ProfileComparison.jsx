@@ -102,20 +102,92 @@ const DIMENSIONS = [
   { id: "aptitude", name: "Aptitude", icon: "⚡", color: "#EF4444" }
 ];
 
-// Comparison mode tabs
+// Comparison mode tabs - Now includes JOURNEY as first option
 const COMPARISON_MODES = [
+  { id: "journey", name: "Journey", icon: Sparkles, color: "#F59E0B" },
+  { id: "family", name: "Family", icon: Users, color: "#EC4899" },
   { id: "qr", name: "QR Scan", icon: QrCode, color: "#8B5CF6" },
-  { id: "link", name: "Share Link", icon: Share2, color: "#3B82F6" },
-  { id: "phone", name: "Phone Lookup", icon: Phone, color: "#22C55E" },
-  { id: "family", name: "Family Board", icon: Users, color: "#EC4899" }
+  { id: "link", name: "Link", icon: Share2, color: "#3B82F6" },
+  { id: "phone", name: "Phone", icon: Phone, color: "#22C55E" }
 ];
+
+// Swipeable Card Component for SHARE IT / KEEP IT / LIKE IT
+const SwipeCard = ({ card, onSwipe, isActive }) => {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotate = useTransform(x, [-200, 200], [-25, 25]);
+  const opacity = useTransform(x, [-200, -100, 0, 100, 200], [0.5, 1, 1, 1, 0.5]);
+  
+  const handleDragEnd = (_, info) => {
+    const swipeThreshold = 100;
+    if (Math.abs(info.offset.x) > swipeThreshold) {
+      onSwipe(info.offset.x > 0 ? "right" : "left", card);
+    } else if (info.offset.y < -swipeThreshold) {
+      onSwipe("up", card);
+    }
+  };
+
+  if (!isActive) return null;
+
+  return (
+    <motion.div
+      className="absolute inset-0 cursor-grab active:cursor-grabbing"
+      style={{ x, y, rotate, opacity }}
+      drag
+      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+      dragElastic={0.7}
+      onDragEnd={handleDragEnd}
+      initial={{ scale: 0.8, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0.8, opacity: 0 }}
+    >
+      <Card className={`h-full bg-gradient-to-br ${card.gradient} border-white/20 overflow-hidden`}>
+        <CardContent className="h-full flex flex-col items-center justify-center p-6 text-center">
+          {/* Action Badge */}
+          <motion.div
+            className="mb-6 px-6 py-2 rounded-full font-bold text-lg"
+            style={{ backgroundColor: card.color + "40", color: card.color }}
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            {card.action}
+          </motion.div>
+          
+          {/* Icon */}
+          <div 
+            className="w-24 h-24 rounded-3xl flex items-center justify-center mb-6"
+            style={{ backgroundColor: card.color + "30" }}
+          >
+            <card.icon className="w-12 h-12" style={{ color: card.color }} />
+          </div>
+          
+          {/* Text */}
+          <h3 className="text-white text-xl font-bold mb-2">{card.title}</h3>
+          <p className="text-white/60 text-sm mb-8">{card.description}</p>
+          
+          {/* Swipe Hints */}
+          <div className="flex items-center gap-8 text-white/40 text-xs">
+            <div className="flex items-center gap-1">
+              <ArrowLeft className="w-4 h-4" />
+              <span>Skip</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <ArrowRight className="w-4 h-4" />
+              <span>Action</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+};
 
 export default function ProfileComparison() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
   
-  const [activeMode, setActiveMode] = useState("family");
+  const [activeMode, setActiveMode] = useState("journey"); // Start with journey
   const [myProfile, setMyProfile] = useState(null);
   const [compareProfile, setCompareProfile] = useState(null);
   const [familyProfiles, setFamilyProfiles] = useState([]);
@@ -125,8 +197,46 @@ export default function ProfileComparison() {
   const [linkCopied, setLinkCopied] = useState(false);
   const [showBattle, setShowBattle] = useState(false);
   
+  // Journey card state
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [completedActions, setCompletedActions] = useState([]);
+  
   // Depth layers for Inception effect
   const [depthLevel, setDepthLevel] = useState(0);
+
+  // Handle card swipe in journey
+  const handleCardSwipe = (direction, card) => {
+    if (direction === "right") {
+      // Action taken
+      setCompletedActions(prev => [...prev, { ...card, action: "completed" }]);
+      
+      if (card.id === "share") {
+        // Open share
+        const text = `Check out my Talent Card! DoersScore: ${myProfile?.doers_score || 728}/900. Get yours at HI AI-APP.COM!`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        toast.success("Sharing your Talent Card!");
+      } else if (card.id === "keep") {
+        toast.success("Saved to your Personal G.P.S!");
+      } else if (card.id === "like") {
+        toast.success("Thanks for the love! ❤️");
+      } else if (card.id === "match") {
+        setActiveMode("family");
+        toast.info("Let's find someone to compare with!");
+      }
+    } else {
+      // Skipped
+      setCompletedActions(prev => [...prev, { ...card, action: "skipped" }]);
+    }
+    
+    // Move to next card
+    if (currentCardIndex < JOURNEY_CARDS.length - 1) {
+      setCurrentCardIndex(prev => prev + 1);
+    } else {
+      // Journey complete
+      toast.success("Journey Complete! Now let's compare scores!");
+      setActiveMode("family");
+    }
+  };
 
   // Fetch my profile
   const fetchMyProfile = useCallback(async () => {
