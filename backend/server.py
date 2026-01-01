@@ -1717,6 +1717,143 @@ async def get_supported_languages():
     """Get list of supported Indian languages"""
     return {"languages": INDIAN_LANGUAGES}
 
+# ============================================
+# GEMMA OFFLINE AI APIs
+# For Rural India: Srikakulum & Chickmagalur
+# ============================================
+
+from gemma_offline import (
+    gemma_service, GemmaQuery, GemmaResponse,
+    RURAL_LANGUAGES, OFFLINE_CAREER_GUIDANCE, OFFLINE_FAQ,
+    calculate_rural_doers_score
+)
+
+class GemmaChatRequest(BaseModel):
+    query: str
+    language: str = "en"
+    is_offline: bool = False
+    education_level: Optional[str] = None
+    region: Optional[str] = None
+
+class RuralDoersScoreRequest(BaseModel):
+    education_level: str
+    skills: List[str] = []
+    work_experience_years: int = 0
+    certifications: int = 0
+    language_proficiency: Dict[str, str] = {}
+
+@api_router.get("/gemma/status")
+async def gemma_status():
+    """Check Gemma Offline AI status"""
+    return {
+        "available": True,
+        "model": "gemma-3n-270m",
+        "description": "Offline-first AI for Rural India",
+        "target_regions": ["Srikakulum (Telugu)", "Chickmagalur (Kannada)"],
+        "supported_languages": list(RURAL_LANGUAGES.keys()),
+        "features": ["career_guidance", "offline_cache", "multi_lingual"]
+    }
+
+@api_router.post("/gemma/chat")
+async def gemma_chat(request: GemmaChatRequest):
+    """Main Gemma chat endpoint - works offline and online"""
+    try:
+        gemma_query = GemmaQuery(
+            query=request.query,
+            language=request.language,
+            is_offline=request.is_offline,
+            education_level=request.education_level,
+            region=request.region
+        )
+        
+        response = await gemma_service.process_query(gemma_query)
+        return response.model_dump()
+    except Exception as e:
+        logger.error(f"Gemma chat error: {e}")
+        # Return offline fallback
+        fallback = await gemma_service.get_offline_response(GemmaQuery(
+            query=request.query,
+            language=request.language,
+            is_offline=True
+        ))
+        return fallback.model_dump()
+
+@api_router.get("/gemma/languages")
+async def gemma_languages():
+    """Get supported languages for rural India"""
+    return {"languages": RURAL_LANGUAGES}
+
+@api_router.get("/gemma/career-data")
+async def gemma_career_data(language: str = "en", category: str = "lig_workers"):
+    """Get offline career guidance data"""
+    data = gemma_service.get_career_data(category, language)
+    return data
+
+@api_router.get("/gemma/offline-cache")
+async def gemma_offline_cache():
+    """Get all offline cached data for PWA sync"""
+    return {
+        "faq": OFFLINE_FAQ,
+        "career_data": OFFLINE_CAREER_GUIDANCE,
+        "languages": RURAL_LANGUAGES
+    }
+
+@api_router.post("/gemma/doers-score")
+async def calculate_gemma_doers_score(request: RuralDoersScoreRequest):
+    """Calculate DoersScore™ for rural users"""
+    score = calculate_rural_doers_score(
+        education_level=request.education_level,
+        skills=request.skills,
+        work_experience_years=request.work_experience_years,
+        certifications=request.certifications,
+        language_proficiency=request.language_proficiency
+    )
+    
+    # Determine level based on score
+    if score >= 800:
+        level = "EXPERT"
+    elif score >= 700:
+        level = "PROFESSIONAL"
+    elif score >= 600:
+        level = "MANAGER"
+    elif score >= 500:
+        level = "ASSOCIATE"
+    else:
+        level = "PARA"
+    
+    return {
+        "doers_score": score,
+        "level": level,
+        "education_level": request.education_level,
+        "skills_count": len(request.skills),
+        "certifications": request.certifications
+    }
+
+@api_router.get("/gemma/quick-questions/{language}")
+async def gemma_quick_questions(language: str):
+    """Get quick questions in specified language"""
+    questions = {
+        "en": [
+            "What career suits me?",
+            "How to improve my income?",
+            "Government schemes for jobs",
+            "Skill training near me"
+        ],
+        "te": [
+            "నాకు ఏ కెరీర్ సరిపోతుంది?",
+            "నా ఆదాయాన్ని ఎలా పెంచుకోవాలి?",
+            "ఉద్యోగాల కోసం ప్రభుత్వ పథకాలు",
+            "నా సమీపంలో స్కిల్ ట్రైనింగ్"
+        ],
+        "kn": [
+            "ನನಗೆ ಯಾವ ವೃತ್ತಿ ಸರಿಹೊಂದುತ್ತದೆ?",
+            "ನನ್ನ ಆದಾಯವನ್ನು ಹೇಗೆ ಸುಧಾರಿಸುವುದು?",
+            "ಉದ್ಯೋಗಗಳಿಗೆ ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು",
+            "ನನ್ನ ಹತ್ತಿರ ಕೌಶಲ್ಯ ತರಬೇತಿ"
+        ]
+    }
+    return {"questions": questions.get(language, questions["en"]), "language": language}
+
 # Include router
 app.include_router(api_router)
 
