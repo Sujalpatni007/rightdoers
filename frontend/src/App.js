@@ -73,6 +73,7 @@ import ContentCommandCentre from "@/pages/ContentCommandCentre";
 import GemmaOffline from "@/pages/GemmaOffline";
 import WhatsAppSigning from "@/pages/WhatsAppSigning";
 import CaptainCommandCentre from "@/pages/CaptainCommandCentre";
+import MissionBoard from "@/pages/MissionBoard";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
@@ -301,6 +302,11 @@ function AppContent() {
       <Route path="/captain" element={<CaptainCommandCentre />} />
       <Route path="/verticals" element={<CaptainCommandCentre />} />
       <Route path="/hq" element={<CaptainCommandCentre />} />
+      
+      {/* Mission Board - Dubai Launch Tracker */}
+      <Route path="/mission-board" element={<MissionBoard />} />
+      <Route path="/launch" element={<MissionBoard />} />
+      <Route path="/dubai" element={<MissionBoard />} />
       
       {/* Employer Flow */}
       <Route path="/employer" element={<ProtectedRoute allowedRoles={["employer"]}><EmployerDashboard /></ProtectedRoute>} />
