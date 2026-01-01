@@ -194,11 +194,21 @@ export default function GemmaOffline() {
 
       setMessages(prev => [...prev, assistantMessage]);
       
-      // Save to IndexedDB for offline access
+      // Save conversation to IndexedDB for offline history
+      if (dbReady) {
+        await saveConversation({
+          query: text,
+          response: response.data.response,
+          language: language,
+          is_cached: response.data.is_cached
+        });
+      }
+      
+      // Also save to localStorage as backup
       saveToOfflineCache(text, response.data.response, language);
       
     } catch (error) {
-      console.error("Chat error:", error);
+      console.error("[Gemma] Chat error:", error);
       
       // Fallback offline response
       const offlineResponse = getOfflineResponse(text, language);
@@ -207,9 +217,21 @@ export default function GemmaOffline() {
         role: "assistant",
         content: offlineResponse,
         is_cached: true,
+        offline_fallback: true,
         timestamp: new Date().toISOString()
       };
       setMessages(prev => [...prev, assistantMessage]);
+      
+      // Save fallback conversation
+      if (dbReady) {
+        await saveConversation({
+          query: text,
+          response: offlineResponse,
+          language: language,
+          is_cached: true,
+          offline_fallback: true
+        });
+      }
     } finally {
       setLoading(false);
     }
