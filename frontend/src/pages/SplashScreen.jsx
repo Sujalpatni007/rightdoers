@@ -1,71 +1,161 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Sparkles } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function SplashScreen() {
   const navigate = useNavigate();
-  const [fadeOut, setFadeOut] = useState(false);
+  const [stage, setStage] = useState(0); // 0: Astro, 1: Welcome, 2: Fade out
 
   useEffect(() => {
-    const timer1 = setTimeout(() => setFadeOut(true), 2500);
-    const timer2 = setTimeout(() => navigate("/welcome"), 3000);
+    // Stage 0 → 1: Show Astro for 1.5s
+    const timer1 = setTimeout(() => setStage(1), 1500);
+    // Stage 1 → 2: Show Welcome for 1.5s
+    const timer2 = setTimeout(() => setStage(2), 3000);
+    // Navigate after fade
+    const timer3 = setTimeout(() => navigate("/welcome"), 3500);
+    
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
+      clearTimeout(timer3);
     };
   }, [navigate]);
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 flex items-center justify-center transition-opacity duration-500 ${fadeOut ? 'opacity-0' : 'opacity-100'}`}>
-      <div className="text-center">
-        {/* IKIGAI SVG Logo */}
-        <div className="relative mb-6">
-          <div className="w-48 h-48 mx-auto relative">
-            {/* Outer cosmic glow */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500/30 via-pink-500/30 to-orange-500/30 animate-pulse blur-2xl"></div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 flex items-center justify-center overflow-hidden">
+      <AnimatePresence mode="wait">
+        {/* Stage 0: ASTRO DOER Loading */}
+        {stage === 0 && (
+          <motion.div
+            key="astro"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.2 }}
+            transition={{ duration: 0.5 }}
+            className="text-center"
+          >
+            {/* Cosmic glow */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="w-96 h-96 bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-orange-500/20 rounded-full blur-3xl animate-pulse" />
+            </div>
             
-            {/* IKIGAI Image */}
-            <img 
-              src="/140.svg" 
-              alt="IKIGAI - Purpose" 
-              className="w-full h-full object-contain animate-spin-slow"
-              style={{ animationDuration: '20s' }}
-            />
-          </div>
-        </div>
+            {/* ASTRO DOER SVG */}
+            <motion.div 
+              className="relative w-64 h-64 mx-auto mb-6"
+              animate={{ rotate: [0, 5, -5, 0] }}
+              transition={{ duration: 4, repeat: Infinity }}
+            >
+              <img 
+                src="/141.svg" 
+                alt="ASTRO DOER" 
+                className="w-full h-full object-contain"
+              />
+            </motion.div>
+            
+            {/* Loading text */}
+            <motion.p 
+              className="text-white/60 text-sm"
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              Loading...
+            </motion.p>
+            
+            {/* Loading dots */}
+            <div className="mt-4 flex justify-center gap-2">
+              <motion.div 
+                className="w-2 h-2 bg-purple-400 rounded-full"
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
+              />
+              <motion.div 
+                className="w-2 h-2 bg-pink-400 rounded-full"
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 0.6, repeat: Infinity, delay: 0.15 }}
+              />
+              <motion.div 
+                className="w-2 h-2 bg-orange-400 rounded-full"
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 0.6, repeat: Infinity, delay: 0.3 }}
+              />
+            </div>
+          </motion.div>
+        )}
 
-        {/* Brand Name */}
-        <h1 className="font-display text-4xl md:text-5xl font-bold text-white mb-2 tracking-tight">
-          <span className="text-orange-400">HI</span> AI-APP<span className="text-blue-400">.COM</span>
-        </h1>
-        <p className="text-xl md:text-2xl font-display text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-400 to-pink-400 font-semibold mb-4">
-          Enter the Doers World
-        </p>
-        
-        {/* Tagline */}
-        <p className="text-white/80 text-lg font-body tracking-wide">
-          Say WOW • Get What You Want
-        </p>
-        
-        {/* Subtitle */}
-        <p className="text-white/50 text-sm mt-2 font-body">
-          Human Potential Management & Transformation
-        </p>
+        {/* Stage 1: RIGHT DOERS WELCOMES YOU */}
+        {stage === 1 && (
+          <motion.div
+            key="welcome"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+            className="text-center px-6"
+          >
+            {/* Cosmic background */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="w-[500px] h-[500px] bg-gradient-to-r from-orange-500/10 via-purple-500/10 to-pink-500/10 rounded-full blur-3xl" />
+            </div>
+            
+            {/* Sketch/IKIGAI Image */}
+            <motion.div 
+              className="relative w-72 h-48 mx-auto mb-6"
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <img 
+                src="/140.svg" 
+                alt="Right Doers" 
+                className="w-full h-full object-contain rounded-2xl"
+              />
+            </motion.div>
+            
+            {/* Welcome Text */}
+            <motion.h1 
+              className="font-display text-3xl md:text-4xl font-bold text-white mb-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              <span className="text-orange-400">RIGHT DOERS</span>
+            </motion.h1>
+            <motion.p 
+              className="text-xl text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 font-semibold mb-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              WELCOMES YOU
+            </motion.p>
+            
+            {/* Tagline */}
+            <motion.p 
+              className="text-white/70 text-lg"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              Say WOW • Get What You Want
+            </motion.p>
+          </motion.div>
+        )}
 
-        {/* Loading indicator */}
-        <div className="mt-10 flex justify-center gap-2">
-          <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-          <div className="w-2 h-2 bg-pink-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-          <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-        </div>
-      </div>
-
-      {/* Background decorations */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-pink-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"></div>
-      </div>
+        {/* Stage 2: Fade to Landing */}
+        {stage === 2 && (
+          <motion.div
+            key="fadeout"
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center"
+          >
+            <h1 className="font-display text-4xl font-bold text-white">
+              <span className="text-orange-400">HI</span> AI-APP<span className="text-blue-400">.COM</span>
+            </h1>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
