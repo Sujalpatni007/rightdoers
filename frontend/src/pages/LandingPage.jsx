@@ -104,6 +104,32 @@ export default function LandingPage() {
         <section className="space-y-3 mb-8">
           <h2 className="text-white/60 text-xs uppercase tracking-wider text-center mb-2">🎯 Quick Launch</h2>
           
+          {/* Captain Command Centre - 7 Business Verticals */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.42 }}
+          >
+            <Card 
+              className="bg-gradient-to-r from-[#0a1628]/90 to-[#1a2744]/80 border-[#00ff88]/40 cursor-pointer hover:border-[#00ff88]/70 transition-all"
+              onClick={() => navigate('/command-centre')}
+              data-testid="captain-command-btn"
+            >
+              <CardContent className="p-4 flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-[#00ff88]/20 flex items-center justify-center">
+                  <Award className="w-6 h-6 text-[#00ff88]" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-[#00ff88] font-bold font-mono">CAPTAIN COMMAND CENTRE</p>
+                  <p className="text-white/50 text-xs">7 Verticals • AI Onboarding • Varun Mayya 16-Kata</p>
+                </div>
+                <Badge className="bg-[#00ff88]/20 text-[#00ff88] border-0 font-mono">
+                  🎖️ HQ
+                </Badge>
+              </CardContent>
+            </Card>
+          </motion.div>
+          
           {/* Content Command Centre - GTM */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
