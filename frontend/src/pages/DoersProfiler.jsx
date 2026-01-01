@@ -214,16 +214,79 @@ export default function DoersProfiler() {
   const [activeTab, setActiveTab] = useState("overview");
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [showTalentTracker, setShowTalentTracker] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
 
-  useEffect(() => {
-    // Simulate loading profile data
-    setTimeout(() => {
-      setProfile(getSampleProfile(user?.name));
+  // Fetch or create profile from backend
+  const fetchProfile = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      // Try to get profile by user ID
+      const userId = user?.id || localStorage.getItem('rdw_user_id') || 'demo-user';
+      
+      try {
+        const response = await axios.get(`${API}/profiles/user/${userId}`);
+        const transformedProfile = transformBackendProfile(response.data, user?.name);
+        setProfile(transformedProfile);
+        console.log('Profile loaded from backend:', response.data.id);
+      } catch (fetchError) {
+        // Profile doesn't exist, create one
+        if (fetchError.response?.status === 404) {
+          console.log('Profile not found, creating new one...');
+          const createResponse = await axios.post(`${API}/profiles`, {
+            user_id: userId,
+            name: user?.name || 'Doer'
+          });
+          const transformedProfile = transformBackendProfile(createResponse.data, user?.name);
+          setProfile(transformedProfile);
+          toast.success('Your Doers Profiler has been created!');
+          console.log('New profile created:', createResponse.data.id);
+        } else {
+          throw fetchError;
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch/create profile:', err);
+      setError('Failed to load profile. Please try again.');
+      // Fallback to sample data for demo purposes
+      const fallbackProfile = transformBackendProfile({
+        id: `DP-DEMO-${Date.now().toString(36).toUpperCase()}`,
+        name: user?.name || 'Demo Doer',
+        doers_score: 720,
+        doers_score_percentile: 65,
+        natural_fit_score: 72,
+        developed_skills_score: 78,
+        learning_agility_score: 75,
+        efficiency_value: 76,
+        adaptive_level: 'PROFESSIONAL',
+        dimensions: {
+          personality: { score: 75, level: "PROFESSIONAL" },
+          interest: { score: 80, level: "PROFESSIONAL" },
+          learning: { score: 70, level: "MANAGER" },
+          eq: { score: 78, level: "PROFESSIONAL" },
+          intelligence: { score: 82, level: "PROFESSIONAL" },
+          aptitude: { score: 72, level: "MANAGER" }
+        },
+        skills: [
+          { name: "Problem Solving", level: 82, growth: "+12%" },
+          { name: "Communication", level: 75, growth: "+8%" },
+          { name: "Technical Skills", level: 88, growth: "+18%" },
+          { name: "Team Collaboration", level: 80, growth: "+10%" }
+        ]
+      }, user?.name);
+      setProfile(fallbackProfile);
+      toast.warning('Using demo profile - backend may be unavailable');
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   }, [user]);
+
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
 
   const efficiencyValue = profile ? calculateEfficiencyValue(
     profile.naturalFit.score,
