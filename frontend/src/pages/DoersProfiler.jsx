@@ -35,7 +35,8 @@ import {
   Copy,
   X,
   Send,
-  AlertCircle
+  AlertCircle,
+  Trophy
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth, API } from "@/App";
