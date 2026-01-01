@@ -484,7 +484,7 @@ export default function ProfileComparison() {
                           </div>
                           <h3 className="text-white font-bold mb-2">Find by Phone</h3>
                           <p className="text-white/50 text-sm">
-                            Enter friend's phone number to compare
+                            Enter friend&apos;s phone number to compare
                           </p>
                         </div>
                         
