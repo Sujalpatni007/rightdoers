@@ -1057,7 +1057,7 @@ Keep responses concise (under 200 words) and end with a helpful suggestion or qu
             api_key=llm_key,
             session_id=session_id,
             system_message=system_prompt
-        )
+        ).with_model("gemini", "gemini-3-flash-preview")
         
         # Add context from previous messages
         for msg in request.context[-6:]:  # Last 6 messages for context
@@ -1066,8 +1066,9 @@ Keep responses concise (under 200 words) and end with a helpful suggestion or qu
             elif msg.get("role") == "assistant":
                 chat.add_assistant_message(msg.get("content", ""))
         
-        # Get response
-        response = await chat.send_message_async(request.message)
+        # Get response using UserMessage
+        user_message = UserMessage(text=request.message)
+        response = await chat.send_message(user_message)
         
         return {"response": response}
         
