@@ -666,8 +666,19 @@ export default function FounderDashboard() {
       {/* Division Metrics */}
       <Card className="bg-white/5 border-white/10">
         <CardHeader className="pb-2">
-          <CardTitle className="text-white text-sm flex items-center gap-2">
-            <Users className="w-4 h-4 text-purple-400" /> Division Leaders
+          <CardTitle className="text-white text-sm flex items-center justify-between">
+            <span className="flex items-center gap-2">
+              <Users className="w-4 h-4 text-purple-400" /> Division Leaders
+            </span>
+            <Button 
+              size="sm" 
+              className="h-7 text-xs bg-purple-500/20 hover:bg-purple-500/30 text-purple-300"
+              onClick={() => navigate('/divisions')}
+              data-testid="goto-divisions"
+            >
+              <Building className="w-3 h-3 mr-1" />
+              Full Dashboard
+            </Button>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
@@ -689,6 +700,15 @@ export default function FounderDashboard() {
               </div>
             </div>
           ))}
+          
+          {/* Link to Full Division Dashboards */}
+          <Button 
+            className="w-full mt-3 bg-gradient-to-r from-purple-600/30 to-pink-600/30 hover:from-purple-600/40 hover:to-pink-600/40 text-white"
+            onClick={() => navigate('/divisions')}
+          >
+            View All 12 Division Dashboards
+            <ChevronRight className="w-4 h-4 ml-2" />
+          </Button>
         </CardContent>
       </Card>
 
