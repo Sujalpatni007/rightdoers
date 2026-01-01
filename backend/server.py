@@ -1515,6 +1515,204 @@ async def get_crm_dashboard():
         }
     }
 
+# ============================================
+# CONTENT COMMAND CENTRE APIs
+# ============================================
+
+from content_command import (
+    content_command, ReelContent, ShareCard, CareerMantra,
+    NDADocument, OfferLetter, INDIAN_LANGUAGES, REEL_TEMPLATES,
+    CAREER_MANTRAS, TARGET_SEGMENTS, AI_BUSINESS_2026
+)
+
+class TranslateRequest(BaseModel):
+    text: str
+    languages: List[str] = ["en", "hi", "kn", "ta", "te"]
+
+class GenerateImageRequest(BaseModel):
+    template: str
+    message: str
+    style: str = "vibrant"
+
+class ShareCardRequest(BaseModel):
+    name: str
+    doers_score: int = 650
+    adaptive_level: str = "ASSOCIATE"
+    top_skills: List[str] = []
+    career_match: str = ""
+    language: str = "en"
+
+class NDARequest(BaseModel):
+    recipient_name: str
+    recipient_email: str
+    recipient_phone: str = ""
+    effective_date: str
+
+class OfferRequest(BaseModel):
+    candidate_name: str
+    candidate_email: str
+    position: str
+    division: str
+    salary_annual: int
+    joining_date: str
+
+@api_router.get("/content/status")
+async def content_command_status():
+    """Check Content Command Centre status"""
+    return {
+        "available": content_command.is_available(),
+        "features": ["translate", "image_generation", "share_cards", "mantras", "nda", "offer_letter"],
+        "languages": list(INDIAN_LANGUAGES.keys()),
+        "templates": list(REEL_TEMPLATES.keys()),
+        "target_segments": list(TARGET_SEGMENTS.keys())
+    }
+
+@api_router.post("/content/translate")
+async def translate_content(request: TranslateRequest):
+    """Translate text to multiple Indian languages"""
+    try:
+        translations = await content_command.translate_to_all_languages(
+            request.text, 
+            request.languages
+        )
+        return {"translations": translations, "source_text": request.text}
+    except Exception as e:
+        logger.error(f"Translation error: {e}")
+        # Return original text for all languages as fallback
+        fallback = {lang: request.text for lang in request.languages}
+        return {"translations": fallback, "source_text": request.text, "fallback": True}
+
+@api_router.post("/content/generate-image")
+async def generate_content_image(request: GenerateImageRequest):
+    """Generate AI image for content using Gemini Nano Banana"""
+    try:
+        template_info = REEL_TEMPLATES.get(request.template, {})
+        prompt = f"{request.message} - {template_info.get('description', 'Inspirational content')}"
+        
+        image_base64 = await content_command.generate_reel_image(prompt, request.style)
+        
+        if image_base64:
+            return {"success": True, "image_base64": image_base64, "template": request.template}
+        else:
+            return {"success": False, "message": "Image generation unavailable"}
+    except Exception as e:
+        logger.error(f"Image generation error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/content/share-card")
+async def create_share_card(request: ShareCardRequest):
+    """Create DoersScore™ Share Card"""
+    try:
+        card = ShareCard(
+            name=request.name,
+            doers_score=request.doers_score,
+            adaptive_level=request.adaptive_level,
+            top_skills=request.top_skills,
+            career_match=request.career_match,
+            language=request.language
+        )
+        
+        # Generate image
+        image_base64 = await content_command.create_share_card_image(card)
+        
+        return {
+            "card": card.model_dump(),
+            "image_base64": image_base64 if image_base64 else None
+        }
+    except Exception as e:
+        logger.error(f"Share card error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/content/mantra/{audience}")
+async def get_career_mantra(audience: str):
+    """Get random career mantra for specified audience"""
+    mantra_data = content_command.get_random_mantra(audience)
+    
+    # Create mantra object
+    mantra = CareerMantra(
+        text=mantra_data["text"],
+        translations={},
+        category=mantra_data["category"],
+        target_audience=audience,
+        image_prompt=f"Inspirational {audience} career motivation"
+    )
+    
+    # Try to generate image
+    image_base64 = await content_command.create_career_mantra_image(mantra)
+    
+    return {
+        **mantra.model_dump(),
+        "image_base64": image_base64 if image_base64 else None
+    }
+
+@api_router.get("/content/mantras")
+async def list_all_mantras():
+    """Get all career mantras by category"""
+    return {"mantras": CAREER_MANTRAS, "audiences": list(CAREER_MANTRAS.keys())}
+
+@api_router.post("/content/legal/nda")
+async def generate_nda(request: NDARequest):
+    """Generate NDA document"""
+    nda = NDADocument(
+        recipient_name=request.recipient_name,
+        recipient_email=request.recipient_email,
+        recipient_phone=request.recipient_phone,
+        effective_date=request.effective_date
+    )
+    
+    html = content_command.generate_nda_html(nda)
+    
+    # Save to database
+    nda_dict = nda.model_dump()
+    await db.legal_documents.insert_one(nda_dict)
+    
+    return {"nda": nda_dict, "html": html}
+
+@api_router.post("/content/legal/offer")
+async def generate_offer_letter(request: OfferRequest):
+    """Generate Offer Letter"""
+    offer = OfferLetter(
+        candidate_name=request.candidate_name,
+        candidate_email=request.candidate_email,
+        position=request.position,
+        division=request.division,
+        salary_annual=request.salary_annual,
+        joining_date=request.joining_date
+    )
+    
+    html = content_command.generate_offer_letter_html(offer)
+    
+    # Save to database
+    offer_dict = offer.model_dump()
+    await db.legal_documents.insert_one(offer_dict)
+    
+    return {"offer": offer_dict, "html": html}
+
+@api_router.get("/content/legal/documents")
+async def list_legal_documents(doc_type: Optional[str] = None, limit: int = 50):
+    """List all generated legal documents"""
+    query = {}
+    if doc_type:
+        query["id"] = {"$regex": f"^{doc_type.upper()}-"}
+    
+    docs = await db.legal_documents.find(query, {"_id": 0}).sort("created_at", -1).limit(limit).to_list(limit)
+    return {"documents": docs, "total": len(docs)}
+
+@api_router.get("/content/segments")
+async def get_target_segments():
+    """Get GTM target audience segments"""
+    return {"segments": TARGET_SEGMENTS}
+
+@api_router.get("/content/ai-business-2026")
+async def get_ai_business_opportunities():
+    """Get 2026 AI Business opportunities mapped to DOERS features"""
+    return {"opportunities": AI_BUSINESS_2026}
+
+@api_router.get("/content/languages")
+async def get_supported_languages():
+    """Get list of supported Indian languages"""
+    return {"languages": INDIAN_LANGUAGES}
+
 # Include router
 app.include_router(api_router)
 
