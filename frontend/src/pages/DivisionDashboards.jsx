@@ -685,7 +685,7 @@ export default function DivisionDashboards() {
             <div className="mt-4 p-3 bg-amber-500/10 rounded-xl border border-amber-500/20">
               <p className="text-amber-400 text-sm">
                 <Crown className="w-4 h-4 inline mr-2" />
-                <strong>Founder's Priority:</strong> Reward those who contribute to product development & enhancement. 
+                <strong>Founder&apos;s Priority:</strong> Reward those who contribute to product development &amp; enhancement. 
                 Sales agents receive standard commission cuts. This season of student uncertainty is crucial for business growth.
               </p>
             </div>
