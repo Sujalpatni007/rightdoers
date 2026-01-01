@@ -114,91 +114,99 @@ const calculateEfficiencyValue = (naturalFit, developedSkills, learningAgility) 
   return Math.round((developedSkills * 0.6) + (naturalFit * 0.3) + (learningAgility * 0.1));
 };
 
-// Sample profile data structure (Suraj Kulkarni example)
-const getSampleProfile = (name) => ({
-  name: name || "Doer",
-  doersId: `DP-${Date.now().toString(36).toUpperCase()}`,
+// Transform backend profile data to frontend format
+const transformBackendProfile = (backendProfile, userName) => {
+  if (!backendProfile) return null;
   
-  // Natural Fit (Personality alignment to role)
-  naturalFit: {
-    score: 68,
-    roleTarget: "Software Developer",
-    gap: 27,
-    details: {
-      personality: 72,
-      interest: 65,
-      eq: 70
-    }
-  },
-  
-  // Developed Skills (Actual competencies)
-  developedSkills: {
-    score: 95,
-    skills: [
-      { name: "Problem Solving", level: 92, growth: "+15%" },
-      { name: "Technical Coding", level: 98, growth: "+22%" },
-      { name: "Communication", level: 88, growth: "+12%" },
-      { name: "Team Collaboration", level: 94, growth: "+18%" }
-    ]
-  },
-  
-  // Learning Agility
-  learningAgility: {
-    score: 85,
-    style: "Visual-Kinesthetic",
-    adaptability: 88,
-    growthMindset: 90
-  },
-  
-  // DoersScore (CIBIL-style)
-  doersScore: {
-    value: 847,
-    maxValue: 900,
-    percentile: 92,
-    trend: "rising",
-    lastUpdated: new Date().toISOString()
-  },
-  
-  // 6 Dimension Scores
-  dimensions: {
-    personality: { score: 78, level: "PROFESSIONAL" },
-    interest: { score: 85, level: "PROFESSIONAL" },
-    learning: { score: 72, level: "MANAGER" },
-    eq: { score: 83, level: "PROFESSIONAL" },
-    intelligence: { score: 88, level: "PROFESSIONAL" },
-    aptitude: { score: 75, level: "MANAGER" }
-  },
-  
-  // Career Suitability
-  suitability: {
-    currentRole: "Software Developer",
-    matchScore: 89,
-    alternateRoles: [
-      { role: "Product Manager", match: 82 },
-      { role: "Tech Lead", match: 91 },
-      { role: "Solution Architect", match: 78 }
-    ]
-  },
-  
-  // Skill Development Journey
-  skillJourney: {
-    startDate: "2020-01-15",
-    milestones: [
-      { date: "2020-06", skill: "Python", improvement: 45 },
-      { date: "2021-03", skill: "Leadership", improvement: 32 },
-      { date: "2022-09", skill: "System Design", improvement: 55 },
-      { date: "2024-01", skill: "AI/ML", improvement: 40 }
-    ],
-    totalImprovement: 172
-  },
-  
-  // Verification
-  verification: {
-    rightDoersPowered: true,
-    verifiedDate: new Date().toISOString(),
-    credentialId: `RDVC-${Date.now().toString(36).toUpperCase()}`
-  }
-});
+  return {
+    name: backendProfile.name || userName || "Doer",
+    doersId: backendProfile.id || `DP-${Date.now().toString(36).toUpperCase()}`,
+    
+    // Natural Fit (from backend)
+    naturalFit: {
+      score: backendProfile.natural_fit_score || 70,
+      roleTarget: backendProfile.current_role || "Professional",
+      gap: 100 - (backendProfile.natural_fit_score || 70),
+      details: {
+        personality: backendProfile.dimensions?.personality?.score || 70,
+        interest: backendProfile.dimensions?.interest?.score || 70,
+        eq: backendProfile.dimensions?.eq?.score || 70
+      }
+    },
+    
+    // Developed Skills (from backend)
+    developedSkills: {
+      score: backendProfile.developed_skills_score || 75,
+      skills: backendProfile.skills || [
+        { name: "Problem Solving", level: 80, growth: "+10%" },
+        { name: "Communication", level: 75, growth: "+8%" },
+        { name: "Technical Skills", level: 85, growth: "+15%" },
+        { name: "Team Collaboration", level: 78, growth: "+12%" }
+      ]
+    },
+    
+    // Learning Agility (from backend)
+    learningAgility: {
+      score: backendProfile.learning_agility_score || 75,
+      style: "Visual-Kinesthetic",
+      adaptability: 85,
+      growthMindset: 88
+    },
+    
+    // DoersScore (CIBIL-style) - from backend
+    doersScore: {
+      value: backendProfile.doers_score || 650,
+      maxValue: 900,
+      percentile: backendProfile.doers_score_percentile || 50,
+      trend: backendProfile.doers_score_trend || "stable",
+      lastUpdated: backendProfile.updated_at || new Date().toISOString()
+    },
+    
+    // 6 Dimension Scores - from backend
+    dimensions: backendProfile.dimensions || {
+      personality: { score: 70, level: "MANAGER" },
+      interest: { score: 70, level: "MANAGER" },
+      learning: { score: 70, level: "MANAGER" },
+      eq: { score: 70, level: "MANAGER" },
+      intelligence: { score: 70, level: "MANAGER" },
+      aptitude: { score: 70, level: "MANAGER" }
+    },
+    
+    // Career Suitability
+    suitability: {
+      currentRole: backendProfile.current_role || "Professional",
+      matchScore: backendProfile.role_match_score || 75,
+      alternateRoles: backendProfile.alternate_roles || [
+        { role: "Team Lead", match: 80 },
+        { role: "Specialist", match: 75 },
+        { role: "Consultant", match: 70 }
+      ]
+    },
+    
+    // Skill Development Journey
+    skillJourney: {
+      startDate: backendProfile.created_at || new Date().toISOString(),
+      milestones: backendProfile.skill_milestones || [
+        { date: "2024-01", skill: "Core Skills", improvement: 25 },
+        { date: "2024-06", skill: "Communication", improvement: 18 }
+      ],
+      totalImprovement: backendProfile.total_skill_improvement || 43
+    },
+    
+    // Verification
+    verification: {
+      rightDoersPowered: backendProfile.right_doers_powered !== false,
+      verifiedDate: backendProfile.verified_date || backendProfile.created_at || new Date().toISOString(),
+      credentialId: backendProfile.credential_id || `RDVC-${Date.now().toString(36).toUpperCase()}`
+    },
+    
+    // Additional metadata
+    _backendId: backendProfile.id,
+    _userId: backendProfile.user_id,
+    _adaptiveLevel: backendProfile.adaptive_level || "MANAGER",
+    _efficiencyValue: backendProfile.efficiency_value || 70
+  };
+};
 
 export default function DoersProfiler() {
   const navigate = useNavigate();
