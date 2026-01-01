@@ -627,7 +627,7 @@ export default function DivisionDashboards() {
           <CardHeader className="pb-2">
             <CardTitle className="text-white text-sm flex items-center gap-2">
               <Crown className="w-4 h-4 text-amber-400" />
-              Pay Variability Matrix (Founder's Focus)
+              Pay Variability Matrix (Founder&apos;s Focus)
             </CardTitle>
           </CardHeader>
           <CardContent>
