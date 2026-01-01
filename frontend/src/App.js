@@ -71,6 +71,7 @@ import DoerKidzDashboard from "@/pages/DoerKidzDashboard";
 import DoerTeensDashboard from "@/pages/DoerTeensDashboard";
 import ContentCommandCentre from "@/pages/ContentCommandCentre";
 import GemmaOffline from "@/pages/GemmaOffline";
+import WhatsAppSigning from "@/pages/WhatsAppSigning";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
