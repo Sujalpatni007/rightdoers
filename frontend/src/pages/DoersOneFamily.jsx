@@ -169,10 +169,120 @@ const transformBackendFamily = (backendFamily) => {
 
 export default function DoersOneFamily() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [selectedMember, setSelectedMember] = useState("daughter");
   const [language, setLanguage] = useState("kn"); // kn = Kannada, en = English
+  const [family, setFamily] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const activeMember = FAMILY_MEMBERS.find(m => m.id === selectedMember);
+  // Fetch or create family from backend
+  const fetchFamily = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const userId = user?.id || localStorage.getItem('rdw_user_id') || 'demo-user';
+      
+      // Try to get family by user ID (as a member)
+      try {
+        const response = await axios.get(`${API}/families/user/${userId}`);
+        const transformedFamily = transformBackendFamily(response.data);
+        setFamily(transformedFamily);
+        if (response.data.primary_language) {
+          setLanguage(response.data.primary_language === 'en' ? 'en' : 'kn');
+        }
+        console.log('Family loaded from backend:', response.data.id);
+      } catch (fetchError) {
+        // Family doesn't exist, create one
+        if (fetchError.response?.status === 404) {
+          console.log('Family not found, creating new one...');
+          const createResponse = await axios.post(`${API}/families`, {
+            name: user?.name ? `${user.name}'s Family` : "My Family",
+            family_type: "MIG",
+            primary_language: "kn",
+            members: [
+              { name: "Father", name_regional: "ತಂದೆ", role: "father", avatar: "👨", doers_score: 720 },
+              { name: "Mother", name_regional: "ತಾಯಿ", role: "mother", avatar: "👩", doers_score: 680 },
+              { name: "Daughter", name_regional: "ಮಗಳು", role: "daughter", avatar: "👧", doers_score: 810, is_first_student: true }
+            ],
+            goals: [
+              { title: "Dubai Vacation 2026", target_amount: 300000, saved_amount: 105000 },
+              { title: "Higher Education Fund", target_amount: 1500000, saved_amount: 300000 }
+            ]
+          });
+          const transformedFamily = transformBackendFamily(createResponse.data);
+          setFamily(transformedFamily);
+          toast.success('Your Family Dashboard has been created!');
+          console.log('New family created:', createResponse.data.id);
+        } else {
+          throw fetchError;
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch/create family:', err);
+      setError('Failed to load family data. Using demo data.');
+      // Fallback to default data
+      setFamily({
+        id: 'demo-family',
+        name: 'Demo Family',
+        familyType: 'MIG',
+        familyDoersScore: Math.round(DEFAULT_FAMILY_MEMBERS.reduce((a, m) => a + m.doersScore, 0) / DEFAULT_FAMILY_MEMBERS.length),
+        members: DEFAULT_FAMILY_MEMBERS,
+        goals: DEFAULT_FAMILY_GOALS,
+        primaryLanguage: 'kn'
+      });
+      toast.warning('Using demo data - backend may be unavailable');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    fetchFamily();
+  }, [fetchFamily]);
+
+  // Get family members and active member
+  const familyMembers = family?.members || DEFAULT_FAMILY_MEMBERS;
+  const familyGoals = family?.goals || DEFAULT_FAMILY_GOALS;
+  const familyDoersScore = family?.familyDoersScore || Math.round(familyMembers.reduce((a, m) => a + m.doersScore, 0) / familyMembers.length);
+  
+  const activeMember = familyMembers.find(m => m.id === selectedMember) || familyMembers[0];
+
+  // Set initial selected member when family loads
+  useEffect(() => {
+    if (family?.members?.length > 0) {
+      const firstStudent = family.members.find(m => m.isFirstStudent);
+      if (firstStudent) {
+        setSelectedMember(firstStudent.id);
+      } else {
+        setSelectedMember(family.members[0].id);
+      }
+    }
+  }, [family]);
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center">
+        <motion.div 
+          className="text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <motion.div
+            className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+          >
+            <Users className="w-10 h-10 text-white" />
+          </motion.div>
+          <h2 className="text-white text-xl font-bold mb-2">Loading Family Dashboard</h2>
+          <p className="text-white/50">Connecting to backend...</p>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
