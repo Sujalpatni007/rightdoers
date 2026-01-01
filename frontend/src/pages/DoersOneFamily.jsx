@@ -330,21 +330,21 @@ export default function DoersOneFamily() {
                     <Users className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-white font-bold">MIG ಕುಟುಂಬ</h2>
-                    <p className="text-white/60 text-xs">Middle Income Group Family</p>
+                    <h2 className="text-white font-bold">{family?.familyType || "MIG"} ಕುಟುಂಬ</h2>
+                    <p className="text-white/60 text-xs">{family?.name || "Middle Income Group Family"}</p>
                   </div>
                 </div>
                 <div className="text-right">
                   <p className="text-white/60 text-xs">Family DoersScore</p>
                   <p className="text-2xl font-bold text-white">
-                    {Math.round(FAMILY_MEMBERS.reduce((a, m) => a + m.doersScore, 0) / FAMILY_MEMBERS.length)}
+                    {familyDoersScore}
                   </p>
                 </div>
               </div>
 
               {/* Family Member Avatars */}
               <div className="flex justify-center gap-4">
-                {FAMILY_MEMBERS.map((member) => (
+                {familyMembers.map((member) => (
                   <motion.button
                     key={member.id}
                     className={`relative flex flex-col items-center p-2 rounded-xl transition-all ${
