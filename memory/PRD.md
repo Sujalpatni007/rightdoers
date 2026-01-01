@@ -89,6 +89,41 @@ Build **HI AI-APP.COM** - A Human Potential Management & Transformation Company 
 
 **Files:** `/app/backend/voice_ai.py`, `/app/frontend/src/components/VoiceAssistant.jsx`
 
+### ✅ NEW: AIMEE Text-to-Speech (January 1, 2026)
+**AIMEE Can Now Speak! Voice Responses for AI Chat**
+
+**Technology:** OpenAI TTS (tts-1) via Emergent LLM Key
+**Default Voice:** Nova (energetic, upbeat)
+
+**Available Voices:**
+- alloy, ash, coral, echo, fable, **nova** (default), onyx, sage, shimmer
+
+**APIs:**
+- `GET /api/aimee/voice/status` - Check TTS availability
+- `POST /api/aimee/speak` - Generate speech (base64)
+- `POST /api/aimee/speak/audio` - Generate speech (audio file)
+- `POST /api/aimee/chat-simple` - AI chat with context
+
+**Files:** `/app/backend/aimee_voice.py`, `/app/frontend/src/components/AIMEEChat.jsx`
+
+### ✅ NEW: PDF Report Generation - "Big 5 Report" (January 1, 2026)
+**"Spotify Wrapped" for Careers - KEY PRODUCT FEATURE**
+
+**Report Contents (5 Pages):**
+1. **Cover Page** - Name, DoersScore™, Report Date
+2. **DoersScore™ Breakdown** - Visual chart, component scores, adaptive level
+3. **BIG 5 #1: Career Interests** - RIASEC pie chart, top 3 interests
+4. **BIG 5 #2: Skills & Abilities** - Bar chart, proficiency levels
+5. **BIG 5 #3-5: Recommendations** - Career clusters, 5E Journey, next steps
+
+**APIs:**
+- `POST /api/report/generate` - Generate PDF (base64)
+- `POST /api/report/download` - Download PDF directly
+- `GET /api/report/generate/{user_id}` - Generate from user profile
+
+**Files:** `/app/backend/pdf_report.py`
+**Frontend:** Download button in DoersProfiler share modal
+
 ### ✅ NEW: Proven Profiles - Anushree's Journey (January 1, 2026)
 **First Real Success Story in Platform**
 
