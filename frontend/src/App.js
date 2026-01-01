@@ -74,6 +74,7 @@ import GemmaOffline from "@/pages/GemmaOffline";
 import WhatsAppSigning from "@/pages/WhatsAppSigning";
 import CaptainCommandCentre from "@/pages/CaptainCommandCentre";
 import MissionBoard from "@/pages/MissionBoard";
+import LaunchAnnouncement from "@/pages/LaunchAnnouncement";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
@@ -307,6 +308,12 @@ function AppContent() {
       <Route path="/mission-board" element={<MissionBoard />} />
       <Route path="/launch" element={<MissionBoard />} />
       <Route path="/dubai" element={<MissionBoard />} />
+      
+      {/* Launch Announcement Page */}
+      <Route path="/launch-announcement" element={<LaunchAnnouncement />} />
+      <Route path="/announcement" element={<LaunchAnnouncement />} />
+      <Route path="/happy-new-year" element={<LaunchAnnouncement />} />
+      <Route path="/2026" element={<LaunchAnnouncement />} />
       
       {/* Employer Flow */}
       <Route path="/employer" element={<ProtectedRoute allowedRoles={["employer"]}><EmployerDashboard /></ProtectedRoute>} />
