@@ -284,6 +284,11 @@ function AppContent() {
       <Route path="/content-factory" element={<ContentCommandCentre />} />
       <Route path="/reel-creator" element={<ContentCommandCentre />} />
       
+      {/* Gemma Offline AI - For Rural India */}
+      <Route path="/gemma" element={<GemmaOffline />} />
+      <Route path="/offline-ai" element={<GemmaOffline />} />
+      <Route path="/rural" element={<GemmaOffline />} />
+      
       {/* Employer Flow */}
       <Route path="/employer" element={<ProtectedRoute allowedRoles={["employer"]}><EmployerDashboard /></ProtectedRoute>} />
       <Route path="/employer/post" element={<ProtectedRoute allowedRoles={["employer"]}><PostJobPage /></ProtectedRoute>} />
