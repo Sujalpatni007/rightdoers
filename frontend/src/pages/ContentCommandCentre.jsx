@@ -706,7 +706,7 @@ export default function ContentCommandCentre() {
                     <div className="text-center">
                       <Quote className="h-12 w-12 text-pink-400 mx-auto mb-4 opacity-50" />
                       <p className="text-2xl text-white font-medium leading-relaxed mb-4">
-                        "{currentMantra.text}"
+                        &quot;{currentMantra.text}&quot;
                       </p>
                       <div className="flex items-center justify-center gap-2">
                         <Badge className="bg-pink-600">{currentMantra.category}</Badge>
@@ -726,7 +726,7 @@ export default function ContentCommandCentre() {
                   ) : (
                     <div className="text-center text-white/50">
                       <Quote className="h-16 w-16 mx-auto mb-4 opacity-30" />
-                      <p>Click "Get New Mantra" to generate an inspirational quote</p>
+                      <p>Click &quot;Get New Mantra&quot; to generate an inspirational quote</p>
                     </div>
                   )}
                 </CardContent>
