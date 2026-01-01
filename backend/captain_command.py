@@ -889,3 +889,106 @@ async def get_vertical_leaderboard():
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
 
+# Notification payload model
+class NotificationPayload(BaseModel):
+    type: str  # orbit, readiness, leader, kata, countdown, win
+    vertical: Optional[str] = None
+    leader_name: Optional[str] = None
+    percentage: Optional[int] = None
+    kata_number: Optional[int] = None
+    days_remaining: Optional[int] = None
+    description: Optional[str] = None
+
+@router.post("/notifications/trigger")
+async def trigger_notification(payload: NotificationPayload):
+    """Manually trigger a notification (for testing or admin use)"""
+    
+    notification_data = {
+        "type": payload.type,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "should_notify": True
+    }
+    
+    if payload.type == "orbit":
+        notification_data["title"] = f"🚀 ORBIT ACHIEVED - {payload.vertical}!"
+        notification_data["body"] = f"{payload.leader_name or 'Team'} has reached self-sustaining productivity!"
+        notification_data["priority"] = "high"
+        
+    elif payload.type == "readiness":
+        notification_data["title"] = f"📈 {payload.vertical} at {payload.percentage}% Readiness!"
+        notification_data["body"] = f"Almost there! {payload.vertical} is ready for Dubai launch!"
+        notification_data["priority"] = "medium"
+        
+    elif payload.type == "leader":
+        notification_data["title"] = f"🎖️ New Leader: {payload.vertical}"
+        notification_data["body"] = f"{payload.leader_name} has been assigned to lead {payload.vertical}"
+        notification_data["priority"] = "medium"
+        
+    elif payload.type == "kata":
+        notification_data["title"] = f"📚 Kata {payload.kata_number} Complete - {payload.vertical}"
+        notification_data["body"] = f"{payload.leader_name or 'Team'} has completed Kata {payload.kata_number}"
+        notification_data["priority"] = "low"
+        
+    elif payload.type == "countdown":
+        if payload.days_remaining == 0:
+            notification_data["title"] = "🚀 DUBAI LAUNCH DAY!"
+            notification_data["body"] = "The moment is here! HI AI APP is launching globally!"
+        else:
+            notification_data["title"] = f"⏰ {payload.days_remaining} Days to Dubai Launch!"
+            notification_data["body"] = "Check the Mission Board to see team progress."
+        notification_data["priority"] = "high" if payload.days_remaining <= 1 else "medium"
+        
+    elif payload.type == "win":
+        notification_data["title"] = f"🏆 First Win - {payload.vertical}!"
+        notification_data["body"] = payload.description or "A major milestone has been achieved!"
+        notification_data["priority"] = "medium"
+    
+    # Store notification in DB for history
+    if db is not None:
+        await db.notifications.insert_one(notification_data)
+    
+    return {
+        "success": True,
+        "notification": notification_data,
+        "message": "Notification triggered successfully"
+    }
+
+@router.get("/notifications/history")
+async def get_notification_history(limit: int = 20):
+    """Get notification history"""
+    
+    notifications = []
+    
+    if db is not None:
+        cursor = db.notifications.find(
+            {},
+            {"_id": 0}
+        ).sort("timestamp", -1).limit(limit)
+        
+        async for doc in cursor:
+            notifications.append(doc)
+    
+    return {
+        "notifications": notifications,
+        "total": len(notifications),
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
+@router.get("/notifications/settings")
+async def get_notification_settings():
+    """Get notification settings and supported types"""
+    
+    return {
+        "supported_types": [
+            {"type": "orbit", "description": "ORBIT status achieved", "priority": "high"},
+            {"type": "readiness", "description": "80%+ readiness milestone", "priority": "medium"},
+            {"type": "leader", "description": "New leader assigned", "priority": "medium"},
+            {"type": "kata", "description": "Kata completion", "priority": "low"},
+            {"type": "countdown", "description": "Launch countdown alerts", "priority": "high"},
+            {"type": "win", "description": "First win achievements", "priority": "medium"}
+        ],
+        "auto_notify": True,
+        "check_interval_seconds": 60
+    }
+
+
