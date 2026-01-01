@@ -69,6 +69,7 @@ import Jobs4Me from "@/pages/Jobs4Me";
 import PricingPage from "@/pages/PricingPage";
 import DoerKidzDashboard from "@/pages/DoerKidzDashboard";
 import DoerTeensDashboard from "@/pages/DoerTeensDashboard";
+import ContentCommandCentre from "@/pages/ContentCommandCentre";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
