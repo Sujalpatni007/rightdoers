@@ -1865,6 +1865,10 @@ from whatsapp_service import (
 )
 from content_command import content_command, NDADocument, OfferLetter
 
+# Import Captain Command Centre
+import captain_command
+captain_command.set_database(db)
+
 class SendNDAWhatsAppRequest(BaseModel):
     nda_id: str
     recipient_name: str
@@ -2150,8 +2154,9 @@ async def send_welcome_notification(name: str, phone: str, role: str):
 
 import hashlib  # Add at top if not already there
 
-# Include router
+# Include routers
 app.include_router(api_router)
+app.include_router(captain_command.router)
 
 app.add_middleware(
     CORSMiddleware,
