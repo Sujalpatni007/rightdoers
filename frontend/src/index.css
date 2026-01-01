@@ -2,6 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Indian Language Font Families */
+.font-telugu {
+    font-family: 'Noto Sans Telugu', sans-serif;
+}
+
+.font-kannada {
+    font-family: 'Noto Sans Kannada', sans-serif;
+}
+
+.font-hindi {
+    font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
+/* Auto-detect language and apply font */
+:lang(te) {
+    font-family: 'Noto Sans Telugu', sans-serif;
+}
+
+:lang(kn) {
+    font-family: 'Noto Sans Kannada', sans-serif;
+}
+
+:lang(hi) {
+    font-family: 'Noto Sans Devanagari', sans-serif;
+}
+
 @layer base {
     :root {
         --background: 210 40% 98%;
