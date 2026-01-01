@@ -532,6 +532,95 @@ export default function ProfileComparison() {
 
               {/* Mode Content */}
               <AnimatePresence mode="wait">
+                {/* JOURNEY Mode - SHARE IT / KEEP IT / LIKE IT */}
+                {activeMode === "journey" && (
+                  <motion.div
+                    key="journey"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="space-y-4"
+                  >
+                    {/* Progress Indicator */}
+                    <div className="flex items-center justify-center gap-2 mb-4">
+                      {JOURNEY_CARDS.map((card, idx) => (
+                        <div 
+                          key={card.id}
+                          className={`w-3 h-3 rounded-full transition-all ${
+                            idx < currentCardIndex 
+                              ? "bg-green-500" 
+                              : idx === currentCardIndex 
+                                ? "bg-amber-500 scale-125" 
+                                : "bg-white/20"
+                          }`}
+                        />
+                      ))}
+                    </div>
+
+                    {/* Swipeable Card Stack */}
+                    <div className="relative h-80 mx-auto max-w-sm">
+                      <AnimatePresence>
+                        {JOURNEY_CARDS.map((card, idx) => (
+                          <SwipeCard
+                            key={card.id}
+                            card={card}
+                            isActive={idx === currentCardIndex}
+                            onSwipe={handleCardSwipe}
+                          />
+                        ))}
+                      </AnimatePresence>
+                      
+                      {/* Journey Complete */}
+                      {currentCardIndex >= JOURNEY_CARDS.length && (
+                        <motion.div
+                          initial={{ scale: 0.8, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          className="absolute inset-0 flex flex-col items-center justify-center"
+                        >
+                          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center mb-4">
+                            <Check className="w-12 h-12 text-white" />
+                          </div>
+                          <h3 className="text-white text-xl font-bold mb-2">Journey Complete!</h3>
+                          <p className="text-white/60 text-sm mb-4">Now compare with friends & family</p>
+                          <Button 
+                            onClick={() => setActiveMode("family")}
+                            className="bg-gradient-to-r from-purple-500 to-pink-500"
+                          >
+                            Start Comparing <ArrowRight className="w-4 h-4 ml-2" />
+                          </Button>
+                        </motion.div>
+                      )}
+                    </div>
+
+                    {/* Action Buttons Below Card */}
+                    {currentCardIndex < JOURNEY_CARDS.length && (
+                      <div className="flex justify-center gap-4 mt-4">
+                        <Button
+                          variant="outline"
+                          size="lg"
+                          className="w-16 h-16 rounded-full border-red-500/50 text-red-400 hover:bg-red-500/20"
+                          onClick={() => handleCardSwipe("left", JOURNEY_CARDS[currentCardIndex])}
+                        >
+                          <X className="w-6 h-6" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="lg"
+                          className="w-16 h-16 rounded-full border-green-500/50 text-green-400 hover:bg-green-500/20"
+                          onClick={() => handleCardSwipe("right", JOURNEY_CARDS[currentCardIndex])}
+                        >
+                          <Check className="w-6 h-6" />
+                        </Button>
+                      </div>
+                    )}
+
+                    {/* Instructions */}
+                    <p className="text-center text-white/40 text-xs">
+                      Swipe right to act • Swipe left to skip • Or tap buttons
+                    </p>
+                  </motion.div>
+                )}
+
                 {/* QR Code Mode */}
                 {activeMode === "qr" && (
                   <motion.div
