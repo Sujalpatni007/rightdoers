@@ -288,11 +288,12 @@ export default function DoersProfiler() {
     fetchProfile();
   }, [fetchProfile]);
 
-  const efficiencyValue = profile ? calculateEfficiencyValue(
+  // Use backend efficiency value if available, otherwise calculate
+  const efficiencyValue = profile?._efficiencyValue || (profile ? calculateEfficiencyValue(
     profile.naturalFit.score,
     profile.developedSkills.score,
     profile.learningAgility.score
-  ) : 0;
+  ) : 0);
 
   const getAdaptiveLevel = (score) => {
     if (score >= 91) return ASSESSMENT_LEVELS.EXPERT;
@@ -302,9 +303,19 @@ export default function DoersProfiler() {
     return ASSESSMENT_LEVELS.PARA;
   };
 
+  // Refresh profile from backend
+  const handleRefreshProfile = async () => {
+    toast.info('Refreshing your profile...');
+    await fetchProfile();
+    toast.success('Profile refreshed!');
+  };
+
   // Generate shareable content
   const getShareContent = () => {
-    const shareText = `Check out my TalentCard! DoersScore: ${profile?.doersScore.value}/900 | Efficiency: ${efficiencyValue}% | Level: ${getAdaptiveLevel(efficiencyValue).name}
+    const doersScoreValue = profile?.doersScore?.value || 650;
+    const levelName = profile?._adaptiveLevel || getAdaptiveLevel(efficiencyValue).name;
+    
+    const shareText = `Check out my TalentCard! DoersScore: ${doersScoreValue}/900 | Efficiency: ${efficiencyValue}% | Level: ${levelName}
 
 TALENTON.AI REVOLUTION - Ride the Wave!
 
