@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -24,12 +24,31 @@ import {
   GraduationCap,
   Briefcase,
   Music,
-  Calculator
+  Calculator,
+  RefreshCw,
+  AlertCircle,
+  Loader2
 } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth, API } from "@/App";
+import axios from "axios";
 
-// MIG FAMILY DATA - "One Family, Different Dreams"
-const FAMILY_MEMBERS = [
+// Icon mapping for dynamic needs
+const ICON_MAP = {
+  DollarSign,
+  TrendingUp,
+  Target,
+  BookOpen,
+  Briefcase,
+  Heart,
+  Calculator,
+  Music,
+  Brain,
+  Star
+};
+
+// Default MIG FAMILY DATA - "One Family, Different Dreams" (fallback)
+const DEFAULT_FAMILY_MEMBERS = [
   {
     id: "father",
     name: "ತಂದೆ (Father)",
@@ -81,12 +100,72 @@ const FAMILY_MEMBERS = [
   }
 ];
 
-// Family Goals
-const FAMILY_GOALS = [
+// Default Family Goals
+const DEFAULT_FAMILY_GOALS = [
   { id: 1, title: "Dubai Vacation 2026", progress: 35, target: "₹3,00,000", saved: "₹1,05,000" },
   { id: 2, title: "Daughter's Higher Education", progress: 20, target: "₹15,00,000", saved: "₹3,00,000" },
   { id: 3, title: "Home Renovation", progress: 60, target: "₹5,00,000", saved: "₹3,00,000" }
 ];
+
+// Transform backend family data to frontend format
+const transformBackendFamily = (backendFamily) => {
+  if (!backendFamily) return null;
+  
+  const roleColors = {
+    father: "#3B82F6",
+    mother: "#EC4899",
+    daughter: "#8B5CF6",
+    son: "#22C55E"
+  };
+  
+  const roleIcons = {
+    father: "👨",
+    mother: "👩",
+    daughter: "👧",
+    son: "👦"
+  };
+  
+  // Transform members
+  const members = (backendFamily.members || []).map((member, idx) => ({
+    id: member.id || member.role || `member-${idx}`,
+    name: member.name_regional ? `${member.name_regional} (${member.name})` : member.name,
+    nameEn: member.name,
+    role: member.role_description || member.role,
+    avatar: member.avatar || roleIcons[member.role] || "👤",
+    color: member.color || roleColors[member.role] || "#6366F1",
+    isFirstStudent: member.is_first_student || false,
+    needs: (member.needs || []).map(need => ({
+      id: need.id,
+      name: need.name,
+      nameKn: need.name_regional || need.name,
+      icon: ICON_MAP[need.icon_name] || Brain,
+      progress: need.progress || 0,
+      status: need.status || "pending"
+    })),
+    doersScore: member.doers_score || 650,
+    currentGoal: member.current_goal || "Set a goal",
+    nextAction: member.next_action || "Choose your next step"
+  }));
+  
+  // Transform goals
+  const goals = (backendFamily.goals || []).map((goal, idx) => ({
+    id: goal.id || idx + 1,
+    title: goal.title,
+    progress: goal.progress || Math.round((goal.saved_amount / goal.target_amount) * 100) || 0,
+    target: `₹${(goal.target_amount || 0).toLocaleString('en-IN')}`,
+    saved: `₹${(goal.saved_amount || 0).toLocaleString('en-IN')}`
+  }));
+  
+  return {
+    id: backendFamily.id,
+    name: backendFamily.name,
+    familyType: backendFamily.family_type || "MIG",
+    familyDoersScore: backendFamily.family_doers_score || 700,
+    members: members.length > 0 ? members : DEFAULT_FAMILY_MEMBERS,
+    goals: goals.length > 0 ? goals : DEFAULT_FAMILY_GOALS,
+    primaryLanguage: backendFamily.primary_language || "en"
+  };
+};
 
 export default function DoersOneFamily() {
   const navigate = useNavigate();
