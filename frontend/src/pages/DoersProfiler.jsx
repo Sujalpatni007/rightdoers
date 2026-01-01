@@ -355,7 +355,8 @@ Say HI AI. Get your D.P. (Doers Profiler) at:`;
 
   const shareViaEmail = () => {
     const { shareText, shareUrl } = getShareContent();
-    const subject = `Check out my TalentCard - DoersScore ${profile?.doersScore.value}`;
+    const doersScoreValue = profile?.doersScore?.value || 650;
+    const subject = `Check out my TalentCard - DoersScore ${doersScoreValue}`;
     const emailUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(shareText + '\n\n' + shareUrl)}`;
     window.location.href = emailUrl;
     toast.success('Opening email...');
