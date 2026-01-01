@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -34,10 +34,12 @@ import {
   Mail,
   Copy,
   X,
-  Send
+  Send,
+  AlertCircle
 } from "lucide-react";
 import { toast } from "sonner";
-import { useAuth } from "@/App";
+import { useAuth, API } from "@/App";
+import axios from "axios";
 
 // Adaptive Question Levels (Para → Professional)
 const ASSESSMENT_LEVELS = {
