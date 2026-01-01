@@ -42,11 +42,13 @@ import {
   Bookmark,
   ThumbsUp,
   X,
-  ArrowRight
+  ArrowRight,
+  Flame
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth, API } from "@/App";
 import axios from "axios";
+import { StreakWidget } from "./StreakSystem";
 
 // SHARE IT • KEEP IT • LIKE IT Journey Cards
 const JOURNEY_CARDS = [
