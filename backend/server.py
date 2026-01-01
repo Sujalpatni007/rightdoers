@@ -1249,6 +1249,272 @@ async def generate_user_report(user_id: str):
         logger.error(f"User report generation error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+# ============================================
+# CRM SUPER APP APIs - Business to the World
+# ============================================
+
+from crm_service import (
+    crm_service, Lead, Contact, Deal, Activity, BusinessOrder,
+    BusinessVertical, LeadSource, LeadStage, DoerDivision, UrgencyLevel,
+    GTMMetrics, CURRENT_ORDERS
+)
+
+# --- LEADS ---
+
+class LeadCreate(BaseModel):
+    name: str
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    company: Optional[str] = None
+    source: str = "community"
+    vertical: str
+    vibe_score: int = 50
+    notes: List[str] = Field(default_factory=list)
+    tags: List[str] = Field(default_factory=list)
+
+@api_router.post("/crm/leads")
+async def create_lead(data: LeadCreate):
+    """Create a new lead in CRM"""
+    lead = Lead(
+        name=data.name,
+        email=data.email,
+        phone=data.phone,
+        company=data.company,
+        source=LeadSource(data.source) if data.source in [e.value for e in LeadSource] else LeadSource.COMMUNITY,
+        vertical=BusinessVertical(data.vertical) if data.vertical in [e.value for e in BusinessVertical] else BusinessVertical.EDTECH,
+        vibe_score=data.vibe_score,
+        notes=data.notes,
+        tags=data.tags
+    )
+    
+    # Save to database
+    lead_dict = lead.model_dump()
+    await db.crm_leads.insert_one(lead_dict)
+    
+    return {"success": True, "lead": lead_dict}
+
+@api_router.get("/crm/leads")
+async def get_leads(vertical: Optional[str] = None, stage: Optional[str] = None, limit: int = 50):
+    """Get all leads, optionally filtered"""
+    query = {}
+    if vertical:
+        query["vertical"] = vertical
+    if stage:
+        query["stage"] = stage
+    
+    leads = await db.crm_leads.find(query, {"_id": 0}).sort("created_at", -1).limit(limit).to_list(limit)
+    return {"leads": leads, "total": len(leads)}
+
+@api_router.get("/crm/leads/{lead_id}")
+async def get_lead(lead_id: str):
+    """Get a specific lead"""
+    lead = await db.crm_leads.find_one({"id": lead_id}, {"_id": 0})
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    return lead
+
+@api_router.patch("/crm/leads/{lead_id}")
+async def update_lead(lead_id: str, updates: Dict[str, Any]):
+    """Update a lead"""
+    updates["updated_at"] = utc_now()
+    result = await db.crm_leads.update_one({"id": lead_id}, {"$set": updates})
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    return {"success": True, "message": "Lead updated"}
+
+# --- BUSINESS ORDERS (Your 3 current projects) ---
+
+@api_router.get("/crm/orders")
+async def get_orders():
+    """Get all business orders including the 3 current ones"""
+    # First check DB for any orders
+    db_orders = await db.crm_orders.find({}, {"_id": 0}).to_list(100)
+    
+    # If no orders in DB, seed with current orders
+    if not db_orders:
+        for order in CURRENT_ORDERS:
+            order_dict = order.model_dump()
+            await db.crm_orders.insert_one(order_dict)
+        db_orders = [o.model_dump() for o in CURRENT_ORDERS]
+    
+    return {"orders": db_orders, "total": len(db_orders)}
+
+@api_router.get("/crm/orders/{order_id}")
+async def get_order(order_id: str):
+    """Get a specific business order"""
+    order = await db.crm_orders.find_one({"id": order_id}, {"_id": 0})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    return order
+
+@api_router.patch("/crm/orders/{order_id}")
+async def update_order(order_id: str, updates: Dict[str, Any]):
+    """Update a business order (progress, status, etc.)"""
+    updates["updated_at"] = utc_now()
+    result = await db.crm_orders.update_one({"id": order_id}, {"$set": updates})
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Order not found")
+    return {"success": True, "message": "Order updated"}
+
+@api_router.post("/crm/orders")
+async def create_order(data: Dict[str, Any]):
+    """Create a new business order"""
+    order_id = f"ORDER-{str(uuid.uuid4())[:8].upper()}"
+    data["id"] = order_id
+    data["created_at"] = utc_now()
+    data["updated_at"] = utc_now()
+    data["status"] = data.get("status", "draft")
+    data["progress"] = data.get("progress", 0)
+    
+    await db.crm_orders.insert_one(data)
+    return {"success": True, "order_id": order_id}
+
+# --- GTM METRICS (10K Users by Dubai) ---
+
+@api_router.get("/crm/gtm/metrics")
+async def get_gtm_metrics():
+    """Get GTM metrics for Dubai investor meeting"""
+    # Get from DB or create
+    metrics = await db.crm_metrics.find_one({"type": "gtm"}, {"_id": 0})
+    
+    if not metrics:
+        metrics = {
+            "type": "gtm",
+            "target_users": 10000,
+            "current_users": 0,
+            "target_date": "2026-01-08",
+            "audience_reached": 0,
+            "vibed_users": 0,
+            "community_members": 0,
+            "repeat_users": 0,
+            "referral_rate": 0.0,
+            "share_rate": 0.0,
+            "viral_coefficient": 0.0,
+            "users_by_vertical": {},
+            "mrr": 0.0,
+            "arr": 0.0,
+            "updated_at": utc_now()
+        }
+        await db.crm_metrics.insert_one(metrics)
+        del metrics["_id"]
+    
+    # Calculate progress
+    days_remaining = 7
+    users_needed = metrics["target_users"] - metrics["current_users"]
+    users_per_day = users_needed / max(1, days_remaining)
+    
+    return {
+        **metrics,
+        "progress": {
+            "remaining_users": users_needed,
+            "progress_percent": (metrics["current_users"] / metrics["target_users"]) * 100,
+            "users_per_day_needed": int(users_per_day),
+            "days_remaining": days_remaining,
+            "on_track": metrics["current_users"] >= (metrics["target_users"] * (7 - days_remaining) / 7)
+        }
+    }
+
+@api_router.patch("/crm/gtm/metrics")
+async def update_gtm_metrics(updates: Dict[str, Any]):
+    """Update GTM metrics"""
+    updates["updated_at"] = utc_now()
+    await db.crm_metrics.update_one({"type": "gtm"}, {"$set": updates}, upsert=True)
+    return {"success": True, "message": "Metrics updated"}
+
+# --- PIPELINE ---
+
+@api_router.get("/crm/pipeline")
+async def get_pipeline():
+    """Get GTM pipeline summary - New Path stages"""
+    leads = await db.crm_leads.find({}, {"_id": 0}).to_list(1000)
+    deals = await db.crm_deals.find({}, {"_id": 0}).to_list(1000)
+    
+    pipeline = {
+        "stages": {
+            "audience": len([l for l in leads if l.get("stage") == "audience"]),
+            "vibed": len([l for l in leads if l.get("stage") == "vibed"]),
+            "engaged": len([l for l in leads if l.get("stage") == "engaged"]),
+            "launched": len([l for l in leads if l.get("stage") == "launched"]),
+            "community_plus": len([l for l in leads if l.get("stage") == "community_plus"]),
+            "ai_automated": len([l for l in leads if l.get("stage") == "ai_automated"]),
+            "repeat": len([l for l in leads if l.get("stage") == "repeat"]),
+        },
+        "total_leads": len(leads),
+        "total_deals": len(deals),
+        "total_value": sum(d.get("value", 0) for d in deals),
+        "avg_vibe_score": sum(l.get("vibe_score", 0) for l in leads) / max(1, len(leads))
+    }
+    
+    return pipeline
+
+# --- VERTICALS ---
+
+@api_router.get("/crm/verticals")
+async def get_verticals():
+    """Get all business verticals and their status"""
+    verticals = []
+    for v in BusinessVertical:
+        leads = await db.crm_leads.count_documents({"vertical": v.value})
+        orders = await db.crm_orders.count_documents({"vertical": v.value})
+        
+        verticals.append({
+            "id": v.value,
+            "name": v.value.replace("_", " ").title(),
+            "leads": leads,
+            "orders": orders,
+            "active": orders > 0
+        })
+    
+    return {"verticals": verticals}
+
+# --- DASHBOARD ---
+
+@api_router.get("/crm/dashboard")
+async def get_crm_dashboard():
+    """Get CRM dashboard for Captain Command Centre"""
+    # Get counts
+    leads_count = await db.crm_leads.count_documents({})
+    orders_count = await db.crm_orders.count_documents({})
+    deals_count = await db.crm_deals.count_documents({})
+    
+    # Get recent leads
+    recent_leads = await db.crm_leads.find({}, {"_id": 0}).sort("created_at", -1).limit(5).to_list(5)
+    
+    # Get active orders
+    active_orders = await db.crm_orders.find({"status": {"$in": ["active", "in_progress"]}}, {"_id": 0}).to_list(10)
+    
+    # If no orders, get the 3 default ones
+    if not active_orders:
+        all_orders = await db.crm_orders.find({}, {"_id": 0}).to_list(10)
+        if not all_orders:
+            # Seed orders
+            for order in CURRENT_ORDERS:
+                order_dict = order.model_dump()
+                await db.crm_orders.insert_one(order_dict)
+            active_orders = [o.model_dump() for o in CURRENT_ORDERS]
+        else:
+            active_orders = all_orders
+    
+    # Get GTM metrics
+    gtm = await db.crm_metrics.find_one({"type": "gtm"}, {"_id": 0})
+    
+    return {
+        "summary": {
+            "total_leads": leads_count,
+            "total_orders": orders_count,
+            "total_deals": deals_count,
+            "current_users": gtm.get("current_users", 0) if gtm else 0,
+            "target_users": 10000
+        },
+        "recent_leads": recent_leads,
+        "active_orders": active_orders[:3],  # Your 3 current orders
+        "gtm_progress": {
+            "target": 10000,
+            "current": gtm.get("current_users", 0) if gtm else 0,
+            "days_to_dubai": 7
+        }
+    }
+
 # Include router
 app.include_router(api_router)
 
