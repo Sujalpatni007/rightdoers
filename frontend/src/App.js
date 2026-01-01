@@ -277,6 +277,12 @@ function AppContent() {
       <Route path="/teens" element={<DoerTeensDashboard />} />
       <Route path="/doer-teens" element={<DoerTeensDashboard />} />
       
+      {/* Content Command Centre - GTM Content Factory */}
+      <Route path="/content" element={<ContentCommandCentre />} />
+      <Route path="/content-command" element={<ContentCommandCentre />} />
+      <Route path="/content-factory" element={<ContentCommandCentre />} />
+      <Route path="/reel-creator" element={<ContentCommandCentre />} />
+      
       {/* Employer Flow */}
       <Route path="/employer" element={<ProtectedRoute allowedRoles={["employer"]}><EmployerDashboard /></ProtectedRoute>} />
       <Route path="/employer/post" element={<ProtectedRoute allowedRoles={["employer"]}><PostJobPage /></ProtectedRoute>} />
