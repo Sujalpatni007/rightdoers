@@ -236,6 +236,15 @@ function AppContent() {
       <Route path="/family" element={<DoersOneFamily />} />
       <Route path="/doers-one" element={<DoersOneFamily />} />
       
+      {/* Profile Comparison - DoersScore Battle */}
+      <Route path="/compare" element={<ProfileComparison />} />
+      <Route path="/battle" element={<ProfileComparison />} />
+      
+      {/* Division Director Dashboards */}
+      <Route path="/divisions" element={<DivisionDashboards />} />
+      <Route path="/divisions/:divisionId" element={<DivisionDashboards />} />
+      <Route path="/director" element={<DivisionDashboards />} />
+      
       {/* Employer Flow */}
       <Route path="/employer" element={<ProtectedRoute allowedRoles={["employer"]}><EmployerDashboard /></ProtectedRoute>} />
       <Route path="/employer/post" element={<ProtectedRoute allowedRoles={["employer"]}><PostJobPage /></ProtectedRoute>} />
