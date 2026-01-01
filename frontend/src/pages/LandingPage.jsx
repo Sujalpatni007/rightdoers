@@ -354,138 +354,155 @@ export default function LandingPage() {
             <h3 className="font-display text-3xl font-bold text-white">{content.whoAreYou}</h3>
           </div>
 
-          {/* 5 Entry Points - COSMIC FLYWHEEL Grid */}
-          <div className="max-w-lg mx-auto">
-            {/* Cosmic rotating container */}
-            <div className="relative">
-              {/* Outer glow */}
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-orange-500/20 rounded-full blur-3xl" />
+          {/* COSMIC FLYWHEEL - 5 Entry Points Rotating */}
+          <div className="relative w-full max-w-md mx-auto aspect-square">
+            {/* Outer cosmic glow rings */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-orange-500/20 blur-3xl animate-pulse" />
+            <div className="absolute inset-8 rounded-full bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 blur-2xl" />
+            
+            {/* Rotating outer ring */}
+            <motion.div
+              className="absolute inset-0"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+            >
+              {/* Orbit path */}
+              <div className="absolute inset-4 rounded-full border-2 border-dashed border-white/10" />
               
-              {/* First row - 2 items */}
-              <div className="grid grid-cols-2 gap-3 mb-3 relative">
-                {entryPoints.slice(0, 2).map((entry, idx) => (
+              {/* 5 Entry Points on orbit */}
+              {entryPoints.map((entry, idx) => {
+                const angle = (idx * 72) - 90; // 360/5 = 72 degrees apart
+                const radius = 42; // % from center
+                const x = 50 + radius * Math.cos((angle * Math.PI) / 180);
+                const y = 50 + radius * Math.sin((angle * Math.PI) / 180);
+                
+                return (
                   <motion.div
                     key={entry.id}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 1.2 + idx * 0.1 }}
-                    whileHover={{ scale: 1.05, rotate: 2 }}
+                    className="absolute cursor-pointer"
+                    style={{
+                      left: `${x}%`,
+                      top: `${y}%`,
+                      transform: 'translate(-50%, -50%)'
+                    }}
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => {
+                      setSelectedEntry(entry.id);
+                      setTimeout(() => navigate(entry.path), 300);
+                    }}
+                    data-testid={`flywheel-${entry.id}`}
                   >
-                    <Card 
-                      className={`bg-gradient-to-br ${entry.color} border-0 cursor-pointer overflow-hidden group hover:shadow-xl transition-all duration-300`}
-                      onClick={() => {
-                        setSelectedEntry(entry.id);
-                        setTimeout(() => navigate(entry.path), 300);
-                      }}
-                      data-testid={`entry-${entry.id}`}
-                    >
-                      <CardContent className="p-4">
-                        <motion.div
-                          className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"
-                          animate={{ rotate: [0, 5, -5, 0] }}
-                          transition={{ duration: 4, repeat: Infinity }}
-                        >
-                          <entry.icon className="w-6 h-6 text-white" />
-                        </motion.div>
-                        <h4 className="font-display font-bold text-white text-lg mb-1">{entry.title}</h4>
-                        <p className="text-white/80 text-xs mb-2">{entry.subtitle}</p>
-                        <p className="text-white/60 text-[10px] leading-tight">{entry.description}</p>
-                        <div className="mt-3 flex flex-wrap gap-1">
-                          {entry.features.slice(0, 2).map((f, i) => (
-                            <Badge key={i} className="bg-white/20 text-white/90 border-0 text-[8px]">
-                              {f}
-                            </Badge>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
-              
-              {/* Center - PROFILES (The 5th P - Hero) */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.4 }}
-                className="mb-3 relative"
-                whileHover={{ scale: 1.02 }}
-              >
-                <Card 
-                  className={`bg-gradient-to-br ${entryPoints[2]?.color} border-2 border-pink-400/50 cursor-pointer overflow-hidden group hover:shadow-xl hover:shadow-pink-500/30 transition-all duration-300`}
-                  onClick={() => {
-                    setSelectedEntry('profiles');
-                    setTimeout(() => navigate('/dp'), 300);
-                  }}
-                  data-testid="entry-profiles"
-                >
-                  <CardContent className="p-4 flex items-center gap-4">
                     <motion.div
-                      className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform"
-                      animate={{ scale: [1, 1.05, 1], rotate: [0, 5, -5, 0] }}
-                      transition={{ duration: 3, repeat: Infinity }}
+                      animate={{ rotate: -360 }}
+                      transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
                     >
-                      <IdCard className="w-8 h-8 text-white" />
+                      <div 
+                        className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br ${entry.color} flex flex-col items-center justify-center shadow-lg border-2 border-white/20 hover:border-white/50 transition-all`}
+                      >
+                        <entry.icon className="w-6 h-6 sm:w-8 sm:h-8 text-white mb-1" />
+                        <span className="text-white text-[8px] sm:text-[10px] font-bold text-center leading-tight">
+                          {entry.title}
+                        </span>
+                      </div>
                     </motion.div>
-                    <div className="flex-1">
-                      <Badge className="mb-1 bg-white/20 text-white border-0 text-[10px]">
-                        D.P. Doers Profiler
-                      </Badge>
-                      <h4 className="font-display font-bold text-white text-xl mb-1">{entryPoints[2]?.title}</h4>
-                      <p className="text-white/80 text-xs mb-1">{entryPoints[2]?.subtitle}</p>
-                      <p className="text-white/60 text-[10px]">{entryPoints[2]?.description}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-white font-bold text-2xl">847</p>
-                      <p className="text-white/60 text-[9px]">DoersScore™</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-              
-              {/* Last row - 2 items */}
-              <div className="grid grid-cols-2 gap-3 relative">
-                {entryPoints.slice(3, 5).map((entry, idx) => (
-                  <motion.div
-                    key={entry.id}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 1.5 + idx * 0.1 }}
-                    whileHover={{ scale: 1.05, rotate: -2 }}
-                  >
-                    <Card 
-                      className={`bg-gradient-to-br ${entry.color} border-0 cursor-pointer overflow-hidden group hover:shadow-xl transition-all duration-300`}
-                      onClick={() => {
-                        setSelectedEntry(entry.id);
-                        setTimeout(() => navigate(entry.path), 300);
-                      }}
-                      data-testid={`entry-${entry.id}`}
-                    >
-                      <CardContent className="p-4">
-                        <motion.div
-                          className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"
-                          animate={{ rotate: [0, -5, 5, 0] }}
-                          transition={{ duration: 4, repeat: Infinity }}
-                        >
-                          <entry.icon className="w-6 h-6 text-white" />
-                        </motion.div>
-                        <h4 className="font-display font-bold text-white text-lg mb-1">{entry.title}</h4>
-                        <p className="text-white/80 text-xs mb-2">{entry.subtitle}</p>
-                        <p className="text-white/60 text-[10px] leading-tight">{entry.description}</p>
-                        <div className="mt-3 flex flex-wrap gap-1">
-                          {entry.features.slice(0, 2).map((f, i) => (
-                            <Badge key={i} className="bg-white/20 text-white/90 border-0 text-[8px]">
-                              {f}
-                            </Badge>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
                   </motion.div>
-                ))}
-              </div>
+                );
+              })}
+            </motion.div>
+
+            {/* CENTER - Agent AIMEE Activation Button */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <motion.button
+                className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 shadow-2xl border-4 border-white/30 flex flex-col items-center justify-center cursor-pointer overflow-hidden group"
+                whileHover={{ scale: 1.1, boxShadow: "0 0 60px rgba(139, 92, 246, 0.5)" }}
+                whileTap={{ scale: 0.95 }}
+                animate={{ 
+                  boxShadow: [
+                    "0 0 20px rgba(139, 92, 246, 0.3)",
+                    "0 0 40px rgba(139, 92, 246, 0.5)",
+                    "0 0 20px rgba(139, 92, 246, 0.3)"
+                  ]
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+                onClick={() => navigate('/aimee-analyzer')}
+                data-testid="flywheel-center-aimee"
+              >
+                {/* Inner glow */}
+                <div className="absolute inset-0 bg-gradient-to-t from-white/0 via-white/10 to-white/20 rounded-full" />
+                
+                {/* Sparkle effect */}
+                <motion.div
+                  className="absolute inset-0"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                >
+                  <Sparkles className="absolute top-3 left-1/2 w-4 h-4 text-yellow-300/80" />
+                  <Sparkles className="absolute bottom-3 right-3 w-3 h-3 text-pink-300/80" />
+                </motion.div>
+                
+                {/* Brain icon */}
+                <Brain className="w-10 h-10 sm:w-12 sm:h-12 text-white mb-2 group-hover:scale-110 transition-transform" />
+                <span className="text-white font-bold text-sm sm:text-base">AIMEE</span>
+                <span className="text-white/70 text-[9px] sm:text-[10px]">Start Here</span>
+              </motion.button>
             </div>
+
+            {/* Orbital lines connecting to center */}
+            <svg className="absolute inset-0 w-full h-full pointer-events-none">
+              {entryPoints.map((entry, idx) => {
+                const angle = (idx * 72) - 90;
+                const radius = 42;
+                const x = 50 + radius * Math.cos((angle * Math.PI) / 180);
+                const y = 50 + radius * Math.sin((angle * Math.PI) / 180);
+                return (
+                  <motion.line
+                    key={entry.id}
+                    x1="50%"
+                    y1="50%"
+                    x2={`${x}%`}
+                    y2={`${y}%`}
+                    stroke="url(#cosmicGradient)"
+                    strokeWidth="1"
+                    strokeDasharray="4 4"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: [0.2, 0.5, 0.2] }}
+                    transition={{ duration: 2, repeat: Infinity, delay: idx * 0.2 }}
+                  />
+                );
+              })}
+              <defs>
+                <linearGradient id="cosmicGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#8B5CF6" stopOpacity="0.5" />
+                  <stop offset="50%" stopColor="#EC4899" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#F59E0B" stopOpacity="0.5" />
+                </linearGradient>
+              </defs>
+            </svg>
           </div>
+
+          {/* Selected Entry Info */}
+          {selectedEntry && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-6 text-center"
+            >
+              <Badge className="bg-white/10 text-white border-white/20 px-4 py-2">
+                Click to enter: {entryPoints.find(e => e.id === selectedEntry)?.title}
+              </Badge>
+            </motion.div>
+          )}
+
+          {/* Cosmic tagline */}
+          <motion.p
+            className="text-center text-white/40 text-xs mt-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2 }}
+          >
+            The wheel signifies progress • speed • future advancement of human civilization
+          </motion.p>
         </motion.section>
 
         {/* DOERS WORLD FLYWHEEL */}
