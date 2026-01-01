@@ -79,44 +79,54 @@ const CAREER_CATEGORIES = [
 
 export default function GemmaOffline() {
   const navigate = useNavigate();
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [language, setLanguage] = useState("en");
   const [query, setQuery] = useState("");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [careerData, setCareerData] = useState(null);
+  const [showInstallBanner, setShowInstallBanner] = useState(false);
   const messagesEndRef = useRef(null);
+  
+  // PWA Hooks
+  const { 
+    isOnline, 
+    isInstallable, 
+    isInstalled,
+    installApp, 
+    swVersion,
+    cacheGemmaData 
+  } = usePWA();
+  
+  const { 
+    isReady: dbReady,
+    saveConversation,
+    getConversations,
+    saveCareerData: saveCareerToDb,
+    getCareerData: getCareerFromDb
+  } = useOfflineStorage();
 
-  // Monitor online/offline status
+  // Show install banner for rural users
   useEffect(() => {
-    const handleOnline = () => {
-      setIsOnline(true);
+    if (isInstallable && !isInstalled && (language === "te" || language === "kn")) {
+      setTimeout(() => setShowInstallBanner(true), 3000);
+    }
+  }, [isInstallable, isInstalled, language]);
+
+  // Handle network status changes
+  useEffect(() => {
+    if (isOnline) {
       toast.success(language === "te" ? "ఆన్‌లైన్‌కు కనెక్ట్ అయింది!" : 
                     language === "kn" ? "ಆನ್‌ಲೈನ್‌ಗೆ ಸಂಪರ್ಕಗೊಂಡಿದೆ!" : 
                     "Connected to internet!");
-    };
-    const handleOffline = () => {
-      setIsOnline(false);
-      toast.info(language === "te" ? "ఆఫ్‌లైన్ మోడ్ - క్యాష్ చేసిన సమాచారం ఉపయోగిస్తోంది" :
-                 language === "kn" ? "ಆಫ್‌ಲೈನ್ ಮೋಡ್ - ಕ್ಯಾಶ್ ಮಾಡಿದ ಮಾಹಿತಿ ಬಳಸುತ್ತಿದೆ" :
-                 "Offline mode - Using cached information");
-    };
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
-  }, [language]);
+    }
+  }, [isOnline, language]);
 
   // Scroll to bottom of messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Fetch career data on mount
+  // Fetch and cache career data on mount
   useEffect(() => {
     fetchCareerData();
   }, [language]);
