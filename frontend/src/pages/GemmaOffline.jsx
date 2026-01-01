@@ -297,32 +297,95 @@ export default function GemmaOffline() {
         te: "పంపండి",
         kn: "ಕಳುಹಿಸಿ",
         hi: "भेजें"
+      },
+      installApp: {
+        en: "Install App for Offline Use",
+        te: "ఆఫ్‌లైన్ వాడకం కోసం యాప్ ఇన్‌స్టాల్ చేయండి",
+        kn: "ಆಫ್‌ಲೈನ್ ಬಳಕೆಗೆ ಆಪ್ ಇನ್‌ಸ್ಟಾಲ್ ಮಾಡಿ",
+        hi: "ऑफ़लाइन उपयोग के लिए ऐप इंस्टॉल करें"
+      },
+      installBenefits: {
+        en: "Works without internet • Faster loading • Phone storage",
+        te: "ఇంటర్నెట్ లేకుండా పని చేస్తుంది • వేగంగా లోడ్ • ఫోన్ స్టోరేజ్",
+        kn: "ಇಂಟರ್ನೆಟ್ ಇಲ್ಲದೆ ಕೆಲಸ • ವೇಗವಾಗಿ ಲೋಡ್ • ಫೋನ್ ಸ್ಟೋರೇಜ್",
+        hi: "इंटरनेट के बिना काम • तेज़ लोडिंग • फ़ोन स्टोरेज"
       }
     };
     return texts[key]?.[language] || texts[key]?.en || key;
   };
 
+  // Handle app install
+  const handleInstall = async () => {
+    const success = await installApp();
+    if (success) {
+      toast.success(language === "te" ? "యాప్ ఇన్‌స్టాల్ అయింది!" : 
+                    language === "kn" ? "ಆಪ್ ಇನ್‌ಸ್ಟಾಲ್ ಆಯಿತು!" : 
+                    "App installed successfully!");
+      setShowInstallBanner(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-900 to-slate-900">
+      {/* Install Banner for Rural Users */}
+      {showInstallBanner && isInstallable && !isInstalled && (
+        <div className="fixed top-0 left-0 right-0 z-[60] bg-gradient-to-r from-purple-600 to-indigo-600 py-3 px-4">
+          <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                <Download className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <p className="text-white font-medium text-sm">{getLanguageText("installApp")}</p>
+                <p className="text-white/70 text-xs">{getLanguageText("installBenefits")}</p>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => setShowInstallBanner(false)}
+                className="text-white/70 hover:text-white hover:bg-white/10"
+              >
+                ✕
+              </Button>
+              <Button
+                size="sm"
+                onClick={handleInstall}
+                className="bg-white text-purple-600 hover:bg-white/90"
+                data-testid="install-app-btn"
+              >
+                <Download className="h-4 w-4 mr-1" />
+                {language === "te" ? "ఇన్‌స్టాల్" : language === "kn" ? "ಇನ್‌ಸ್ಟಾಲ್" : "Install"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Offline/Online Status Bar */}
-      <div className={`fixed top-0 left-0 right-0 z-50 py-2 px-4 flex items-center justify-center gap-2 ${
+      <div className={`fixed ${showInstallBanner && isInstallable && !isInstalled ? 'top-[60px]' : 'top-0'} left-0 right-0 z-50 py-2 px-4 flex items-center justify-center gap-2 ${
         isOnline ? "bg-emerald-600" : "bg-amber-600"
       }`}>
         {isOnline ? (
           <>
             <Wifi className="h-4 w-4 text-white" />
             <span className="text-white text-sm font-medium">Online - Full AI Available</span>
+            {swVersion && <Badge variant="outline" className="text-white/70 border-white/30 text-xs ml-2">v{swVersion}</Badge>}
           </>
         ) : (
           <>
             <WifiOff className="h-4 w-4 text-white" />
             <span className="text-white text-sm font-medium">{getLanguageText("offlineMode")}</span>
+            <Badge variant="outline" className="text-white/70 border-white/30 text-xs ml-2">
+              <HardDrive className="h-3 w-3 mr-1" /> Cached
+            </Badge>
           </>
         )}
       </div>
 
       {/* Header */}
-      <div className="pt-14 bg-black/30 backdrop-blur-sm border-b border-white/10">
+      <div className={`${showInstallBanner && isInstallable && !isInstalled ? 'pt-[100px]' : 'pt-14'} bg-black/30 backdrop-blur-sm border-b border-white/10`}>
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
