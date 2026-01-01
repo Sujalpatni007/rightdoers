@@ -674,6 +674,24 @@ async def get_family(family_id: str):
         raise HTTPException(status_code=404, detail="Family not found")
     return family
 
+@api_router.get("/families/user/{user_id}")
+async def get_family_by_user(user_id: str):
+    """Get a Family by User ID (member lookup)"""
+    # Look for family where user is a member
+    family = await db.families.find_one(
+        {"members.user_id": user_id}, 
+        {"_id": 0}
+    )
+    if not family:
+        # Also check if user_id matches creator
+        family = await db.families.find_one(
+            {"creator_user_id": user_id}, 
+            {"_id": 0}
+        )
+    if not family:
+        raise HTTPException(status_code=404, detail="Family not found for user")
+    return family
+
 @api_router.put("/families/{family_id}/member/{member_id}")
 async def update_family_member(family_id: str, member_id: str, updates: Dict[str, Any]):
     """Update a family member's progress"""
