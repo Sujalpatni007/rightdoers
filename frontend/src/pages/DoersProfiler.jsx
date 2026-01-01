@@ -1179,9 +1179,67 @@ Say HI AI. Get your D.P. (Doers Profiler) at:`;
 
                 {/* Big 5 Report Download */}
                 <Button
-                  onClick={() => {
-                    toast.success('Generating Big 5 Report PDF...');
-                    // Future: Generate actual PDF
+                  onClick={async () => {
+                    try {
+                      toast.loading('Generating Big 5 Report PDF...', { id: 'pdf-gen' });
+                      
+                      // Prepare report data
+                      const reportData = {
+                        name: user?.name || profile?.name || 'Doer',
+                        doers_score: profile?.doers_score || doersScore || 650,
+                        adaptive_level: profile?.adaptive_level || currentLevel || 'ASSOCIATE',
+                        natural_fit: profile?.natural_fit_score || 70,
+                        developed_skills: profile?.developed_skills_score || 75,
+                        learning_agility: profile?.learning_agility_score || 80,
+                        efficiency_value: profile?.efficiency_value || efficiencyValue || 78,
+                        career_interests: {
+                          'Artistic': 65,
+                          'Enterprising': 60,
+                          'Social': 55,
+                          'Investigative': 50,
+                          'Realistic': 45,
+                          'Conventional': 40
+                        },
+                        skills_abilities: Object.fromEntries(
+                          (profile?.skills || []).map(s => [s.name, s.level || 50])
+                        ),
+                        career_clusters: profile?.career_clusters || [],
+                        next_steps: [
+                          'Complete remaining assessments',
+                          'Explore Jobs4Me for opportunities',
+                          'Connect with mentors',
+                          'Build your portfolio',
+                          'Track daily progress with Streaks'
+                        ]
+                      };
+                      
+                      const response = await axios.post(`${API}/report/generate`, reportData);
+                      
+                      if (response.data.success) {
+                        // Create download link
+                        const byteCharacters = atob(response.data.pdf_base64);
+                        const byteNumbers = new Array(byteCharacters.length);
+                        for (let i = 0; i < byteCharacters.length; i++) {
+                          byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        const byteArray = new Uint8Array(byteNumbers);
+                        const blob = new Blob([byteArray], { type: 'application/pdf' });
+                        
+                        const url = window.URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = response.data.filename;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        window.URL.revokeObjectURL(url);
+                        
+                        toast.success('Big 5 Report downloaded!', { id: 'pdf-gen' });
+                      }
+                    } catch (error) {
+                      console.error('PDF generation error:', error);
+                      toast.error('Failed to generate PDF', { id: 'pdf-gen' });
+                    }
                   }}
                   className="w-full h-12 bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 mb-3"
                   data-testid="download-big5-report"
