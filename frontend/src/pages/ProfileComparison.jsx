@@ -803,10 +803,10 @@ export default function ProfileComparison() {
                               </div>
                               <span className="text-2xl">{member.avatar}</span>
                               <div className="flex-1 text-left">
-                                <p className="text-white font-medium text-sm">
-                                  {member.name}
-                                  {member.isMe && <Badge className="ml-2 bg-purple-500/30 text-purple-300 border-0 text-[10px]">You</Badge>}
-                                </p>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-white font-medium text-sm">{member.name}</span>
+                                  {member.isMe && <Badge className="bg-purple-500/30 text-purple-300 border-0 text-[10px]">You</Badge>}
+                                </div>
                                 <p className="text-white/40 text-xs capitalize">{member.role}</p>
                               </div>
                               <div className="text-right">
