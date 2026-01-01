@@ -169,6 +169,7 @@ Bangalore, India
 | Feature | Color | Badge | Route |
 |---------|-------|-------|-------|
 | Captain Command Centre | Tactical Green | 🎖️ HQ | /command-centre |
+| Mission Board | Green/Purple | 🚀 LAUNCH | /mission-board |
 | Content Command Centre | Purple | NEW | /content |
 | Gemma Offline AI | Emerald | 🇮🇳 Rural | /gemma |
 | WhatsApp NDA Signing | Green | ⚖️ Legal | /whatsapp |
@@ -194,6 +195,7 @@ Bangalore, India
 
 ## Key Routes Reference
 ```
+/mission-board   → Mission Board (Dubai Launch Tracker)
 /command-centre  → Captain Command Centre (7 Verticals HQ)
 /captain         → Captain Command Centre (alias)
 /whatsapp        → WhatsApp NDA Signing (DOERS LEGAL AI)
