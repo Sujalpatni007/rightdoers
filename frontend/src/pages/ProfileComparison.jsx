@@ -512,8 +512,11 @@ export default function ProfileComparison() {
                 </CardContent>
               </Card>
 
+              {/* Streak Widget */}
+              <StreakWidget onPress={() => navigate('/streaks')} />
+
               {/* Comparison Mode Tabs */}
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-5 gap-2">
                 {COMPARISON_MODES.map((mode) => (
                   <Button
                     key={mode.id}
