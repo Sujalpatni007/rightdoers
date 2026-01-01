@@ -1686,9 +1686,9 @@ async def generate_offer_letter(request: OfferRequest):
     
     html = content_command.generate_offer_letter_html(offer)
     
-    # Save to database
+    # Save to database (create a copy to avoid _id mutation)
     offer_dict = offer.model_dump()
-    await db.legal_documents.insert_one(offer_dict)
+    await db.legal_documents.insert_one({**offer_dict})
     
     return {"offer": offer_dict, "html": html}
 
