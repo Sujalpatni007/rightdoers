@@ -276,16 +276,14 @@ export default function LandingPage() {
       {/* Main Content */}
       <main className="relative z-10 px-4 pb-8">
         
-        {/* THE HOOK QUESTION - MOONSHOT RINGS */}
+        {/* THE HOOK QUESTION - SIMPLE CARD PICKER */}
         <motion.section 
           className="text-center py-6"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <div className="max-w-lg mx-auto">
-            {/* Cosmic glow effect */}
-            <div className="absolute left-1/2 top-32 -translate-x-1/2 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="max-w-lg mx-auto px-4">
             
             <motion.div
               className="relative"
@@ -297,133 +295,80 @@ export default function LandingPage() {
               </Badge>
             </motion.div>
 
-            {/* MOONSHOT with CROSSING RINGS */}
-            <div className="relative w-72 h-72 mx-auto mb-6" style={{ perspective: '1000px' }}>
-              {/* Outer cosmic glow */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/10 via-purple-500/20 to-rose-500/10 blur-3xl" />
+            {/* Will AI? Header */}
+            <h1 className="font-display text-3xl md:text-4xl font-bold text-white mb-6">
+              Will <span className="text-purple-400">AI</span> ...?
+            </h1>
+
+            {/* SIMPLE CARD PICKER - Two Options */}
+            <div className="grid grid-cols-1 gap-4 mb-6">
               
-              {/* Ring 1 - Horizontal orbit (Will AI make life better?) */}
+              {/* Card 1: Take away my job */}
               <motion.div
-                className="absolute inset-0"
-                style={{ transformStyle: 'preserve-3d' }}
-                animate={{ rotateZ: 360 }}
-                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
+                whileHover={{ scale: 1.02, x: 5 }}
+                whileTap={{ scale: 0.98 }}
+                className="cursor-pointer"
+                onClick={() => {
+                  setSelectedEntry('fear');
+                  setTimeout(() => navigate("/aimee-analyzer?concern=jobs"), 500);
+                }}
+                data-testid="question-jobs"
               >
-                <div 
-                  className="absolute inset-2 rounded-full border-2 border-emerald-500/40"
-                  style={{ transform: 'rotateX(75deg)' }}
-                />
-                {/* Orbiting element */}
-                <motion.div
-                  className="absolute"
-                  style={{ 
-                    left: '50%', 
-                    top: '10%',
-                    transform: 'translateX(-50%)'
-                  }}
-                >
-                  <div className="px-3 py-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/40 cursor-pointer hover:scale-110 transition-transform"
-                    onClick={() => navigate("/aimee-analyzer")}
-                  >
-                    <span className="text-white text-[10px] font-bold whitespace-nowrap">
-                      Make life better?
-                    </span>
-                  </div>
-                </motion.div>
-              </motion.div>
-
-              {/* Ring 2 - Tilted orbit (Will AI take away jobs?) */}
-              <motion.div
-                className="absolute inset-0"
-                style={{ transformStyle: 'preserve-3d' }}
-                animate={{ rotateZ: -360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              >
-                <div 
-                  className="absolute inset-6 rounded-full border-2 border-rose-500/40"
-                  style={{ transform: 'rotateX(75deg) rotateY(30deg)' }}
-                />
-                {/* Orbiting element */}
-                <motion.div
-                  className="absolute"
-                  style={{ 
-                    left: '85%', 
-                    top: '50%',
-                    transform: 'translateY(-50%)'
-                  }}
-                >
-                  <div className="px-3 py-1.5 rounded-full bg-gradient-to-r from-rose-500 to-red-600 shadow-lg shadow-rose-500/40 cursor-pointer hover:scale-110 transition-transform"
-                    onClick={() => navigate("/aimee-analyzer")}
-                  >
-                    <span className="text-white text-[10px] font-bold whitespace-nowrap">
-                      Take away jobs?
-                    </span>
-                  </div>
-                </motion.div>
-              </motion.div>
-
-              {/* Ring 3 - Counter tilted orbit */}
-              <motion.div
-                className="absolute inset-0"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-              >
-                <div 
-                  className="absolute inset-10 rounded-full border border-dashed border-violet-500/30"
-                  style={{ transform: 'rotateX(60deg) rotateY(-20deg)' }}
-                />
-              </motion.div>
-
-              {/* CENTER MOON - Will AI? */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <motion.div
-                  className="relative w-24 h-24 rounded-full cursor-pointer"
-                  whileHover={{ scale: 1.15 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => navigate("/aimee-analyzer")}
-                >
-                  {/* Moon glow */}
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-400 via-purple-500 to-violet-600 blur-md opacity-60" />
-                  
-                  {/* Moon surface */}
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-slate-200 via-indigo-100 to-purple-200 shadow-2xl flex flex-col items-center justify-center overflow-hidden">
-                    {/* Moon texture */}
-                    <div className="absolute inset-0 opacity-20">
-                      <div className="absolute w-4 h-4 rounded-full bg-slate-400/50 top-3 left-4" />
-                      <div className="absolute w-3 h-3 rounded-full bg-slate-400/40 top-8 right-5" />
-                      <div className="absolute w-2 h-2 rounded-full bg-slate-400/30 bottom-4 left-6" />
+                <Card className="bg-gradient-to-r from-rose-500/20 to-red-500/10 border-rose-500/30 hover:border-rose-400/50 transition-all">
+                  <CardContent className="p-4 flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-rose-500/30 flex items-center justify-center flex-shrink-0">
+                      <span className="text-2xl">😰</span>
                     </div>
-                    
-                    <span className="text-indigo-900/80 text-xs font-medium z-10">Will</span>
-                    <span className="text-indigo-900 font-bold text-2xl z-10">AI</span>
-                    <span className="text-indigo-900/60 text-[10px] z-10">...?</span>
-                  </div>
-                  
-                  {/* Moonshot sparkle */}
-                  <motion.div
-                    className="absolute -top-1 -right-1 w-3 h-3"
-                    animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    <Sparkles className="w-full h-full text-yellow-300" />
-                  </motion.div>
-                </motion.div>
-              </div>
+                    <div className="flex-1 text-left">
+                      <p className="text-rose-300 text-lg font-bold">Take away my job?</p>
+                      <p className="text-white/50 text-xs">I'm worried about AI replacing me</p>
+                    </div>
+                    <ArrowRight className="w-5 h-5 text-rose-400" />
+                  </CardContent>
+                </Card>
+              </motion.div>
 
-              {/* Stars around */}
-              {[...Array(8)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute w-1 h-1 bg-white rounded-full"
-                  style={{
-                    left: `${15 + Math.random() * 70}%`,
-                    top: `${15 + Math.random() * 70}%`,
-                  }}
-                  animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.2, 0.8] }}
-                  transition={{ duration: 2 + Math.random() * 2, repeat: Infinity, delay: Math.random() * 2 }}
-                />
-              ))}
+              {/* Card 2: Make my life better */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5 }}
+                whileHover={{ scale: 1.02, x: -5 }}
+                whileTap={{ scale: 0.98 }}
+                className="cursor-pointer"
+                onClick={() => {
+                  setSelectedEntry('hope');
+                  setTimeout(() => navigate("/aimee-analyzer?concern=opportunity"), 500);
+                }}
+                data-testid="question-life"
+              >
+                <Card className="bg-gradient-to-r from-emerald-500/20 to-teal-500/10 border-emerald-500/30 hover:border-emerald-400/50 transition-all">
+                  <CardContent className="p-4 flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-emerald-500/30 flex items-center justify-center flex-shrink-0">
+                      <span className="text-2xl">🚀</span>
+                    </div>
+                    <div className="flex-1 text-left">
+                      <p className="text-emerald-300 text-lg font-bold">Make my life better?</p>
+                      <p className="text-white/50 text-xs">I want to leverage AI for growth</p>
+                    </div>
+                    <ArrowRight className="w-5 h-5 text-emerald-400" />
+                  </CardContent>
+                </Card>
+              </motion.div>
             </div>
+
+            {/* Pick instruction */}
+            <motion.p
+              className="text-white/40 text-sm mb-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.7 }}
+            >
+              👆 Pick what you want • Agent AIMEE will guide you
+            </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
