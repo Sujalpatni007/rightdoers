@@ -1019,13 +1019,23 @@ Say HI AI. Get your D.P. (Doers Profiler) at:`;
 
       {/* Bottom CTA */}
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-slate-900 via-slate-900/95 to-transparent">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto space-y-2">
+          {/* DoersScore Battle Button */}
+          <Button 
+            className="w-full h-12 font-semibold bg-gradient-to-r from-amber-500 to-orange-500 hover:opacity-90"
+            onClick={() => navigate('/compare')}
+            data-testid="dp-compare-btn"
+          >
+            <Trophy className="w-5 h-5 mr-2" />
+            Compare DoersScore with Friends
+          </Button>
           <Button 
             className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90"
             onClick={() => navigate('/prakruti')}
             data-testid="dp-continue-btn"
           >
             Enter the Doers World <ArrowRight className="ml-2 w-5 h-5" />
+          </Button>
           </Button>
           <p className="text-center text-white/40 text-xs mt-2">
             Say WOW. Get What You Want.
