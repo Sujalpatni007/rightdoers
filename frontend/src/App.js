@@ -75,6 +75,7 @@ import WhatsAppSigning from "@/pages/WhatsAppSigning";
 import CaptainCommandCentre from "@/pages/CaptainCommandCentre";
 import MissionBoard from "@/pages/MissionBoard";
 import LaunchAnnouncement from "@/pages/LaunchAnnouncement";
+import LaunchAnnouncementMultiLang from "@/pages/LaunchAnnouncementMultiLang";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
@@ -314,6 +315,10 @@ function AppContent() {
       <Route path="/announcement" element={<LaunchAnnouncement />} />
       <Route path="/happy-new-year" element={<LaunchAnnouncement />} />
       <Route path="/2026" element={<LaunchAnnouncement />} />
+      
+      {/* Multi-Lingual Launch Announcement */}
+      <Route path="/announce/:lang" element={<LaunchAnnouncementMultiLang />} />
+      <Route path="/announce" element={<LaunchAnnouncementMultiLang />} />
       
       {/* Employer Flow */}
       <Route path="/employer" element={<ProtectedRoute allowedRoles={["employer"]}><EmployerDashboard /></ProtectedRoute>} />
