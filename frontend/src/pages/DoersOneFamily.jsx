@@ -513,7 +513,7 @@ export default function DoersOneFamily() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {FAMILY_GOALS.map((goal) => (
+              {familyGoals.map((goal) => (
                 <div key={goal.id} className="bg-white/5 rounded-xl p-3">
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-white text-sm">{goal.title}</p>
