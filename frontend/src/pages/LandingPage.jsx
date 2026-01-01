@@ -130,6 +130,32 @@ export default function LandingPage() {
             </Card>
           </motion.div>
           
+          {/* Gemma Offline AI - Rural India */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.48 }}
+          >
+            <Card 
+              className="bg-gradient-to-r from-emerald-600/30 to-teal-600/20 border-emerald-500/30 cursor-pointer hover:border-emerald-400/50 transition-all"
+              onClick={() => navigate('/gemma')}
+              data-testid="gemma-offline-btn"
+            >
+              <CardContent className="p-4 flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-emerald-500/30 flex items-center justify-center">
+                  <Globe className="w-6 h-6 text-emerald-300" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-emerald-300 font-bold">Gemma Offline AI</p>
+                  <p className="text-white/50 text-xs">Telugu • Kannada • Rural India • No Network</p>
+                </div>
+                <Badge className="bg-teal-500/30 text-teal-300 border-0">
+                  🇮🇳 Rural
+                </Badge>
+              </CardContent>
+            </Card>
+          </motion.div>
+          
           {/* Junicorn Finder + ISF */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
