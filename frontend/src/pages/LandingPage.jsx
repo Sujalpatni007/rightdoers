@@ -276,7 +276,7 @@ export default function LandingPage() {
       {/* Main Content */}
       <main className="relative z-10 px-4 pb-8">
         
-        {/* THE HOOK QUESTION - MINI FLYWHEEL */}
+        {/* THE HOOK QUESTION - MOONSHOT RINGS */}
         <motion.section 
           className="text-center py-6"
           initial={{ opacity: 0, scale: 0.9 }}
@@ -297,72 +297,132 @@ export default function LandingPage() {
               </Badge>
             </motion.div>
 
-            {/* MINI FLYWHEEL for AI Question */}
-            <div className="relative w-64 h-64 mx-auto mb-6">
-              {/* Outer glow */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/20 via-purple-500/20 to-rose-500/20 blur-2xl" />
+            {/* MOONSHOT with CROSSING RINGS */}
+            <div className="relative w-72 h-72 mx-auto mb-6" style={{ perspective: '1000px' }}>
+              {/* Outer cosmic glow */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-500/10 via-purple-500/20 to-rose-500/10 blur-3xl" />
               
-              {/* Rotating ring */}
+              {/* Ring 1 - Horizontal orbit (Will AI make life better?) */}
               <motion.div
                 className="absolute inset-0"
-                animate={{ rotate: -360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                style={{ transformStyle: 'preserve-3d' }}
+                animate={{ rotateZ: 360 }}
+                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
               >
-                {/* Orbit path */}
-                <div className="absolute inset-4 rounded-full border border-dashed border-white/20" />
-                
-                {/* Question 1: Take Away Jobs - Top */}
+                <div 
+                  className="absolute inset-2 rounded-full border-2 border-emerald-500/40"
+                  style={{ transform: 'rotateX(75deg)' }}
+                />
+                {/* Orbiting element */}
                 <motion.div
-                  className="absolute left-1/2 top-2 -translate-x-1/2 cursor-pointer"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  whileHover={{ scale: 1.1 }}
-                  onClick={() => navigate("/aimee-analyzer")}
+                  className="absolute"
+                  style={{ 
+                    left: '50%', 
+                    top: '10%',
+                    transform: 'translateX(-50%)'
+                  }}
                 >
-                  <div className="px-4 py-2 rounded-full bg-gradient-to-r from-rose-500 to-red-600 shadow-lg shadow-rose-500/30">
-                    <span className="text-white text-xs font-bold whitespace-nowrap">
-                      {content.question2.replace("OR ", "")}
-                    </span>
-                  </div>
-                </motion.div>
-                
-                {/* Question 2: Make Life Better - Bottom */}
-                <motion.div
-                  className="absolute left-1/2 bottom-2 -translate-x-1/2 cursor-pointer"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  whileHover={{ scale: 1.1 }}
-                  onClick={() => navigate("/aimee-analyzer")}
-                >
-                  <div className="px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/30">
-                    <span className="text-white text-xs font-bold whitespace-nowrap">
-                      {content.question1}
+                  <div className="px-3 py-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/40 cursor-pointer hover:scale-110 transition-transform"
+                    onClick={() => navigate("/aimee-analyzer")}
+                  >
+                    <span className="text-white text-[10px] font-bold whitespace-nowrap">
+                      Make life better?
                     </span>
                   </div>
                 </motion.div>
               </motion.div>
 
-              {/* CENTER - Will AI? */}
+              {/* Ring 2 - Tilted orbit (Will AI take away jobs?) */}
+              <motion.div
+                className="absolute inset-0"
+                style={{ transformStyle: 'preserve-3d' }}
+                animate={{ rotateZ: -360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              >
+                <div 
+                  className="absolute inset-6 rounded-full border-2 border-rose-500/40"
+                  style={{ transform: 'rotateX(75deg) rotateY(30deg)' }}
+                />
+                {/* Orbiting element */}
+                <motion.div
+                  className="absolute"
+                  style={{ 
+                    left: '85%', 
+                    top: '50%',
+                    transform: 'translateY(-50%)'
+                  }}
+                >
+                  <div className="px-3 py-1.5 rounded-full bg-gradient-to-r from-rose-500 to-red-600 shadow-lg shadow-rose-500/40 cursor-pointer hover:scale-110 transition-transform"
+                    onClick={() => navigate("/aimee-analyzer")}
+                  >
+                    <span className="text-white text-[10px] font-bold whitespace-nowrap">
+                      Take away jobs?
+                    </span>
+                  </div>
+                </motion.div>
+              </motion.div>
+
+              {/* Ring 3 - Counter tilted orbit */}
+              <motion.div
+                className="absolute inset-0"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+              >
+                <div 
+                  className="absolute inset-10 rounded-full border border-dashed border-violet-500/30"
+                  style={{ transform: 'rotateX(60deg) rotateY(-20deg)' }}
+                />
+              </motion.div>
+
+              {/* CENTER MOON - Will AI? */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <motion.div
-                  className="w-28 h-28 rounded-full bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-700 shadow-xl flex flex-col items-center justify-center cursor-pointer border-2 border-white/20"
-                  whileHover={{ scale: 1.1, boxShadow: "0 0 40px rgba(139, 92, 246, 0.5)" }}
+                  className="relative w-24 h-24 rounded-full cursor-pointer"
+                  whileHover={{ scale: 1.15 }}
                   whileTap={{ scale: 0.95 }}
-                  animate={{ 
-                    boxShadow: [
-                      "0 0 15px rgba(139, 92, 246, 0.3)",
-                      "0 0 30px rgba(139, 92, 246, 0.5)",
-                      "0 0 15px rgba(139, 92, 246, 0.3)"
-                    ]
-                  }}
-                  transition={{ duration: 2, repeat: Infinity }}
                   onClick={() => navigate("/aimee-analyzer")}
                 >
-                  <span className="text-white/80 text-xs">Will</span>
-                  <span className="text-white font-bold text-2xl">AI</span>
-                  <span className="text-white/80 text-[10px]">...?</span>
+                  {/* Moon glow */}
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-400 via-purple-500 to-violet-600 blur-md opacity-60" />
+                  
+                  {/* Moon surface */}
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-slate-200 via-indigo-100 to-purple-200 shadow-2xl flex flex-col items-center justify-center overflow-hidden">
+                    {/* Moon texture */}
+                    <div className="absolute inset-0 opacity-20">
+                      <div className="absolute w-4 h-4 rounded-full bg-slate-400/50 top-3 left-4" />
+                      <div className="absolute w-3 h-3 rounded-full bg-slate-400/40 top-8 right-5" />
+                      <div className="absolute w-2 h-2 rounded-full bg-slate-400/30 bottom-4 left-6" />
+                    </div>
+                    
+                    <span className="text-indigo-900/80 text-xs font-medium z-10">Will</span>
+                    <span className="text-indigo-900 font-bold text-2xl z-10">AI</span>
+                    <span className="text-indigo-900/60 text-[10px] z-10">...?</span>
+                  </div>
+                  
+                  {/* Moonshot sparkle */}
+                  <motion.div
+                    className="absolute -top-1 -right-1 w-3 h-3"
+                    animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <Sparkles className="w-full h-full text-yellow-300" />
+                  </motion.div>
                 </motion.div>
               </div>
+
+              {/* Stars around */}
+              {[...Array(8)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-1 h-1 bg-white rounded-full"
+                  style={{
+                    left: `${15 + Math.random() * 70}%`,
+                    top: `${15 + Math.random() * 70}%`,
+                  }}
+                  animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.2, 0.8] }}
+                  transition={{ duration: 2 + Math.random() * 2, repeat: Infinity, delay: Math.random() * 2 }}
+                />
+              ))}
             </div>
 
             <motion.div
