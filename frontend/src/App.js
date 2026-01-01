@@ -246,6 +246,10 @@ function AppContent() {
       <Route path="/divisions/:divisionId" element={<DivisionDashboards />} />
       <Route path="/director" element={<DivisionDashboards />} />
       
+      {/* Streak System - Content + Campaign */}
+      <Route path="/streaks" element={<StreakSystem />} />
+      <Route path="/streak" element={<StreakSystem />} />
+      
       {/* Employer Flow */}
       <Route path="/employer" element={<ProtectedRoute allowedRoles={["employer"]}><EmployerDashboard /></ProtectedRoute>} />
       <Route path="/employer/post" element={<ProtectedRoute allowedRoles={["employer"]}><PostJobPage /></ProtectedRoute>} />
