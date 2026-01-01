@@ -63,6 +63,7 @@ import DoersProfiler from "@/pages/DoersProfiler";
 import DoersOneFamily from "@/pages/DoersOneFamily";
 import ProfileComparison from "@/pages/ProfileComparison";
 import DivisionDashboards from "@/pages/DivisionDashboards";
+import StreakSystem from "@/pages/StreakSystem";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
