@@ -1666,9 +1666,9 @@ async def generate_nda(request: NDARequest):
     
     html = content_command.generate_nda_html(nda)
     
-    # Save to database
+    # Save to database (create a copy to avoid _id mutation)
     nda_dict = nda.model_dump()
-    await db.legal_documents.insert_one(nda_dict)
+    await db.legal_documents.insert_one({**nda_dict})
     
     return {"nda": nda_dict, "html": html}
 
