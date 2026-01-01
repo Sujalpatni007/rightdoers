@@ -400,7 +400,7 @@ export default function ProfileComparison() {
                           onClick={() => toast.info("QR Scanner coming soon!")}
                         >
                           <QrCode className="w-4 h-4 mr-2" />
-                          Scan Friend's QR
+                          Scan Friend&apos;s QR
                         </Button>
                       </CardContent>
                     </Card>
