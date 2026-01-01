@@ -129,14 +129,35 @@ export default function GemmaOffline() {
   // Fetch and cache career data on mount
   useEffect(() => {
     fetchCareerData();
-  }, [language]);
+  }, [language, dbReady]);
 
   const fetchCareerData = async () => {
     try {
-      const response = await axios.get(`${API}/gemma/career-data?language=${language}`);
-      setCareerData(response.data);
+      // Try to get from IndexedDB first (offline-first)
+      if (dbReady) {
+        const cachedData = await getCareerFromDb("lig_workers", language);
+        if (cachedData) {
+          setCareerData(cachedData);
+          console.log("[Gemma] Using cached career data from IndexedDB");
+        }
+      }
+      
+      // If online, fetch fresh data and cache it
+      if (isOnline) {
+        const response = await axios.get(`${API}/gemma/career-data?language=${language}`);
+        setCareerData(response.data);
+        
+        // Cache in IndexedDB for offline use
+        if (dbReady) {
+          await saveCareerToDb("lig_workers", language, response.data);
+          console.log("[Gemma] Career data cached to IndexedDB");
+        }
+        
+        // Also cache in service worker
+        cacheGemmaData({ careerData: response.data, language });
+      }
     } catch (error) {
-      console.log("Using offline career data");
+      console.log("[Gemma] Using offline career data");
     }
   };
 
