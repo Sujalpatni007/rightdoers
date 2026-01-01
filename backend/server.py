@@ -118,6 +118,10 @@ class User(BaseModel):
     level: str = "L1"
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
+# Helper function
+def utc_now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
 class JobCreate(BaseModel):
     title: str
     description: str
