@@ -1,5 +1,5 @@
 # HI AI-APP.COM - Product Requirements Document
-## Version 11.0 | January 1, 2026
+## Version 12.0 | January 1, 2026
 
 ---
 
@@ -10,6 +10,14 @@ Build **HI AI-APP.COM** - A Human Potential Management & Transformation Company 
 
 **POSITIONING:** "We are to Population Management what NPCI is to Payments"
 
+**HEADQUARTERS:**
+```
+Right Doers World Pvt Ltd
+Global Capability Centre for Human Xperts
+15th Floor, World Trade Centre
+Bangalore, India
+```
+
 ---
 
 ## Vision & Philosophy
@@ -18,208 +26,160 @@ Build **HI AI-APP.COM** - A Human Potential Management & Transformation Company 
 - **Moonshot**: "People in this planet must say HI AI and experience WOW"
 - **IPO Target**: Q1 2031 (Soonicorn Journey)
 
-### 8 T's TIMELESS WORKFORCE FLOW (Reid Hoffman Vision)
-| T | Meaning | Feature | Status |
-|---|---------|---------|--------|
-| 💬 **TALK** | Voice Command | AI Voice Assistant (Whisper) | ✅ IMPLEMENTED |
-| 📋 **TASK** | Action Items | Goals & Milestones | 🔄 Partial |
-| ⏰ **TIME** | Investment | Learning Hours | 🔄 Partial |
-| 🛠️ **TOOLS** | Platform | DoersScore™, Jobs4Me | ✅ IMPLEMENTED |
-| 🌟 **TALENTS** | Skills | 6D Assessment | ✅ IMPLEMENTED |
-| 💰 **TAX** | Cost | Subscription Tiers | ✅ IMPLEMENTED |
-| 📊 **TOTAL** | ROI | Career Metrics | 🔄 Partial |
-| 🤝 **TRUST** | Verification | Right Doers Powered™ | ✅ IMPLEMENTED |
-
 ---
 
 ## What's Been Implemented
 
-### ✅ NEW: Content Command Centre - GTM Content Factory (January 1, 2026)
-**Purpose:** Create viral, multi-lingual content for GTM strategy - Target 10K users in 7 days before Dubai launch
+### ✅ NEW: Gemma Offline AI - Rural India (January 1, 2026)
+**Purpose:** Bring DOERS career guidance to the last mile - LIG workers in remote areas with no network connectivity
+
+**Target Regions:**
+- **Srikakulum Village, Andhra Pradesh** - Telugu speaking LIG workers & families
+- **Chickmagalur Hills, Karnataka** - Kannada speaking communities with no network
+
+**Technology:**
+- **Google Gemma 3n (270M parameters)** - Open source, designed for basic Android phones (₹5,000-10,000)
+- **Offline-First Architecture** - Pre-cached responses work without internet
+- **Multi-Lingual** - Telugu, Kannada, Hindi, English
 
 **Features:**
 
-#### 1. Multi-Lingual Reel Creator 🎬
-- **6 Templates:** My DOERS Journey, Talent Card Reveal, Success Story Spotlight, Career Mantra, New Year Career Wish 2026, 5E Journey Progress
-- **11 Indian Languages:** English, Hindi, Kannada, Tamil, Telugu, Marathi, Bengali, Gujarati, Malayalam, Punjabi, Odia
-- **AI Image Generation:** Gemini Nano Banana (gemini-3-pro-image-preview)
-- **Translation:** LLM-powered translation to all supported languages
+#### 1. Offline Career Guidance Chatbot 💬
+- Works completely offline with cached responses
+- Keyword matching for common career questions
+- Falls back to Emergent LLM (Gemini) when online
+- Related resources returned with each response
 
-#### 2. DoersScore™ Share Card Generator 🎯
-- Generate viral-ready talent cards
-- Live preview with score visualization
-- Social media ready (1:1 format)
-- Fields: Name, DoersScore™ (300-900), Adaptive Level, Top Skills, Career Match
+#### 2. Multi-Lingual Support 🌍
+| Language | Script | Region | Status |
+|----------|--------|--------|--------|
+| Telugu | తెలుగు | Srikakulum, AP | ✅ Full |
+| Kannada | ಕನ್ನಡ | Chickmagalur, KA | ✅ Full |
+| Hindi | हिंदी | Pan-India | ✅ Full |
+| English | English | Universal | ✅ Full |
 
-#### 3. Career Mantra Generator 💬
-**4 Target Audiences:**
-- **Entrepreneurs:** Startup founders & business builders
-- **Students:** Career seekers & graduates (including CBSE repeaters)
-- **Corporate Professionals:** Working professionals
-- **Career Comeback:** Those seeking second chances
+#### 3. LIG Workers Career Paths 📚
+Pre-loaded career guidance for Low Income Group workers:
+- **Digital Skills** - Data Entry, Mobile Banking Helper (₹8K-15K/month)
+- **Agriculture Tech** - Farm Advisor, Crop Monitor (₹10K-20K/month)
+- **Healthcare Support** - ASHA Worker, Health Assistant (₹6K-12K/month)
+- **Skilled Trades** - Electrician, Plumber, Carpenter (₹12K-25K/month)
 
-**AI-Generated Mantras with Images for Each Audience**
+#### 4. Government Schemes Info 🏛️
+- PMKVY (Pradhan Mantri Kaushal Vikas Yojana)
+- Mudra Loan for small business
+- Skill India Digital
+- National Apprenticeship Scheme
 
-#### 4. Legal Document Hub (DOERS LEGAL AI) ⚖️
-**NDA Generator:**
-- Based on user's real NDA template
-- Fields: Recipient Name, Email, WhatsApp Number
-- Perpetual confidentiality, Indian law (Bangalore jurisdiction)
-- HTML output with digital signature placeholders
+#### 5. Rural DoersScore™ Calculator 📊
+Modified algorithm for rural users:
+- Education level (below 10th to postgraduate)
+- Skills count (10 points each, max 50)
+- Work experience (10 per year, max 100)
+- Certifications (20 each, max 80)
+- Language proficiency bonus
 
-**Offer Letter Generator:**
-- Based on professional offer letter template
-- Fields: Candidate Name, Email, Position, Division, Salary, Joining Date
-- Auto-calculated salary breakdown (Basic, HRA, Special Allowances)
-- Company: Right Doers World Pvt. Ltd.
-
-**Routes:** `/content`, `/content-command`, `/content-factory`, `/reel-creator`
+**Routes:** `/gemma`, `/offline-ai`, `/rural`
 
 **APIs:**
-- `GET /api/content/status` - Check feature availability
-- `POST /api/content/translate` - Multi-lingual translation
-- `POST /api/content/generate-image` - AI image generation
-- `POST /api/content/share-card` - Create share cards
-- `GET /api/content/mantra/{audience}` - Get career mantras
-- `POST /api/content/legal/nda` - Generate NDA
-- `POST /api/content/legal/offer` - Generate Offer Letter
-- `GET /api/content/segments` - GTM target segments
-- `GET /api/content/ai-business-2026` - AI business opportunities
+- `GET /api/gemma/status` - Service status
+- `POST /api/gemma/chat` - Main chat endpoint (offline/online)
+- `GET /api/gemma/languages` - Supported languages
+- `GET /api/gemma/career-data` - LIG workers career guidance
+- `POST /api/gemma/doers-score` - Rural DoersScore calculation
+- `GET /api/gemma/quick-questions/{language}` - Quick questions
+- `GET /api/gemma/offline-cache` - Full data for PWA sync
 
-**Files:** `/app/backend/content_command.py`, `/app/frontend/src/pages/ContentCommandCentre.jsx`
-
-### ✅ DOER TIERS & COMBO PRICING
-**4 Tiers × 3 Plans = 12 Options:**
-
-| Tier | Age | Monthly (Basic/Std/Prem) | Yearly |
-|------|-----|--------------------------|--------|
-| 🧒 **DOER KIDZ** | 6-12 | ₹99/149/199 | ₹999-1999 |
-| 🎓 **DOER TEENS** | 13-19 | ₹199/299/399 | ₹1999-3999 |
-| 💼 **DOER PRO** | 20-45 | ₹499/749/999 | ₹4999-9999 |
-| ⭐ **DOER PLUS** | All | ₹1999/2999/4999 | ₹19999-49999 |
-
-**B2B Plans:** Startup (₹49,999), Growth (₹1,49,999), Enterprise (Custom)
-
-### ✅ Voice AI - TALK Component
-**Technology:** OpenAI Whisper (whisper-1) via Emergent LLM Key
-
-**Voice Commands:**
-- Navigation: "Go to pricing", "Show my profile", "Open jobs"
-- Search: "Search jobs for fashion designer"
-- Actions: "Start assessment", "Create my profile"
-- Questions: "What is my Doer score?"
-
-### ✅ AIMEE Text-to-Speech
-**Technology:** OpenAI TTS (tts-1) via Emergent LLM Key
-**Default Voice:** Nova
-**Available Voices:** alloy, ash, coral, echo, fable, nova, onyx, sage, shimmer
-
-### ✅ PDF Report Generation - "Big 5 Report"
-**Report Contents (5 Pages):**
-1. Cover Page - Name, DoersScore™, Report Date
-2. DoersScore™ Breakdown - Visual chart, component scores
-3. BIG 5 #1: Career Interests - RIASEC pie chart
-4. BIG 5 #2: Skills & Abilities - Bar chart
-5. BIG 5 #3-5: Recommendations - Career clusters, 5E Journey
-
-### ✅ Proven Profiles - Anushree's Journey
-**First Real Success Story:**
-- Anushree R. Hosalli, Age 16, Bengaluru
-- From Fashion Design aspiration to Circular Fashion Entrepreneur
-- DoersScore™: 820/900
-- Impact: 150+ artisans empowered, 30 tons textile waste diverted
-
-### ✅ Jobs4Me - AI-Powered Job Matching
-**Sources:** JSearch (LinkedIn, Indeed), Adzuna, Naukri (Coming), Mercor (Coming)
-**AI Matching:** Skill match, Interest match (RIASEC), Level match, Salary match
-
-### ✅ Streak System - Content + Campaign
-**D-COIN Rewards, Streak Badges (3d → 365d), Leaderboard**
-
-### ✅ 12 Division Director Dashboards
-Real-time delivery dashboards for IPO 2031
-
-### ✅ Cosmic Flywheel Landing Page
-5 Entry Points: Pupil, People, Profiles, Partners, Performers
+**Files:** `/app/backend/gemma_offline.py`, `/app/frontend/src/pages/GemmaOffline.jsx`
 
 ---
 
-## GTM Target Segments
+### ✅ Content Command Centre - GTM Content Factory (January 1, 2026)
+**Purpose:** Create viral, multi-lingual content for 10K users target before Dubai launch
 
-| Segment | Description | Content Types | Est. Reach |
-|---------|-------------|---------------|------------|
-| 🚀 Startup India | Registered companies needing services | Entrepreneur mantras, funding guidance | 100,000 |
-| 📚 CBSE Repeaters | Students who need career guidance | Student mantras, alternative careers | 500,000 |
-| 🏢 Small Business | MSMEs needing digital transformation | Business growth, hiring tips | 200,000 |
-| 👔 Corporate HR | HR professionals seeking talent | Talent insights, hiring strategies | 50,000 |
-| 🏛️ Government | Employment exchanges | Policy updates, skill programs | 1,000,000 |
+**Features:**
+1. **Multi-Lingual Reel Creator** - 6 templates, 11 Indian languages, Gemini Nano Banana AI images
+2. **DoersScore™ Share Card Generator** - Viral-ready talent cards with live preview
+3. **Career Mantra Generator** - 4 audiences (Entrepreneurs, Students, Corporate, Career Comeback)
+4. **DOERS LEGAL AI Division** - NDA Generator & Offer Letter Generator
+
+**Routes:** `/content`, `/content-command`, `/reel-creator`
 
 ---
 
-## 2026 AI Business Opportunities (Mapped to DOERS)
+### ✅ Previous Features (All Working)
+- **Voice AI (TALK)** - OpenAI Whisper integration
+- **AIMEE TTS** - Text-to-Speech with OpenAI
+- **PDF Reports** - Big 5 Career Report
+- **Proven Profiles** - Anushree's success story
+- **Jobs4Me** - AI job matching
+- **Pricing Tiers** - DOER Kidz/Teens/Pro/Plus
+- **12 Division Dashboards** - IPO 2031 tracking
+- **Cosmic Flywheel** - Landing page with 5 entry points
 
-| Business | Cost | Effort | Potential | DOERS Feature |
-|----------|------|--------|-----------|---------------|
-| AI Governance & Compliance | Medium | High | $50K-$100K/month | DOERS LEGAL AI Division |
-| AI Lead Generation | Low | Medium | $30K-$80K/month | Content Command Centre GTM |
-| AI Content Repurposing | Low | Medium | $10K-$30K/month | Multi-lingual Reel Creator |
-| AI Virtual Assistant | Low | Low | $10K-$20K/month | Agent AIMEE |
+---
+
+## Testing Status
+- **Gemma Offline AI:** 100% (17/17 tests passing)
+- **Content Command Centre:** 100% (12/12 tests passing)
+- **Latest Test Reports:** 
+  - `/app/test_reports/iteration_10.json` (Gemma)
+  - `/app/test_reports/iteration_9.json` (Content)
+
+---
+
+## GTM Target Segments for Rural India
+
+| Segment | Description | Content | Est. Reach |
+|---------|-------------|---------|------------|
+| 🚀 Startup India | Registered companies needing services | Entrepreneur mantras | 100,000 |
+| 📚 CBSE Repeaters | Students needing career guidance | Alternative careers | 500,000 |
+| 🏢 Small Business | MSMEs needing digital transformation | Business growth | 200,000 |
+| 👔 Corporate HR | HR professionals | Talent insights | 50,000 |
+| 🏛️ Government | Employment exchanges | Skill programs | 1,000,000 |
+| 🏠 **LIG Workers** | Low Income Group families | Offline career guidance | **10,000,000+** |
 
 ---
 
 ## Key Routes Reference
 ```
+/gemma           → Gemma Offline AI (Rural India - Telugu/Kannada)
 /content         → Content Command Centre (GTM Content Factory)
-/streaks         → Streak System (Content + Campaign)
-/compare         → Profile Comparison (SHARE IT journey)
-/divisions       → 12 Division Director Dashboards
 /dp              → Doers Profiler (Talent Card)
-/family          → DOERS ONE Family Dashboard
-/captain-command → Captain Command Centre
-/pricing         → Subscription Tiers
 /jobs4me         → AI Job Matching
+/pricing         → Subscription Tiers
 /proven-profiles → Success Stories
+/welcome         → Landing Page
 ```
-
----
-
-## Testing Status
-- **Backend**: 100% (12/12 Content Command tests passing)
-- **Frontend**: 100% (All UI elements working)
-- **Latest Test Report**: `/app/test_reports/iteration_9.json`
 
 ---
 
 ## Upcoming Tasks (Priority Order)
 
-### P0: Critical (GTM Focus)
+### P0: Critical
 1. ✅ **Content Command Centre** - COMPLETE
-2. **WhatsApp Integration** - Direct NDA signing & notifications
-3. **Real Authentication** - Twilio SMS OTP integration
+2. ✅ **Gemma Offline AI** - COMPLETE
+3. **WhatsApp Integration** - Direct NDA signing & notifications
+4. **PWA Service Worker** - Full offline sync for rural areas
 
 ### P1: High Priority
 1. **Full Job Aggregator Integration** - Naukri, Quikr, Mercor APIs
-2. **Complete CRM Functionality** - Lead management, business verticals
-3. **Razorpay Payment Integration**
+2. **Complete CRM Functionality** - Lead management
+3. **Real SMS OTP Authentication** - Twilio
 
 ### P2: Medium Priority
-1. **Real AI Integration** - Agent AIMEE with LLM
-2. **Jobs4Me Matcher (L1-L5)** - Enhanced matching
-3. **Daily Career Capsules** - Completion tracking
-
-### P3: Future
-1. **Robo Helper** - Third part of Right Doers Trinity
-2. **Blockchain-based Digital Profile**
-3. **QR Code Scanner** - Profile comparison
+1. **Razorpay Payment Integration**
+2. **Blockchain Digital Profile**
+3. **Daily Career Capsules**
 
 ---
 
 ## Notes
-- Content Command Centre uses **Gemini Nano Banana** for AI image generation
-- Legal documents (NDA, Offer) are **real** - not mocked
-- Translation uses LLM-powered translation with fallback to original text
-- Job Aggregator and CRM are **scaffolded** - need API integration
+- **Gemma Offline AI** uses pre-cached responses for **true offline functionality**
+- **Content Command Centre** uses **Gemini Nano Banana** for AI image generation
+- **Indic fonts** (Noto Sans Telugu, Kannada, Devanagari) loaded for proper script rendering
+- **Both features** prominently displayed on landing page with badges
 
 ---
 
-*HI AI-APP.COM | Content + Campaign = Growth | Soonicorn Journey to IPO 2031 🚀*
+*HI AI-APP.COM | From World Trade Centre, Bangalore to Srikakulum Village | Soonicorn Journey to IPO 2031 🚀*
