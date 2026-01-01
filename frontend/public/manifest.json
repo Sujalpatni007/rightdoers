@@ -1,12 +1,14 @@
 {
   "name": "HI AI-APP.COM - Right Doers World",
   "short_name": "HI AI-APP",
-  "description": "Find a Job That Feels Like Play - Human Potential Management & Transformation",
+  "description": "AI Career Guidance for Everyone - From 7G Neom City to Nagara Village. Telugu, Kannada, Hindi, English supported.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",
-  "theme_color": "#f97316",
+  "theme_color": "#10b981",
   "orientation": "portrait-primary",
+  "scope": "/",
+  "id": "hi-ai-app",
   "icons": [
     {
       "src": "icons/icon-72x72.png",
@@ -57,7 +59,7 @@
       "purpose": "maskable any"
     }
   ],
-  "categories": ["business", "education", "productivity"],
+  "categories": ["business", "education", "productivity", "lifestyle"],
   "lang": "en",
   "dir": "ltr",
   "prefer_related_applications": false,
@@ -66,10 +68,77 @@
       "src": "screenshots/home.png",
       "sizes": "1080x1920",
       "type": "image/png",
-      "form_factor": "narrow"
+      "form_factor": "narrow",
+      "label": "Home Screen"
     }
   ],
   "related_applications": [],
-  "scope": "/",
-  "id": "hi-ai-app"
+  "shortcuts": [
+    {
+      "name": "Gemma Offline AI",
+      "short_name": "Offline AI",
+      "description": "Career guidance that works offline - Telugu, Kannada supported",
+      "url": "/gemma",
+      "icons": [
+        {
+          "src": "icons/icon-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Content Command",
+      "short_name": "Content",
+      "description": "Create viral multi-lingual content",
+      "url": "/content",
+      "icons": [
+        {
+          "src": "icons/icon-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Doers Profiler",
+      "short_name": "Profile",
+      "description": "Get your DoersScore™ talent card",
+      "url": "/dp",
+      "icons": [
+        {
+          "src": "icons/icon-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Jobs4Me",
+      "short_name": "Jobs",
+      "description": "AI-powered job matching",
+      "url": "/jobs4me",
+      "icons": [
+        {
+          "src": "icons/icon-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "display_override": ["window-controls-overlay", "standalone", "browser"],
+  "features": {
+    "offline_capable": true,
+    "multi_language": ["en", "te", "kn", "hi"],
+    "target_regions": ["India", "Saudi Arabia", "Global"],
+    "low_bandwidth_optimized": true
+  }
 }
