@@ -6,7 +6,7 @@ import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { 
   Sparkles, ArrowRight, Brain, Users, Handshake, Star, Zap,
-  GraduationCap, IdCard, Rocket, Share2, Trophy, Search, Award
+  GraduationCap, IdCard, Rocket, Share2, Trophy, Search, Award, Globe
 } from "lucide-react";
 
 // 5 Entry Points
