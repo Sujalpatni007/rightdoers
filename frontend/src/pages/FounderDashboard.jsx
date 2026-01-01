@@ -9,9 +9,119 @@ import {
   ArrowLeft, ArrowRight, Building, MapPin, Users, Target,
   TrendingUp, Award, Clock, CheckCircle, AlertTriangle, XCircle,
   Globe, Star, Briefcase, Code, DollarSign, BarChart3, Zap,
-  Send, Play, Calendar, Phone, Eye, ChevronRight, Crown
+  Send, Play, Calendar, Phone, Eye, ChevronRight, Crown,
+  Network, Megaphone, MessageSquare, FileText, Coins, Brain,
+  Lightbulb, RefreshCw, Mail, ExternalLink
 } from "lucide-react";
 import { toast } from "sonner";
+
+// NEIL PATEL - MARKETING STRATEGIST REFERENCE
+const NEIL_PATEL_INSIGHTS = {
+  name: "Neil Patel",
+  title: "Marketing Strategist Reference",
+  framework: "Search Everywhere Optimization (G.E.O)",
+  keyInsights: [
+    "73% of searches happen OUTSIDE Google",
+    "Visibility ≠ Success → VALIDATION = Success",
+    "AI doesn't scroll, it SUMMARIZES who gets mentioned",
+    "Strategic presence beats omni-presence"
+  ],
+  riceFramework: {
+    R: "Reach - How many people search on that platform daily?",
+    I: "Impact - How much business impact could this have?",
+    C: "Confidence - How confident are you that you can succeed?",
+    E: "Ease - How easy is it for you to execute?"
+  },
+  source: "youtube.com/watch?v=39o0uYPo4jU"
+};
+
+// 5C FRAMEWORK - CAPTAIN'S DECISION MAKING
+const FIVE_C_FRAMEWORK = [
+  {
+    id: "connections",
+    name: "MY CONNECTIONS",
+    icon: Network,
+    color: "#3B82F6",
+    tagline: "Network is Net Worth",
+    metrics: [
+      { label: "Active Partnerships", value: "47", trend: "+12%" },
+      { label: "Investor Pipeline", value: "23", trend: "+8%" },
+      { label: "Mentor Network", value: "15", trend: "+3%" }
+    ],
+    actions: ["View Network Map", "Add Connection", "Schedule Meeting"]
+  },
+  {
+    id: "campaigns",
+    name: "MY CAMPAIGNS",
+    icon: Megaphone,
+    color: "#EF4444",
+    tagline: "Hit the RIGHT message at the RIGHT time",
+    metrics: [
+      { label: "Active Campaigns", value: "8", trend: "+2" },
+      { label: "Reach (This Week)", value: "125K", trend: "+45%" },
+      { label: "Conversion Rate", value: "4.2%", trend: "+0.8%" }
+    ],
+    actions: ["D.P. College Campaign", "Dubai Summit", "TalentON Launch"]
+  },
+  {
+    id: "communications",
+    name: "MY COMMUNICATIONS",
+    icon: MessageSquare,
+    color: "#22C55E",
+    tagline: "Decision-Making Behavior-Based Messaging",
+    metrics: [
+      { label: "Messages Sent", value: "342", trend: "+15%" },
+      { label: "Response Rate", value: "67%", trend: "+5%" },
+      { label: "Avg Response Time", value: "2.4h", trend: "-0.5h" }
+    ],
+    actions: ["WhatsApp Broadcast", "Email Sequence", "LinkedIn Outreach"]
+  },
+  {
+    id: "content",
+    name: "MY CONTENT",
+    icon: FileText,
+    color: "#8B5CF6",
+    tagline: "Platform-Specific Strategy",
+    metrics: [
+      { label: "Content Pieces", value: "156", trend: "+24" },
+      { label: "Engagement Rate", value: "8.7%", trend: "+1.2%" },
+      { label: "AI Citations", value: "12", trend: "+4" }
+    ],
+    actions: ["Create TikTok", "Write LinkedIn Post", "Record Podcast"]
+  },
+  {
+    id: "currency",
+    name: "MY CURRENCY",
+    icon: Coins,
+    color: "#F59E0B",
+    tagline: "D-COIN Economy Metrics",
+    metrics: [
+      { label: "D-COIN Circulation", value: "50K", trend: "+20%" },
+      { label: "MRR", value: "$12.5K", trend: "+18%" },
+      { label: "LTV/CAC Ratio", value: "4.2x", trend: "+0.5x" }
+    ],
+    actions: ["View Treasury", "Issue Rewards", "Check Transactions"]
+  }
+];
+
+// FEEDBACK-FIX-FAX CYCLE
+const FFF_CYCLE = {
+  feedback: {
+    title: "FEEDBACK",
+    desc: "Context-Based Insights",
+    items: ["User Analytics", "Campaign Performance", "Market Signals"]
+  },
+  fix: {
+    title: "FIX",
+    desc: "Case Study Fed Actions",
+    items: ["A/B Test Results", "Competitor Analysis", "Best Practices"]
+  },
+  fax: {
+    title: "FAX TO FOUNDER",
+    desc: "Decision Brief",
+    items: ["Executive Summary", "Recommendations", "Action Items"]
+  }
+};
 
 // WTC BANGALORE FACTS
 const WTC_FACTS = {
