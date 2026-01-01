@@ -105,12 +105,7 @@ const StreakCalendar = ({ history }) => {
 
 // Streak Widget (for embedding in other pages)
 export const StreakWidget = ({ onPress }) => {
-  const [streakData, setStreakData] = useState(null);
-  
-  useEffect(() => {
-    // In production, fetch from backend
-    setStreakData(getDemoStreakData());
-  }, []);
+  const [streakData, setStreakData] = useState(() => getDemoStreakData());
   
   if (!streakData) return null;
   
