@@ -1,5 +1,5 @@
 # HI AI-APP.COM - Product Requirements Document
-## Version 13.0 | January 1, 2026
+## Version 14.0 | January 1, 2026
 
 ---
 
@@ -20,126 +20,124 @@ Bangalore, India
 
 ---
 
-## Vision & Philosophy
-- **Vision**: Right People @ Right Place | Work that feels like PLAY
-- **Moonshot**: "People in this planet must say HI AI and experience WOW"
-- **Global Reach**: From 7G smart cities to no-network villages
-- **IPO Target**: Q1 2031 (Soonicorn Journey)
+## What's Been Implemented
+
+### ✅ NEW: WhatsApp NDA Signing - DOERS LEGAL AI (January 1, 2026)
+**Purpose:** Direct Founder → Command Centre → Candidate Onboarding via WhatsApp
+
+**Flow:**
+```
+Founder WhatsApp → Command Centre Contract Signing → Candidate Onboarding Complete
+```
+
+**Features:**
+
+#### 1. NDA Signing via WhatsApp 📜
+- Send NDA documents via WhatsApp
+- OTP-based digital signatures (6-digit, 24-hour expiry)
+- Signature hash generated using SHA256
+- Document tracking: initiated → otp_sent → verified → signed
+
+#### 2. Offer Letter via WhatsApp 💼
+- Send offer letters for digital acceptance
+- Position and Division selection
+- 48-hour OTP expiry for offers
+- Confirmation messages with signature ID
+
+#### 3. Founder Approval Workflow ✅
+- Request approval directly via WhatsApp
+- Approval types: New Hire, Contract, Budget, Partnership
+- Commands: APPROVE <ID> / REJECT <ID>
+
+#### 4. WhatsApp Commands
+| Command | Action |
+|---------|--------|
+| SIGN <OTP> | Sign NDA with OTP |
+| ACCEPT <OTP> | Accept offer with OTP |
+| REJECT | Decline document |
+| APPROVE <ID> | Approve request (founder) |
+| STATUS <ID> | Check document status |
+| HELP | Show available commands |
+
+**Routes:** `/whatsapp`, `/whatsapp-signing`, `/nda-signing`
+
+**APIs:**
+- `GET /api/whatsapp/status` - Service status
+- `POST /api/whatsapp/nda/send` - Send NDA for signing
+- `POST /api/whatsapp/offer/send` - Send offer for acceptance
+- `GET /api/whatsapp/nda/view/{id}` - View NDA document
+- `GET /api/whatsapp/offer/view/{id}` - View offer document
+- `POST /api/whatsapp/verify` - Verify OTP signature
+- `POST /api/whatsapp/incoming` - Handle incoming messages (webhook)
+- `POST /api/whatsapp/approval/request` - Request founder approval
+- `GET /api/whatsapp/signings` - List all signings
+- `POST /api/whatsapp/welcome` - Send welcome notification
+
+**Status:** Running in **SIMULATION MODE** (Twilio not configured)
+
+**For Production:** Configure in backend/.env:
+```
+TWILIO_ACCOUNT_SID=your_sid
+TWILIO_AUTH_TOKEN=your_token
+TWILIO_WHATSAPP_NUMBER=whatsapp:+1415...
+FOUNDER_WHATSAPP=+91...
+```
+
+**Files:** `/app/backend/whatsapp_service.py`, `/app/frontend/src/pages/WhatsAppSigning.jsx`
 
 ---
 
-## What's Been Implemented
-
-### ✅ NEW: PWA Service Worker - Offline-First Architecture (January 1, 2026)
-**Purpose:** Enable true offline-first experience for basic Android phones (₹5,000-10,000) in rural India
-
-**Technology:**
-- **Service Worker v2.0.0** with smart caching strategies
-- **IndexedDB** for conversation history and career data
-- **Background Sync** for queued actions
-- **Push Notifications** for engagement
-
-**Caching Strategies:**
-| Content Type | Strategy | Cache Name |
-|--------------|----------|------------|
-| Static Assets | Cache First | hi-ai-static-v2.0.0 |
-| API Responses | Network First | hi-ai-api-v2.0.0 |
-| Gemma Data | Full Offline | hi-ai-gemma-v2.0.0 |
-| Images | Cache First | hi-ai-images-v2.0.0 |
-
-**PWA Features:**
-- **Install Prompt** - Banner for rural users in Telugu/Kannada
-- **Offline Detection** - Real-time online/offline status
-- **Conversation Persistence** - IndexedDB storage
-- **Background Sync** - Queue actions for later sync
-
-**App Shortcuts:**
-1. Gemma Offline AI - Career guidance that works offline
-2. Content Command - Create viral multi-lingual content
-3. Doers Profiler - Get your DoersScore™ talent card
-4. Jobs4Me - AI-powered job matching
-
-**Files:**
-- `/app/frontend/src/service-worker.js` - Advanced service worker
-- `/app/frontend/src/hooks/usePWA.js` - PWA React hooks
-- `/app/frontend/public/manifest.json` - Updated manifest
+### ✅ PWA Service Worker - Offline-First (January 1, 2026)
+- Advanced Service Worker v2.0.0
+- IndexedDB for conversation persistence
+- Background sync for queued actions
+- Install prompts for rural users
+- Pre-cached Telugu/Kannada career guidance
 
 ---
 
 ### ✅ Gemma Offline AI - Rural India (January 1, 2026)
-**Purpose:** Bring DOERS career guidance to the last mile
-
-**Target Regions:**
-- **Srikakulum Village, Andhra Pradesh** - Telugu (తెలుగు)
-- **Chickmagalur Hills, Karnataka** - Kannada (ಕನ್ನಡ)
-- **Nagara Village, Thirthahalli, Shivamogga** - Kannada (ಕನ್ನಡ)
-
-**Technology:**
-- **Google Gemma 3n (270M)** - Designed for basic phones
-- **Offline-First** - Pre-cached responses in Telugu/Kannada
-- **PWA** - Installable app with full offline support
-
-**Features:**
-1. **Offline Career Chatbot** - Works without internet
-2. **4 Language Support** - Telugu, Kannada, Hindi, English
-3. **LIG Workers Career Paths** - Digital Skills, Agriculture, Healthcare, Skilled Trades
-4. **Government Schemes** - PMKVY, Mudra Loan, Skill India
-
-**Routes:** `/gemma`, `/offline-ai`, `/rural`
+- Google Gemma 3n (270M) for basic phones
+- Telugu (Srikakulum), Kannada (Chickmagalur)
+- Full offline career guidance
+- Government schemes: PMKVY, Mudra, Skill India
 
 ---
 
-### ✅ Content Command Centre - GTM Content Factory
-**Features:**
-1. Multi-Lingual Reel Creator (11 languages)
-2. DoersScore™ Share Card Generator
-3. Career Mantra Generator (4 audiences)
-4. DOERS LEGAL AI Division (NDA & Offer Letters)
-
-**Routes:** `/content`, `/content-command`
+### ✅ Content Command Centre - GTM (January 1, 2026)
+- Multi-lingual Reel Creator (11 languages)
+- DoersScore™ Share Card Generator
+- Career Mantra Generator (4 audiences)
+- NDA & Offer Letter Generator
 
 ---
 
-### ✅ Previous Features (All Working)
-- Voice AI (TALK) - OpenAI Whisper
-- AIMEE TTS - Text-to-Speech
-- PDF Reports - Big 5 Career Report
-- Proven Profiles - Success stories
-- Jobs4Me - AI job matching
-- Pricing Tiers - DOER Kidz/Teens/Pro/Plus
-- 12 Division Dashboards
+## Landing Page Quick Launch Features
 
----
-
-## Global Reach Strategy
-
-### From 7G to No-Network
-| Location | Connectivity | Feature Support |
-|----------|--------------|-----------------|
-| Neom City, Saudi | 7G Ultra | Full AI, Real-time |
-| Bangalore | 5G/4G | Full AI, Fast |
-| Rural Towns | 4G/3G | Cached AI, Sync later |
-| Srikakulum | 2G/EDGE | Offline mode, Basic |
-| Nagara Village | No Network | Full Offline PWA |
-
-### Offline Data Pre-loaded
-- Career guidance in Telugu & Kannada
-- Government schemes information
-- Salary ranges and training durations
-- Quick questions for common queries
+| Feature | Color | Badge | Route |
+|---------|-------|-------|-------|
+| Content Command Centre | Purple | NEW | /content |
+| Gemma Offline AI | Emerald | 🇮🇳 Rural | /gemma |
+| WhatsApp NDA Signing | Green | ⚖️ Legal | /whatsapp |
+| Junicorn Finder | Indigo | ISF | External |
 
 ---
 
 ## Testing Status
-- **PWA Service Worker:** Implemented (manual verification needed)
+- **WhatsApp NDA Signing:** 100% (18/18 tests)
 - **Gemma Offline AI:** 100% (17/17 tests)
 - **Content Command Centre:** 100% (12/12 tests)
-- **Test Reports:** `/app/test_reports/iteration_10.json`
+
+**Latest Test Reports:**
+- `/app/test_reports/iteration_11.json` (WhatsApp)
+- `/app/test_reports/iteration_10.json` (Gemma)
+- `/app/test_reports/iteration_9.json` (Content)
 
 ---
 
 ## Key Routes Reference
 ```
+/whatsapp        → WhatsApp NDA Signing (DOERS LEGAL AI)
 /gemma           → Gemma Offline AI (Rural India)
 /content         → Content Command Centre (GTM)
 /dp              → Doers Profiler
@@ -150,19 +148,29 @@ Bangalore, India
 
 ---
 
+## Mocked/Simulated Features
+
+| Feature | Status | What's Working | For Production |
+|---------|--------|----------------|----------------|
+| WhatsApp Messages | SIMULATED | OTPs, signatures, DB storage | Configure Twilio credentials |
+| Job Aggregator | SCAFFOLDED | Structure ready | Integrate Naukri, Mercor APIs |
+| CRM | SCAFFOLDED | Basic structure | Complete lead management |
+
+---
+
 ## Upcoming Tasks (Priority Order)
 
 ### P0: Critical
-1. ✅ **PWA Service Worker** - COMPLETE
+1. ✅ **WhatsApp NDA Signing** - COMPLETE (SIMULATED)
 2. ✅ **Gemma Offline AI** - COMPLETE
 3. ✅ **Content Command Centre** - COMPLETE
-4. **WhatsApp Integration** - NDA signing & notifications
-5. **Real Device Testing** - Test on ₹5,000 Android phones
+4. ✅ **PWA Service Worker** - COMPLETE
+5. **Configure Twilio** - For live WhatsApp
 
 ### P1: High Priority
-1. **Full Job Aggregator** - Naukri, Quikr, Mercor APIs
+1. **Full Job Aggregator** - Naukri, Quikr, Mercor
 2. **Complete CRM** - Lead management
-3. **SMS OTP** - Twilio integration
+3. **SMS OTP Auth** - Twilio (real phone verification)
 
 ### P2: Medium Priority
 1. **Razorpay Payments**
@@ -172,12 +180,12 @@ Bangalore, India
 ---
 
 ## Notes
-- PWA works on Chrome, Edge, Samsung Internet, Firefox Mobile
-- Service Worker caches ~5MB of offline data
-- IndexedDB stores conversation history
-- Google Fonts (Noto Sans Telugu, Kannada, Devanagari) for proper script rendering
-- Install banner shows automatically for Telugu/Kannada users
+- **WhatsApp NDA Signing** works end-to-end in simulation mode
+- OTP-based digital signatures generate SHA256 hash
+- Documents stored in MongoDB `legal_documents` collection
+- Signing requests tracked in `whatsapp_signings` collection
+- Landing page now shows all 3 major features prominently
 
 ---
 
-*HI AI-APP.COM | 7G Neom City 🏙️ → Nagara Village 🏘️ | Everyone deserves AI 🚀*
+*HI AI-APP.COM | DOERS LEGAL AI ⚖️ | Digital Signatures via WhatsApp | IPO 2031 🚀*
