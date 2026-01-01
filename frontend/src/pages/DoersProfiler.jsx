@@ -1037,7 +1037,6 @@ Say HI AI. Get your D.P. (Doers Profiler) at:`;
           >
             Enter the Doers World <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
-          </Button>
           <p className="text-center text-white/40 text-xs mt-2">
             Say WOW. Get What You Want.
           </p>
