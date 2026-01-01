@@ -230,6 +230,10 @@ function AppContent() {
       <Route path="/dcoin" element={<ProtectedRoute><EcoinWalletPage /></ProtectedRoute>} />
       <Route path="/dream-siip" element={<DoersDreamSIIPPage />} />
       
+      {/* DOERS ONE Family Dashboard */}
+      <Route path="/family" element={<DoersOneFamily />} />
+      <Route path="/doers-one" element={<DoersOneFamily />} />
+      
       {/* Employer Flow */}
       <Route path="/employer" element={<ProtectedRoute allowedRoles={["employer"]}><EmployerDashboard /></ProtectedRoute>} />
       <Route path="/employer/post" element={<ProtectedRoute allowedRoles={["employer"]}><PostJobPage /></ProtectedRoute>} />
