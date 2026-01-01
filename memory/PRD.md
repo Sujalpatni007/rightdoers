@@ -127,6 +127,54 @@ Bangalore, India
 
 ---
 
+### ✅ NEW: Central Talk Hub + Push Notifications (January 1, 2026)
+**Purpose:** Make AIMEE the central focus of the app with prominent talk button + milestone notifications
+
+**Features:**
+
+#### 1. Central Talk Hub 🗣️
+- Large glowing TALK button at bottom center (impossible to miss!)
+- "ASK AIMEE" floating label badge
+- Collapsed state: Single prominent button with rotating animation
+- Expanded state: Voice (pink), AIMEE (purple), Chat (teal) buttons
+- Replaces hidden corner buttons with central CTA
+
+#### 2. Push Notifications 🔔
+- Browser push notifications for milestones
+- Types: ORBIT achieved, 80%+ readiness, leader assigned, kata complete, countdown
+- Auto-monitoring of Mission Board every 60 seconds
+- Notification history stored in MongoDB
+
+**Routes:** Central Talk Hub appears on ALL pages
+
+**APIs:**
+- `GET /api/captain/notifications/settings` - Notification types
+- `POST /api/captain/notifications/trigger` - Trigger test notification
+- `GET /api/captain/notifications/history` - Notification history
+
+**Files:** `/app/frontend/src/components/CentralTalkHub.jsx`, `/app/frontend/src/services/pushNotifications.js`
+
+---
+
+### ✅ NEW: Launch Announcement Page (January 1, 2026)
+**Purpose:** Shareable Happy New Year + Dubai Launch announcement page
+
+**Features:**
+- Live countdown timer to January 9, 2026
+- Confetti animation on load
+- Captain's message section
+- Social share buttons (Twitter, LinkedIn, Email, Copy Link)
+- Video placeholder for launch video
+- CTA buttons to Mission Board and Command Centre
+
+**Routes:** `/launch-announcement`, `/announcement`, `/happy-new-year`, `/2026`
+
+**Files:** `/app/frontend/src/pages/LaunchAnnouncement.jsx`
+
+**Supporting Docs:** `/app/docs/LAUNCH_VIDEO_SCRIPT.md` - Complete video script for recording
+
+---
+
 ### ✅ WhatsApp NDA Signing - DOERS LEGAL AI (January 1, 2026)
 **Status:** Running in **SIMULATION MODE** (Twilio not configured)
 
