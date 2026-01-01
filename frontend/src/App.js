@@ -60,6 +60,7 @@ import CareerRoadmapGenerator from "@/pages/CareerRoadmapGenerator";
 import TalentOnGlocals from "@/pages/TalentOnGlocals";
 import FounderDashboard from "@/pages/FounderDashboard";
 import DoersProfiler from "@/pages/DoersProfiler";
+import DoersOneFamily from "@/pages/DoersOneFamily";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API = `${BACKEND_URL}/api`;
