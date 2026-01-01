@@ -38,7 +38,7 @@ const DIVISIONS = [
   { id: "finance", name: "Finance", icon: "💰", color: "#EAB308" },
 ];
 
-// 4 Entry Points (The 4 P's)
+// 5 Entry Points (The 5 P's - PANCHA PANDAVA)
 const ENTRY_POINTS = {
   en: [
     {
@@ -60,6 +60,16 @@ const ENTRY_POINTS = {
       color: "from-green-500 to-emerald-600",
       path: "/auth?role=doer&type=people",
       features: ["Agent AIMEE Analysis", "Jobs4Me Matching", "D-COIN Rewards"]
+    },
+    {
+      id: "profiles",
+      title: "PROFILES",
+      subtitle: "D.P. - Doers Profiler",
+      description: "Your TALENT CARD • DoersScore™",
+      icon: IdCard,
+      color: "from-pink-500 to-rose-600",
+      path: "/dp",
+      features: ["Talent Card", "DoersScore™", "Send Your Profiler"]
     },
     {
       id: "partners",
@@ -102,6 +112,16 @@ const ENTRY_POINTS = {
       color: "from-green-500 to-emerald-600",
       path: "/auth?role=doer&type=people",
       features: ["Agent AIMEE विश्लेषण", "Jobs4Me मैचिंग", "D-COIN पुरस्कार"]
+    },
+    {
+      id: "profiles",
+      title: "प्रोफाइल",
+      subtitle: "D.P. - डोअर्स प्रोफाइलर",
+      description: "आपका टैलेंट कार्ड • DoersScore™",
+      icon: IdCard,
+      color: "from-pink-500 to-rose-600",
+      path: "/dp",
+      features: ["टैलेंट कार्ड", "DoersScore™", "प्रोफाइलर भेजें"]
     },
     {
       id: "partners",
