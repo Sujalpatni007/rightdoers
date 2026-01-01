@@ -1007,11 +1007,76 @@ async def parse_voice_text(text: str):
     }
 
 # ============================================
+# AIMEE CHAT API
+# ============================================
+
+class AIMEEChatRequest(BaseModel):
+    message: str
+    context: List[Dict[str, str]] = Field(default_factory=list)
+
+@api_router.post("/aimee/chat")
+async def aimee_chat(request: AIMEEChatRequest):
+    """
+    Chat with AIMEE AI Assistant
+    Uses LLM for career guidance conversations
+    """
+    try:
+        # Build system prompt for AIMEE
+        system_prompt = """You are AIMEE (AI-Mentored Intelligent Employment Engine), a friendly and knowledgeable AI career transformation assistant for the Right Doers platform.
+
+Your expertise includes:
+- Career guidance and pathway recommendations
+- Skill assessment interpretation (DoersScore™, 6D Assessment)
+- Job matching and industry insights
+- Learning recommendations
+- Motivational support
+
+Personality:
+- Warm, encouraging, and professional
+- Use emojis sparingly but effectively
+- Give concise, actionable advice
+- Reference the 5E Journey model (Explore, Educate, Employ, Enterprise, Excel) when relevant
+
+Always encourage users to:
+- Complete their DoersProfile
+- Explore Jobs4Me for matched opportunities
+- Track daily progress with the Streak System
+- Share their Talent Card with the world
+
+Keep responses concise (under 200 words) and end with a helpful suggestion or question."""
+
+        # Create chat instance
+        llm_key = os.environ.get("EMERGENT_LLM_KEY") or os.environ.get("OPENAI_API_KEY")
+        if not llm_key:
+            return {"response": "I'm here to help! While my full AI capabilities are loading, you can explore your DoersProfile, check Jobs4Me for opportunities, or view Proven Profiles for inspiration. What interests you most?"}
+        
+        chat = LlmChat(
+            api_key=llm_key,
+            system_message=system_prompt
+        )
+        
+        # Add context from previous messages
+        for msg in request.context[-6:]:  # Last 6 messages for context
+            if msg.get("role") == "user":
+                chat.add_user_message(msg.get("content", ""))
+            elif msg.get("role") == "assistant":
+                chat.add_assistant_message(msg.get("content", ""))
+        
+        # Get response
+        response = await chat.send_message_async(request.message)
+        
+        return {"response": response}
+        
+    except Exception as e:
+        logger.error(f"AIMEE chat error: {e}")
+        # Fallback response
+        return {"response": f"I'm processing your question about '{request.message[:50]}...'. Meanwhile, explore your DoersProfile to see your career potential! 🚀"}
+
+# ============================================
 # AIMEE TEXT-TO-SPEECH APIs
 # ============================================
 
 from aimee_voice import aimee_voice
-from fastapi.responses import Response
 
 @api_router.get("/aimee/voice/status")
 async def aimee_voice_status():
