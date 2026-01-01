@@ -290,6 +290,11 @@ function AppContent() {
       <Route path="/offline-ai" element={<GemmaOffline />} />
       <Route path="/rural" element={<GemmaOffline />} />
       
+      {/* WhatsApp NDA Signing - DOERS LEGAL AI */}
+      <Route path="/whatsapp" element={<WhatsAppSigning />} />
+      <Route path="/whatsapp-signing" element={<WhatsAppSigning />} />
+      <Route path="/nda-signing" element={<WhatsAppSigning />} />
+      
       {/* Employer Flow */}
       <Route path="/employer" element={<ProtectedRoute allowedRoles={["employer"]}><EmployerDashboard /></ProtectedRoute>} />
       <Route path="/employer/post" element={<ProtectedRoute allowedRoles={["employer"]}><PostJobPage /></ProtectedRoute>} />
