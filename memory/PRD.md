@@ -1,5 +1,5 @@
 # HI AI-APP.COM - Product Requirements Document
-## Version 8.0 | January 1, 2026
+## Version 9.0 | January 1, 2026
 
 ---
 
@@ -18,6 +18,18 @@ Build **HI AI-APP.COM** - A Human Potential Management & Transformation Company 
 - **Moonshot**: "People in this planet must say HI AI and experience WOW"
 - **IPO Target**: Q1 2031 (Soonicorn Journey)
 
+### 8 T's TIMELESS WORKFORCE FLOW (Reid Hoffman Vision)
+| T | Meaning | Feature |
+|---|---------|---------|
+| 💬 **TALK** | Voice Command | AI Voice Assistant (Coming) |
+| 📋 **TASK** | Action Items | Goals & Milestones |
+| ⏰ **TIME** | Investment | Learning Hours |
+| 🛠️ **TOOLS** | Platform | DoersScore™, Jobs4Me |
+| 🌟 **TALENTS** | Skills | 6D Assessment |
+| 💰 **TAX** | Cost | Subscription Tiers |
+| 📊 **TOTAL** | ROI | Career Metrics |
+| 🤝 **TRUST** | Verification | Right Doers Powered™ |
+
 ### Phase 1 Focus (Captain's Priorities)
 1. 🌐 **Digital Portfolio Creation** - Global Talent Nest
 2. 🤖 **AI Universal Skills** - Project/Role-Play based Simulated Skilling
@@ -32,7 +44,61 @@ Build **HI AI-APP.COM** - A Human Potential Management & Transformation Company 
 
 ## What's Been Implemented
 
-### ✅ NEW: Streak System - Content + Campaign Integration (January 1, 2026)
+### ✅ NEW: DOER TIERS & COMBO PRICING (January 1, 2026)
+**Neil Patel + Anupam Mittal Philosophy: Price based on purchasing power**
+
+**4 Tiers × 3 Plans = 12 Options:**
+
+| Tier | Age | Monthly (Basic/Std/Prem) | Yearly |
+|------|-----|--------------------------|--------|
+| 🧒 **DOER KIDZ** | 6-12 | ₹99/149/199 | ₹999-1999 |
+| 🎓 **DOER TEENS** | 13-19 | ₹199/299/399 | ₹1999-3999 |
+| 💼 **DOER PRO** | 20-45 | ₹499/749/999 | ₹4999-9999 |
+| ⭐ **DOER PLUS** | All | ₹1999/2999/4999 | ₹19999-49999 |
+
+**B2B Plans:** Startup (₹49,999), Growth (₹1,49,999), Enterprise (Custom)
+
+**Routes:** `/pricing`, `/kidz`, `/teens`
+
+### ✅ NEW: Proven Profiles - Anushree's Journey (January 1, 2026)
+**First Real Success Story in Platform**
+
+**Anushree R. Hosalli Profile:**
+- Age: 16 | Location: Bengaluru
+- Family: Mother (Tailor), Father (Stunt Artist/Construction)
+- Aspiration: Fashion Designer → Current: Circular Fashion Entrepreneur
+- DoersScore™: 820/900
+- 5E Journey: Explore → Educate → Employ → Enterprise → Excel
+
+**Impact Achieved:**
+- 150+ artisans empowered
+- 300% income increase for partners
+- 30 tons textile waste diverted
+- 50,000+ sustainable garments
+
+**Routes:** `/proven-profiles`, `/anushree`, `/success-stories`
+
+### ✅ NEW: Jobs4Me - AI-Powered Job Matching (January 1, 2026)
+**Multi-Source Job Aggregation + DoersScore™ Matching**
+
+**Job Sources:**
+- JSearch (LinkedIn, Indeed, Glassdoor)
+- Adzuna (16 countries)
+- Naukri (Coming)
+- Mercor (Coming)
+- Quikr (Coming)
+- Internal Right Doers listings
+
+**AI Matching Features:**
+- Skill match score
+- Interest match (RIASEC)
+- Level match (experience)
+- Salary match
+- Recommendations: Perfect Match, Good Match, Stretch Role, Develop First
+
+**Routes:** `/jobs4me`, `/job-match`, `/ai-jobs`
+
+### ✅ Streak System - Content + Campaign (January 1, 2026)
 **Neil Patel G.E.O Strategy: Content Creation + Campaign runs TOGETHER**
 
 **Features:**
