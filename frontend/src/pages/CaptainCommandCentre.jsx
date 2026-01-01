@@ -239,6 +239,14 @@ export default function CaptainCommandCentre() {
           
           {/* Status Indicators */}
           <div className="flex items-center gap-6">
+            <Button
+              onClick={() => navigate("/mission-board")}
+              className="bg-gradient-to-r from-[#00ff88]/20 to-purple-500/20 border border-[#00ff88]/50 text-[#00ff88] hover:bg-[#00ff88]/30 font-mono"
+              data-testid="mission-board-btn"
+            >
+              <Rocket className="w-4 h-4 mr-2" />
+              MISSION BOARD
+            </Button>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-[#00ff88] rounded-full animate-pulse"></div>
               <span className="text-[#00ff88] font-mono text-sm">SYSTEMS ONLINE</span>
