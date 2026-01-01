@@ -252,6 +252,16 @@ function AppContent() {
       <Route path="/streaks" element={<StreakSystem />} />
       <Route path="/streak" element={<StreakSystem />} />
       
+      {/* Proven Profiles - Success Stories */}
+      <Route path="/proven-profiles" element={<ProvenProfiles />} />
+      <Route path="/success-stories" element={<ProvenProfiles />} />
+      <Route path="/anushree" element={<ProvenProfiles />} />
+      
+      {/* Jobs4Me - AI Job Matching */}
+      <Route path="/jobs4me" element={<Jobs4Me />} />
+      <Route path="/job-match" element={<Jobs4Me />} />
+      <Route path="/ai-jobs" element={<Jobs4Me />} />
+      
       {/* Employer Flow */}
       <Route path="/employer" element={<ProtectedRoute allowedRoles={["employer"]}><EmployerDashboard /></ProtectedRoute>} />
       <Route path="/employer/post" element={<ProtectedRoute allowedRoles={["employer"]}><PostJobPage /></ProtectedRoute>} />
