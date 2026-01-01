@@ -16,47 +16,47 @@ export default function SplashScreen() {
   }, [navigate]);
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 flex items-center justify-center transition-opacity duration-500 ${fadeOut ? 'opacity-0' : 'opacity-100'}`}>
+    <div className={`min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 flex items-center justify-center transition-opacity duration-500 ${fadeOut ? 'opacity-0' : 'opacity-100'}`}>
       <div className="text-center">
-        {/* Animated Logo */}
-        <div className="relative mb-8">
-          <div className="w-32 h-32 mx-auto relative">
-            {/* Outer glow ring */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-500 animate-spin-slow opacity-50 blur-xl"></div>
+        {/* IKIGAI SVG Logo */}
+        <div className="relative mb-6">
+          <div className="w-48 h-48 mx-auto relative">
+            {/* Outer cosmic glow */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500/30 via-pink-500/30 to-orange-500/30 animate-pulse blur-2xl"></div>
             
-            {/* Main logo container */}
-            <div className="absolute inset-2 rounded-full bg-gradient-to-br from-indigo-600 to-purple-700 flex items-center justify-center shadow-2xl">
-              <Sparkles className="w-16 h-16 text-white animate-pulse" />
-            </div>
-            
-            {/* Rising sun effect */}
-            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-24 h-12 bg-gradient-to-t from-orange-500/50 to-transparent rounded-t-full blur-md"></div>
+            {/* IKIGAI Image */}
+            <img 
+              src="/140.svg" 
+              alt="IKIGAI - Purpose" 
+              className="w-full h-full object-contain animate-spin-slow"
+              style={{ animationDuration: '20s' }}
+            />
           </div>
         </div>
 
         {/* Brand Name */}
-        <h1 className="font-display text-4xl md:text-5xl font-bold text-white mb-3 tracking-tight">
-          Right Doers
+        <h1 className="font-display text-4xl md:text-5xl font-bold text-white mb-2 tracking-tight">
+          <span className="text-orange-400">HI</span> AI-APP<span className="text-blue-400">.COM</span>
         </h1>
-        <p className="text-2xl md:text-3xl font-display text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-400 to-pink-400 font-semibold mb-4">
-          WORLD
+        <p className="text-xl md:text-2xl font-display text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-400 to-pink-400 font-semibold mb-4">
+          Enter the Doers World
         </p>
         
         {/* Tagline */}
         <p className="text-white/80 text-lg font-body tracking-wide">
-          Dream → Do → Done
+          Say WOW • Get What You Want
         </p>
         
         {/* Subtitle */}
         <p className="text-white/50 text-sm mt-2 font-body">
-          The Future of Work
+          Human Potential Management & Transformation
         </p>
 
         {/* Loading indicator */}
-        <div className="mt-12 flex justify-center gap-2">
-          <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-          <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-          <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+        <div className="mt-10 flex justify-center gap-2">
+          <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+          <div className="w-2 h-2 bg-pink-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+          <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
         </div>
       </div>
 
