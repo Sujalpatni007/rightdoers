@@ -104,6 +104,32 @@ export default function LandingPage() {
         <section className="space-y-3 mb-8">
           <h2 className="text-white/60 text-xs uppercase tracking-wider text-center mb-2">🎯 Quick Launch</h2>
           
+          {/* Content Command Centre - GTM */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.45 }}
+          >
+            <Card 
+              className="bg-gradient-to-r from-purple-600/30 to-pink-600/20 border-purple-500/30 cursor-pointer hover:border-purple-400/50 transition-all"
+              onClick={() => navigate('/content')}
+              data-testid="content-command-btn"
+            >
+              <CardContent className="p-4 flex items-center gap-4">
+                <div className="w-12 h-12 rounded-xl bg-purple-500/30 flex items-center justify-center">
+                  <Sparkles className="w-6 h-6 text-purple-300" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-purple-300 font-bold">Content Command Centre</p>
+                  <p className="text-white/50 text-xs">Multi-lingual Reels • Share Cards • GTM</p>
+                </div>
+                <Badge className="bg-pink-500/30 text-pink-300 border-0">
+                  <Rocket className="w-3 h-3 mr-1" /> NEW
+                </Badge>
+              </CardContent>
+            </Card>
+          </motion.div>
+          
           {/* Junicorn Finder + ISF */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
