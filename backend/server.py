@@ -1854,6 +1854,302 @@ async def gemma_quick_questions(language: str):
     }
     return {"questions": questions.get(language, questions["en"]), "language": language}
 
+# ============================================
+# WHATSAPP NDA SIGNING APIs
+# ============================================
+
+from whatsapp_service import (
+    whatsapp_service, message_handler,
+    NDASigningRequest, OfferSigningRequest, FounderApprovalRequest,
+    WhatsAppMessage
+)
+from content_command import content_command, NDADocument, OfferLetter
+
+class SendNDAWhatsAppRequest(BaseModel):
+    nda_id: str
+    recipient_name: str
+    recipient_phone: str
+    recipient_email: str
+
+class SendOfferWhatsAppRequest(BaseModel):
+    offer_id: str
+    candidate_name: str
+    candidate_phone: str
+    candidate_email: str
+    position: str
+    division: str
+
+class VerifySignatureRequest(BaseModel):
+    signing_id: str
+    otp: str
+
+class IncomingWhatsAppMessage(BaseModel):
+    from_phone: str
+    message: str
+    timestamp: Optional[str] = None
+
+class FounderApprovalCreateRequest(BaseModel):
+    request_type: str
+    subject: str
+    details: Dict[str, Any]
+    requester_name: str
+    requester_phone: str
+
+@api_router.get("/whatsapp/status")
+async def whatsapp_status():
+    """Get WhatsApp service status"""
+    return {
+        "service": "WhatsApp NDA Signing",
+        "twilio_enabled": whatsapp_service.twilio_enabled,
+        "simulation_mode": not whatsapp_service.twilio_enabled,
+        "features": [
+            "nda_signing",
+            "offer_signing",
+            "founder_approvals",
+            "welcome_notifications"
+        ],
+        "company": "Right Doers World Pvt. Ltd.",
+        "location": "15th Floor, World Trade Centre, Bangalore"
+    }
+
+@api_router.post("/whatsapp/nda/send")
+async def send_nda_via_whatsapp(request: SendNDAWhatsAppRequest):
+    """Send NDA document via WhatsApp for digital signing"""
+    try:
+        # Create NDA document
+        nda = NDADocument(
+            id=request.nda_id,
+            recipient_name=request.recipient_name,
+            recipient_email=request.recipient_email,
+            recipient_phone=request.recipient_phone,
+            effective_date=datetime.now(timezone.utc).strftime('%Y-%m-%d')
+        )
+        
+        # Generate HTML
+        nda_html = content_command.generate_nda_html(nda)
+        
+        # Save to database
+        await db.legal_documents.update_one(
+            {"id": request.nda_id},
+            {"$set": {**nda.model_dump(), "html": nda_html, "sent_via_whatsapp": True}},
+            upsert=True
+        )
+        
+        # Create signing request
+        signing_request = NDASigningRequest(
+            nda_id=request.nda_id,
+            recipient_name=request.recipient_name,
+            recipient_phone=request.recipient_phone,
+            recipient_email=request.recipient_email
+        )
+        
+        # Get document URL (in production, this would be a hosted URL)
+        doc_url = f"{os.environ.get('REACT_APP_BACKEND_URL', 'https://hi-ai-app.com')}/api/whatsapp/nda/view/{request.nda_id}"
+        
+        # Send via WhatsApp
+        result = await whatsapp_service.send_nda_for_signing(signing_request, doc_url)
+        
+        # Store pending signature
+        message_handler.add_pending_signature(result)
+        
+        # Save signing request to DB
+        await db.whatsapp_signings.insert_one({**result.model_dump()})
+        
+        return {
+            "success": True,
+            "signing_id": result.id,
+            "status": result.status,
+            "otp_sent": True,
+            "message": f"NDA sent to {request.recipient_phone} via WhatsApp"
+        }
+        
+    except Exception as e:
+        logger.error(f"WhatsApp NDA send error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/whatsapp/offer/send")
+async def send_offer_via_whatsapp(request: SendOfferWhatsAppRequest):
+    """Send Offer Letter via WhatsApp for digital acceptance"""
+    try:
+        # Create Offer document
+        offer = OfferLetter(
+            id=request.offer_id,
+            candidate_name=request.candidate_name,
+            candidate_email=request.candidate_email,
+            position=request.position,
+            division=request.division,
+            salary_annual=0,  # Will be fetched from existing offer
+            joining_date=datetime.now(timezone.utc).strftime('%Y-%m-%d')
+        )
+        
+        # Generate HTML
+        offer_html = content_command.generate_offer_letter_html(offer)
+        
+        # Save to database
+        await db.legal_documents.update_one(
+            {"id": request.offer_id},
+            {"$set": {**offer.model_dump(), "html": offer_html, "sent_via_whatsapp": True}},
+            upsert=True
+        )
+        
+        # Create signing request
+        signing_request = OfferSigningRequest(
+            offer_id=request.offer_id,
+            candidate_name=request.candidate_name,
+            candidate_phone=request.candidate_phone,
+            candidate_email=request.candidate_email,
+            position=request.position,
+            division=request.division
+        )
+        
+        # Get document URL
+        doc_url = f"{os.environ.get('REACT_APP_BACKEND_URL', 'https://hi-ai-app.com')}/api/whatsapp/offer/view/{request.offer_id}"
+        
+        # Send via WhatsApp
+        result = await whatsapp_service.send_offer_for_signing(signing_request, doc_url)
+        
+        # Store pending offer
+        message_handler.add_pending_offer(result)
+        
+        # Save to DB
+        await db.whatsapp_signings.insert_one({**result.model_dump()})
+        
+        return {
+            "success": True,
+            "signing_id": result.id,
+            "status": result.status,
+            "otp_sent": True,
+            "message": f"Offer sent to {request.candidate_phone} via WhatsApp"
+        }
+        
+    except Exception as e:
+        logger.error(f"WhatsApp offer send error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/whatsapp/nda/view/{nda_id}")
+async def view_nda_document(nda_id: str):
+    """View NDA document (returns HTML)"""
+    doc = await db.legal_documents.find_one({"id": nda_id}, {"_id": 0})
+    if not doc or "html" not in doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+    
+    from fastapi.responses import HTMLResponse
+    return HTMLResponse(content=doc["html"])
+
+@api_router.get("/whatsapp/offer/view/{offer_id}")
+async def view_offer_document(offer_id: str):
+    """View Offer document (returns HTML)"""
+    doc = await db.legal_documents.find_one({"id": offer_id}, {"_id": 0})
+    if not doc or "html" not in doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+    
+    from fastapi.responses import HTMLResponse
+    return HTMLResponse(content=doc["html"])
+
+@api_router.post("/whatsapp/verify")
+async def verify_whatsapp_signature(request: VerifySignatureRequest):
+    """Verify OTP and complete signing"""
+    # Find signing request
+    signing = await db.whatsapp_signings.find_one({"id": request.signing_id}, {"_id": 0})
+    
+    if not signing:
+        raise HTTPException(status_code=404, detail="Signing request not found")
+    
+    if signing.get("otp") != request.otp:
+        return {"success": False, "message": "Invalid OTP"}
+    
+    # Check expiry
+    if signing.get("otp_expiry"):
+        expiry = datetime.fromisoformat(signing["otp_expiry"].replace('Z', '+00:00'))
+        if datetime.now(timezone.utc) > expiry:
+            return {"success": False, "message": "OTP expired"}
+    
+    # Mark as signed
+    timestamp = datetime.now(timezone.utc).isoformat()
+    signature_hash = hashlib.sha256(
+        f"{signing['recipient_name'] if 'recipient_name' in signing else signing['candidate_name']}|{request.otp}|{timestamp}".encode()
+    ).hexdigest()[:16].upper()
+    
+    await db.whatsapp_signings.update_one(
+        {"id": request.signing_id},
+        {
+            "$set": {
+                "status": "signed",
+                "otp_verified": True,
+                "signature_hash": signature_hash,
+                "signed_at": timestamp
+            }
+        }
+    )
+    
+    return {
+        "success": True,
+        "status": "signed",
+        "signature_hash": signature_hash,
+        "signed_at": timestamp
+    }
+
+@api_router.post("/whatsapp/incoming")
+async def handle_incoming_whatsapp(message: IncomingWhatsAppMessage):
+    """Handle incoming WhatsApp messages (webhook)"""
+    try:
+        response = await message_handler.handle_message(
+            message.from_phone,
+            message.message
+        )
+        
+        # Send response back
+        if response:
+            await whatsapp_service.send_message(message.from_phone, response)
+        
+        return {"success": True, "response": response}
+        
+    except Exception as e:
+        logger.error(f"WhatsApp incoming message error: {e}")
+        return {"success": False, "error": str(e)}
+
+@api_router.post("/whatsapp/approval/request")
+async def request_founder_approval(request: FounderApprovalCreateRequest):
+    """Request approval from founder via WhatsApp"""
+    approval = FounderApprovalRequest(
+        request_type=request.request_type,
+        subject=request.subject,
+        details=request.details,
+        requester_name=request.requester_name,
+        requester_phone=request.requester_phone
+    )
+    
+    result = await whatsapp_service.request_founder_approval(approval)
+    message_handler.add_pending_approval(result)
+    
+    # Save to DB
+    await db.whatsapp_approvals.insert_one({**result.model_dump()})
+    
+    return {
+        "success": True,
+        "approval_id": result.id,
+        "status": result.status,
+        "message": "Approval request sent to founder"
+    }
+
+@api_router.get("/whatsapp/signings")
+async def list_whatsapp_signings(status: Optional[str] = None, limit: int = 50):
+    """List all WhatsApp signing requests"""
+    query = {}
+    if status:
+        query["status"] = status
+    
+    signings = await db.whatsapp_signings.find(query, {"_id": 0}).sort("created_at", -1).limit(limit).to_list(limit)
+    return {"signings": signings, "total": len(signings)}
+
+@api_router.post("/whatsapp/welcome")
+async def send_welcome_notification(name: str, phone: str, role: str):
+    """Send welcome notification to new team member"""
+    result = await whatsapp_service.send_welcome_notification(name, phone, role)
+    return {"success": True, "message_id": result.id, "status": result.status}
+
+import hashlib  # Add at top if not already there
+
 # Include router
 app.include_router(api_router)
 
