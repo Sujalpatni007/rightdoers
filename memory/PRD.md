@@ -61,6 +61,34 @@ Build **HI AI-APP.COM** - A Human Potential Management & Transformation Company 
 
 **Routes:** `/pricing`, `/kidz`, `/teens`
 
+### ✅ NEW: Voice AI - TALK Component (January 1, 2026)
+**Reid Hoffman Vision: Human-Computer Voice Interaction**
+
+**Technology:** OpenAI Whisper (whisper-1) via Emergent LLM Key
+
+**Voice Commands Supported:**
+| Category | Examples |
+|----------|----------|
+| Navigation | "Go to pricing", "Show my profile", "Open jobs" |
+| Search | "Search jobs for fashion designer", "Find software developer" |
+| Actions | "Start assessment", "Create my profile", "Share talent card" |
+| Questions | "What is my Doer score?" |
+
+**Features:**
+- Real-time speech-to-text transcription
+- Intent parsing (navigate, search, action, question)
+- Text-to-speech responses
+- Floating mic button on all pages
+- Example commands for guidance
+
+**APIs:**
+- `GET /api/voice/status` - Check availability
+- `POST /api/voice/transcribe` - Transcribe audio
+- `POST /api/voice/command` - Full voice command pipeline
+- `POST /api/voice/parse-text` - Parse text as voice command (testing)
+
+**Files:** `/app/backend/voice_ai.py`, `/app/frontend/src/components/VoiceAssistant.jsx`
+
 ### ✅ NEW: Proven Profiles - Anushree's Journey (January 1, 2026)
 **First Real Success Story in Platform**
 
