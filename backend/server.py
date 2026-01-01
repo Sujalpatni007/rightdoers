@@ -1007,17 +1007,17 @@ async def parse_voice_text(text: str):
     }
 
 # ============================================
-# AIMEE CHAT API
+# AIMEE CHAT API (Enhanced with TTS)
 # ============================================
 
-class AIMEEChatRequest(BaseModel):
+class AIMEEChatSimpleRequest(BaseModel):
     message: str
     context: List[Dict[str, str]] = Field(default_factory=list)
 
-@api_router.post("/aimee/chat")
-async def aimee_chat(request: AIMEEChatRequest):
+@api_router.post("/aimee/chat-simple")
+async def aimee_chat_simple(request: AIMEEChatSimpleRequest):
     """
-    Chat with AIMEE AI Assistant
+    Simple chat with AIMEE AI Assistant (no user context required)
     Uses LLM for career guidance conversations
     """
     try:
