@@ -6,7 +6,8 @@ import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import {
   Sparkles, ArrowRight, Brain, Users, Handshake, Star, Zap,
-  GraduationCap, IdCard, Rocket, Share2, Trophy, Search, Award, Globe
+  GraduationCap, IdCard, Rocket, Share2, Trophy, Search, Award, Globe,
+  Calendar, ChevronRight
 } from "lucide-react";
 
 // 5 Entry Points
@@ -41,9 +42,16 @@ export default function LandingPage() {
             <p className="text-white/40 text-[10px]">APP.COM</p>
           </div>
         </div>
-        <Badge className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-300 border-purple-500/30">
-          <Rocket className="w-3 h-3 mr-1" /> PRODUCT LIVE
-        </Badge>
+        <a
+          href="https://calendly.com/doersworld-contact"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group flex items-center gap-2 bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-lg shadow-black/30 hover:shadow-xl hover:shadow-purple-500/20 hover:scale-105 transition-all duration-300 border-2 border-gray-300"
+        >
+          <Calendar className="w-4 h-4 group-hover:animate-pulse" />
+          Book a Call
+          <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        </a>
       </header>
 
       <main className="relative z-10 px-4 pb-24 max-w-lg mx-auto">
