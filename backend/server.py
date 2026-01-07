@@ -14,7 +14,26 @@ from datetime import datetime, timezone
 from enum import Enum
 import random
 import asyncio
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+# Try to import emergentintegrations (Emergent platform only), fallback to mock for local dev
+try:
+    from emergentintegrations.llm.chat import LlmChat, UserMessage
+    HAS_EMERGENT = True
+except ImportError:
+    HAS_EMERGENT = False
+    # Mock classes for local development
+    class UserMessage:
+        def __init__(self, text: str):
+            self.text = text
+    
+    class LlmChat:
+        def __init__(self, **kwargs):
+            self.session_id = kwargs.get('session_id', 'mock')
+        
+        def with_model(self, *args, **kwargs):
+            return self
+        
+        async def send_message(self, msg):
+            return f"[Mock] AIMEE received: {msg.text}. This is a mock response - emergentintegrations not installed."
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')

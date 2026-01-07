@@ -15,10 +15,10 @@ import {
  * Central Talk Hub - The MAIN interaction point for HI AI App
  * Prominently displayed at bottom center - impossible to miss!
  */
-export default function CentralTalkHub({ 
-  onOpenAIMEE, 
+export default function CentralTalkHub({
+  onOpenAIMEE,
   onOpenVoice,
-  hasNewNotification = false 
+  hasNewNotification = false
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [pulseAnimation, setPulseAnimation] = useState(true);
@@ -33,8 +33,8 @@ export default function CentralTalkHub({
 
   return (
     <>
-      {/* Main Central Hub Button */}
-      <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50" data-testid="central-talk-hub">
+      {/* Main Central Hub Button - Now positioned at bottom-left */}
+      <div className="fixed bottom-6 left-6 z-50" data-testid="central-talk-hub">
         <AnimatePresence>
           {isExpanded ? (
             // Expanded State - Show Options
@@ -114,15 +114,15 @@ export default function CentralTalkHub({
             >
               {/* Glow Effect */}
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 blur-xl opacity-60 group-hover:opacity-80 transition-opacity animate-pulse"></div>
-              
+
               {/* Main Button */}
               <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-purple-600 via-indigo-600 to-cyan-600 flex items-center justify-center shadow-2xl border-2 border-white/20">
                 {/* Rotating Ring */}
                 <div className="absolute inset-0 rounded-full border-2 border-dashed border-white/30 animate-spin" style={{ animationDuration: "10s" }}></div>
-                
+
                 {/* Inner Glow */}
                 <div className={`absolute inset-2 rounded-full bg-gradient-to-br from-purple-400 to-cyan-400 ${pulseAnimation ? "opacity-30" : "opacity-50"} transition-opacity duration-1000`}></div>
-                
+
                 {/* Icon */}
                 <div className="relative z-10 flex flex-col items-center">
                   <Sparkles className="w-8 h-8 text-white mb-0.5" />

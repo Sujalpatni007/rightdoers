@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
-import { 
+import {
   Sparkles, ArrowRight, Brain, Users, Handshake, Star, Zap,
   GraduationCap, IdCard, Rocket, Share2, Trophy, Search, Award, Globe
 } from "lucide-react";
@@ -47,7 +47,7 @@ export default function LandingPage() {
       </header>
 
       <main className="relative z-10 px-4 pb-24 max-w-lg mx-auto">
-        
+
         {/* Hero Section */}
         <section className="text-center py-6">
           <motion.div
@@ -58,7 +58,7 @@ export default function LandingPage() {
               🌍 WORLD EXPO 2031 BOUND
             </Badge>
           </motion.div>
-          
+
           <motion.h1
             className="text-4xl md:text-5xl font-bold text-white mb-2"
             initial={{ opacity: 0, scale: 0.9 }}
@@ -66,7 +66,7 @@ export default function LandingPage() {
           >
             Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400">Doers World</span>
           </motion.h1>
-          
+
           <motion.p
             className="text-white/60 text-sm mb-4"
             initial={{ opacity: 0 }}
@@ -100,161 +100,213 @@ export default function LandingPage() {
           <p className="text-center text-white/40 text-xs">The Right Doers Trinity • Shared Foresighted Future</p>
         </section>
 
-        {/* DIRECT ENTRY BUTTONS */}
+        {/* DIRECT ENTRY BUTTONS - Reordered */}
         <section className="space-y-3 mb-8">
           <h2 className="text-white/60 text-xs uppercase tracking-wider text-center mb-2">🎯 Quick Launch</h2>
-          
-          {/* Captain Command Centre - 7 Business Verticals */}
+
+          {/* 1. Will AI Take My Job? - Most Important */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.42 }}
+            transition={{ delay: 0.3 }}
           >
-            <Card 
-              className="bg-gradient-to-r from-[#0a1628]/90 to-[#1a2744]/80 border-[#00ff88]/40 cursor-pointer hover:border-[#00ff88]/70 transition-all"
-              onClick={() => navigate('/command-centre')}
-              data-testid="captain-command-btn"
+            <Card
+              className="bg-gradient-to-r from-rose-600/40 to-red-600/30 border-rose-500/50 cursor-pointer hover:border-rose-400/70 transition-all shadow-lg shadow-rose-500/20"
+              onClick={() => navigate('/aimee-analyzer?concern=jobs')}
+              data-testid="will-ai-take-job-btn"
             >
               <CardContent className="p-4 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-[#00ff88]/20 flex items-center justify-center">
-                  <Award className="w-6 h-6 text-[#00ff88]" />
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-rose-500 to-red-600 flex items-center justify-center shadow-lg">
+                  <Brain className="w-7 h-7 text-white" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-[#00ff88] font-bold font-mono">CAPTAIN COMMAND CENTRE</p>
-                  <p className="text-white/50 text-xs">7 Verticals • AI Onboarding • Varun Mayya 16-Kata</p>
+                  <p className="text-white font-bold text-lg">Will AI Take My Job?</p>
+                  <p className="text-rose-200/70 text-xs">Get your AI readiness analysis</p>
                 </div>
-                <Badge className="bg-[#00ff88]/20 text-[#00ff88] border-0 font-mono">
-                  🎖️ HQ
+                <Badge className="bg-rose-500/40 text-white border-0 font-bold">
+                  🔥 HOT
                 </Badge>
               </CardContent>
             </Card>
           </motion.div>
-          
-          {/* Content Command Centre - GTM */}
+
+          {/* 2. Junicorn Finder */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.45 }}
+            transition={{ delay: 0.35 }}
           >
-            <Card 
-              className="bg-gradient-to-r from-purple-600/30 to-pink-600/20 border-purple-500/30 cursor-pointer hover:border-purple-400/50 transition-all"
-              onClick={() => navigate('/content')}
-              data-testid="content-command-btn"
-            >
-              <CardContent className="p-4 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-purple-500/30 flex items-center justify-center">
-                  <Sparkles className="w-6 h-6 text-purple-300" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-purple-300 font-bold">Content Command Centre</p>
-                  <p className="text-white/50 text-xs">Multi-lingual Reels • Share Cards • GTM</p>
-                </div>
-                <Badge className="bg-pink-500/30 text-pink-300 border-0">
-                  <Rocket className="w-3 h-3 mr-1" /> NEW
-                </Badge>
-              </CardContent>
-            </Card>
-          </motion.div>
-          
-          {/* Gemma Offline AI - Rural India */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.48 }}
-          >
-            <Card 
-              className="bg-gradient-to-r from-emerald-600/30 to-teal-600/20 border-emerald-500/30 cursor-pointer hover:border-emerald-400/50 transition-all"
-              onClick={() => navigate('/gemma')}
-              data-testid="gemma-offline-btn"
-            >
-              <CardContent className="p-4 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-emerald-500/30 flex items-center justify-center">
-                  <Globe className="w-6 h-6 text-emerald-300" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-emerald-300 font-bold">Gemma Offline AI</p>
-                  <p className="text-white/50 text-xs">Telugu • Kannada • Rural India • No Network</p>
-                </div>
-                <Badge className="bg-teal-500/30 text-teal-300 border-0">
-                  🇮🇳 Rural
-                </Badge>
-              </CardContent>
-            </Card>
-          </motion.div>
-          
-          {/* WhatsApp NDA Signing - DOERS LEGAL AI */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.51 }}
-          >
-            <Card 
-              className="bg-gradient-to-r from-green-600/30 to-emerald-600/20 border-green-500/30 cursor-pointer hover:border-green-400/50 transition-all"
-              onClick={() => navigate('/whatsapp')}
-              data-testid="whatsapp-signing-btn"
-            >
-              <CardContent className="p-4 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-green-500/30 flex items-center justify-center">
-                  <Share2 className="w-6 h-6 text-green-300" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-green-300 font-bold">WhatsApp NDA Signing</p>
-                  <p className="text-white/50 text-xs">Digital Signatures • DOERS LEGAL AI</p>
-                </div>
-                <Badge className="bg-emerald-500/30 text-emerald-300 border-0">
-                  ⚖️ Legal
-                </Badge>
-              </CardContent>
-            </Card>
-          </motion.div>
-          
-          {/* Junicorn Finder + ISF */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.5 }}
-          >
-            <Card 
-              className="bg-gradient-to-r from-indigo-600/30 to-blue-600/20 border-indigo-500/30 cursor-pointer hover:border-indigo-400/50 transition-all"
+            <Card
+              className="bg-gradient-to-r from-violet-600/40 to-indigo-600/30 border-violet-500/50 cursor-pointer hover:border-violet-400/70 transition-all shadow-lg shadow-violet-500/20"
               onClick={() => window.open('https://dev.junicornshub.com', '_blank')}
               data-testid="junicorn-btn"
             >
               <CardContent className="p-4 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-indigo-500/30 flex items-center justify-center">
-                  <Search className="w-6 h-6 text-indigo-300" />
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-lg">
+                  <Search className="w-7 h-7 text-white" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-indigo-300 font-bold">Junicorn Finder</p>
-                  <p className="text-white/50 text-xs">ISF Badging • Startup Discovery</p>
+                  <p className="text-white font-bold text-lg">JunicornFinder</p>
+                  <p className="text-violet-200/70 text-xs">ISF Badging • Startup Discovery</p>
                 </div>
-                <Badge className="bg-indigo-500/30 text-indigo-300 border-0">
+                <Badge className="bg-violet-500/40 text-white border-0">
                   <Award className="w-3 h-3 mr-1" /> ISF
                 </Badge>
               </CardContent>
             </Card>
           </motion.div>
 
-          {/* TalentON Hackathon */}
+          {/* 3. TalentON Hackathon */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.6 }}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
           >
-            <Card 
-              className="bg-gradient-to-r from-orange-600/30 to-amber-600/20 border-orange-500/30 cursor-pointer hover:border-orange-400/50 transition-all"
+            <Card
+              className="bg-gradient-to-r from-amber-600/40 to-orange-600/30 border-amber-500/50 cursor-pointer hover:border-amber-400/70 transition-all shadow-lg shadow-amber-500/20"
               onClick={() => navigate('/talenton')}
               data-testid="hackathon-btn"
             >
               <CardContent className="p-4 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-orange-500/30 flex items-center justify-center">
-                  <Trophy className="w-6 h-6 text-orange-300" />
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg">
+                  <Trophy className="w-7 h-7 text-white" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-orange-300 font-bold">TalentON Hackathon</p>
-                  <p className="text-white/50 text-xs">Global Talent Competition</p>
+                  <p className="text-white font-bold text-lg">TalentON Hackathon</p>
+                  <p className="text-amber-200/70 text-xs">Global Talent Competition</p>
                 </div>
-                <Badge className="bg-orange-500/30 text-orange-300 border-0">
+                <Badge className="bg-amber-500/40 text-white border-0">
                   <Zap className="w-3 h-3 mr-1" /> LIVE
+                </Badge>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* 4. Talent Pipeline Program Govt - NEW */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.45 }}
+          >
+            <Card
+              className="bg-gradient-to-r from-blue-600/40 to-cyan-600/30 border-blue-500/50 cursor-pointer hover:border-blue-400/70 transition-all shadow-lg shadow-blue-500/20"
+              onClick={() => navigate('/karnataka-model')}
+              data-testid="talent-pipeline-govt-btn"
+            >
+              <CardContent className="p-4 flex items-center gap-4">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center shadow-lg">
+                  <GraduationCap className="w-7 h-7 text-white" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-white font-bold text-lg">Talent Pipeline Program</p>
+                  <p className="text-blue-200/70 text-xs">Government Initiative • Skill India</p>
+                </div>
+                <Badge className="bg-blue-500/40 text-white border-0 font-bold">
+                  🏛️ GOVT
+                </Badge>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* 5. Gemma Offline AI */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <Card
+              className="bg-gradient-to-r from-emerald-600/40 to-teal-600/30 border-emerald-500/50 cursor-pointer hover:border-emerald-400/70 transition-all shadow-lg shadow-emerald-500/20"
+              onClick={() => navigate('/gemma')}
+              data-testid="gemma-offline-btn"
+            >
+              <CardContent className="p-4 flex items-center gap-4">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg">
+                  <Globe className="w-7 h-7 text-white" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-white font-bold text-lg">Gemma Offline AI</p>
+                  <p className="text-emerald-200/70 text-xs">Telugu • Kannada • Rural India</p>
+                </div>
+                <Badge className="bg-emerald-500/40 text-white border-0">
+                  🇮🇳 Rural
+                </Badge>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* 6. Content Command Centre */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.55 }}
+          >
+            <Card
+              className="bg-gradient-to-r from-fuchsia-600/40 to-pink-600/30 border-fuchsia-500/50 cursor-pointer hover:border-fuchsia-400/70 transition-all shadow-lg shadow-fuchsia-500/20"
+              onClick={() => navigate('/content')}
+              data-testid="content-command-btn"
+            >
+              <CardContent className="p-4 flex items-center gap-4">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-fuchsia-500 to-pink-600 flex items-center justify-center shadow-lg">
+                  <Sparkles className="w-7 h-7 text-white" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-white font-bold text-lg">Content Command Centre</p>
+                  <p className="text-fuchsia-200/70 text-xs">Multi-lingual Reels • GTM</p>
+                </div>
+                <Badge className="bg-fuchsia-500/40 text-white border-0">
+                  <Rocket className="w-3 h-3 mr-1" /> NEW
+                </Badge>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* 7. Captain Command Centre */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+          >
+            <Card
+              className="bg-gradient-to-r from-[#0a1628]/90 to-[#1a2744]/80 border-[#00ff88]/50 cursor-pointer hover:border-[#00ff88]/80 transition-all shadow-lg shadow-[#00ff88]/20"
+              onClick={() => navigate('/command-centre')}
+              data-testid="captain-command-btn"
+            >
+              <CardContent className="p-4 flex items-center gap-4">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#00ff88]/30 to-[#00ff88]/10 border border-[#00ff88]/30 flex items-center justify-center shadow-lg">
+                  <Award className="w-7 h-7 text-[#00ff88]" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-[#00ff88] font-bold text-lg font-mono">Captain Command Centre</p>
+                  <p className="text-white/50 text-xs">7 Verticals • AI Onboarding</p>
+                </div>
+                <Badge className="bg-[#00ff88]/30 text-[#00ff88] border-0 font-mono">
+                  🎖️ HQ
+                </Badge>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* 8. WhatsApp NDA Signing */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.65 }}
+          >
+            <Card
+              className="bg-gradient-to-r from-green-600/40 to-lime-600/30 border-green-500/50 cursor-pointer hover:border-green-400/70 transition-all shadow-lg shadow-green-500/20"
+              onClick={() => navigate('/whatsapp')}
+              data-testid="whatsapp-signing-btn"
+            >
+              <CardContent className="p-4 flex items-center gap-4">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-green-500 to-lime-600 flex items-center justify-center shadow-lg">
+                  <Share2 className="w-7 h-7 text-white" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-white font-bold text-lg">WhatsApp NDA Sign</p>
+                  <p className="text-green-200/70 text-xs">Digital Signatures • DOERS LEGAL AI</p>
+                </div>
+                <Badge className="bg-green-500/40 text-white border-0">
+                  ⚖️ Legal
                 </Badge>
               </CardContent>
             </Card>
@@ -264,7 +316,7 @@ export default function LandingPage() {
         {/* WILL AI? Question Cards */}
         <section className="mb-8">
           <h2 className="text-white text-xl font-bold text-center mb-4">Will <span className="text-purple-400">AI</span> ...?</h2>
-          
+
           <div className="space-y-3">
             <motion.div
               whileHover={{ scale: 1.02 }}
@@ -304,18 +356,18 @@ export default function LandingPage() {
               </Card>
             </motion.div>
           </div>
-          
+
           <p className="text-center text-white/40 text-xs mt-3">👆 Pick • Agent AIMEE will guide you</p>
         </section>
 
         {/* COSMIC FLYWHEEL */}
         <section className="mb-8">
           <h2 className="text-white text-xl font-bold text-center mb-4">Who Are You?</h2>
-          
+
           <div className="relative w-72 h-72 mx-auto">
             {/* Glow */}
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-orange-500/20 blur-2xl" />
-            
+
             {/* Rotating entries */}
             <motion.div
               className="absolute inset-0"
@@ -326,7 +378,7 @@ export default function LandingPage() {
                 const angle = (idx * 72) - 90;
                 const x = 50 + 40 * Math.cos((angle * Math.PI) / 180);
                 const y = 50 + 40 * Math.sin((angle * Math.PI) / 180);
-                
+
                 return (
                   <motion.div
                     key={entry.id}
@@ -372,7 +424,7 @@ export default function LandingPage() {
             <CardContent className="p-4 text-center">
               <h3 className="text-white font-bold mb-1">JOIN THE WAVE</h3>
               <p className="text-white/60 text-xs mb-3">Share your D.P. • DID YOU KNOW? • The Gold Rush is HERE</p>
-              <Button 
+              <Button
                 className="bg-gradient-to-r from-pink-500 to-purple-500"
                 onClick={() => navigate('/dp')}
               >
@@ -396,7 +448,7 @@ export default function LandingPage() {
       {/* Bottom CTA */}
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-slate-950 via-slate-950/95 to-transparent z-20">
         <div className="max-w-lg mx-auto">
-          <Button 
+          <Button
             className="w-full h-14 text-lg font-bold bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90"
             onClick={() => navigate('/aimee-analyzer')}
             data-testid="main-cta"
