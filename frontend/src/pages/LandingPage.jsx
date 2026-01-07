@@ -104,32 +104,6 @@ export default function LandingPage() {
         <section className="space-y-3 mb-8">
           <h2 className="text-white/60 text-xs uppercase tracking-wider text-center mb-2">🎯 Quick Launch</h2>
 
-          {/* 1. Will AI Take My Job? - Most Important */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <Card
-              className="bg-gradient-to-r from-rose-600/40 to-red-600/30 border-rose-500/50 cursor-pointer hover:border-rose-400/70 transition-all shadow-lg shadow-rose-500/20"
-              onClick={() => navigate('/aimee-analyzer?concern=jobs')}
-              data-testid="will-ai-take-job-btn"
-            >
-              <CardContent className="p-4 flex items-center gap-4">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-rose-500 to-red-600 flex items-center justify-center shadow-lg">
-                  <Brain className="w-7 h-7 text-white" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-white font-bold text-lg">Will AI Take My Job?</p>
-                  <p className="text-rose-200/70 text-xs">Get your AI readiness analysis</p>
-                </div>
-                <Badge className="bg-rose-500/40 text-white border-0 font-bold">
-                  🔥 HOT
-                </Badge>
-              </CardContent>
-            </Card>
-          </motion.div>
-
           {/* 2. Junicorn Finder */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}

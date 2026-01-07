@@ -14,26 +14,13 @@ from datetime import datetime, timezone
 from enum import Enum
 import random
 import asyncio
-# Try to import emergentintegrations (Emergent platform only), fallback to mock for local dev
+# Google Generative AI for AIMEE chat
 try:
-    from emergentintegrations.llm.chat import LlmChat, UserMessage
-    HAS_EMERGENT = True
+    import google.generativeai as genai
+    HAS_GEMINI = True
 except ImportError:
-    HAS_EMERGENT = False
-    # Mock classes for local development
-    class UserMessage:
-        def __init__(self, text: str):
-            self.text = text
-    
-    class LlmChat:
-        def __init__(self, **kwargs):
-            self.session_id = kwargs.get('session_id', 'mock')
-        
-        def with_model(self, *args, **kwargs):
-            return self
-        
-        async def send_message(self, msg):
-            return f"[Mock] AIMEE received: {msg.text}. This is a mock response - emergentintegrations not installed."
+    HAS_GEMINI = False
+    genai = None
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -43,8 +30,13 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-# Emergent LLM Key
-EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY')
+# Google AI API Key for Gemini
+GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
+if GOOGLE_API_KEY and genai:
+    genai.configure(api_key=GOOGLE_API_KEY)
+    logging.info("[AIMEE] Google Gemini AI configured successfully")
+else:
+    logging.warning("[AIMEE] GOOGLE_API_KEY not set - AI chat will use fallback responses")
 
 app = FastAPI(title="Right Doers World API", version="1.0.0")
 api_router = APIRouter(prefix="/api")
@@ -536,7 +528,7 @@ async def get_job_applications(job_id: str):
     
     return applications
 
-# AIMEE AI Chat
+# AIMEE AI Chat (with user context)
 @api_router.post("/aimee/chat", response_model=ChatResponse)
 async def aimee_chat(chat_msg: ChatMessage):
     try:
@@ -582,14 +574,23 @@ Guidelines:
 6. Encourage skill development and career growth
 7. Be motivational - remind them they're on the path to their dream career"""
 
-        chat = LlmChat(
-            api_key=EMERGENT_LLM_KEY,
-            session_id=chat_msg.session_id or f"aimee_{chat_msg.user_id}",
-            system_message=system_message
-        ).with_model("gemini", "gemini-3-flash-preview")
-
-        user_message = UserMessage(text=chat_msg.message)
-        response = await chat.send_message(user_message)
+        # Check if Gemini is available
+        if not HAS_GEMINI or not GOOGLE_API_KEY:
+            logger.warning("[AIMEE] Gemini not available for /aimee/chat")
+            return ChatResponse(
+                response="I'm AIMEE, your career guide! While AI is being configured, explore Jobs4Me or complete your DoersProfile. What would you like to do?",
+                recommended_jobs=None
+            )
+        
+        # Initialize Gemini model
+        model = genai.GenerativeModel(
+            model_name='gemini-2.5-flash',
+            system_instruction=system_message
+        )
+        
+        chat = model.start_chat(history=[])
+        response = chat.send_message(chat_msg.message)
+        response_text = response.text
         
         # Find recommended jobs based on user query
         recommended = []
@@ -600,12 +601,13 @@ Guidelines:
             }, {"_id": 0}).limit(3).to_list(3)
             recommended = matching_jobs
         
-        return ChatResponse(response=response, recommended_jobs=recommended if recommended else None)
+        logger.info(f"[AIMEE] Chat response for user {chat_msg.user_id}")
+        return ChatResponse(response=response_text, recommended_jobs=recommended if recommended else None)
         
     except Exception as e:
-        logging.error(f"AIMEE chat error: {e}")
+        logging.error(f"[AIMEE] Chat error: {e}")
         return ChatResponse(
-            response="I'm here to help you find your dream job! Tell me about your skills, interests, or the kind of work you're looking for.",
+            response="I'm here to help you find your dream job! Tell me about your skills, interests, or the kind of work you're looking for. 🚀",
             recommended_jobs=None
         )
 
@@ -1041,9 +1043,14 @@ class AIMEEChatSimpleRequest(BaseModel):
 async def aimee_chat_simple(request: AIMEEChatSimpleRequest):
     """
     Simple chat with AIMEE AI Assistant (no user context required)
-    Uses LLM for career guidance conversations
+    Uses Google Gemini for career guidance conversations
     """
     try:
+        # Check if Gemini is available
+        if not HAS_GEMINI or not GOOGLE_API_KEY:
+            logger.warning("[AIMEE] Gemini not available - using fallback response")
+            return {"response": "I'm AIMEE, your career assistant! While AI is being configured, you can explore your DoersProfile, check Jobs4Me for opportunities, or view Proven Profiles for inspiration. How can I help you today? 🚀"}
+        
         # Build system prompt for AIMEE
         system_prompt = """You are AIMEE (AI-Mentored Intelligent Employment Engine), a friendly and knowledgeable AI career transformation assistant for the Right Doers platform.
 
@@ -1068,40 +1075,34 @@ Always encourage users to:
 
 Keep responses concise (under 200 words) and end with a helpful suggestion or question."""
 
-        # Create chat instance
-        llm_key = os.environ.get("EMERGENT_LLM_KEY") or os.environ.get("OPENAI_API_KEY")
-        if not llm_key:
-            return {"response": "I'm here to help! While my full AI capabilities are loading, you can explore your DoersProfile, check Jobs4Me for opportunities, or view Proven Profiles for inspiration. What interests you most?"}
-        
-        import uuid
-        session_id = str(uuid.uuid4())
-        
-        chat = LlmChat(
-            api_key=llm_key,
-            session_id=session_id,
-            system_message=system_prompt
-        ).with_model("gemini", "gemini-3-flash-preview")
-        
-        # Add context from previous messages
+        # Build conversation history for context
+        history = []
         for msg in request.context[-6:]:  # Last 6 messages for context
-            if msg.get("role") == "user":
-                chat.add_user_message(msg.get("content", ""))
-            elif msg.get("role") == "assistant":
-                chat.add_assistant_message(msg.get("content", ""))
+            role = "user" if msg.get("role") == "user" else "model"
+            history.append({"role": role, "parts": [msg.get("content", "")]})
         
-        # Get response using UserMessage
-        user_message = UserMessage(text=request.message)
-        response = await chat.send_message(user_message)
+        # Initialize Gemini model and chat
+        model = genai.GenerativeModel(
+            model_name='gemini-2.5-flash',
+            system_instruction=system_prompt
+        )
         
-        return {"response": response}
+        chat = model.start_chat(history=history)
+        
+        # Send message and get response
+        response = chat.send_message(request.message)
+        response_text = response.text
+        
+        logger.info(f"[AIMEE] Generated response for: {request.message[:50]}...")
+        return {"response": response_text}
         
     except Exception as e:
-        logger.error(f"AIMEE chat error: {e}")
-        # Fallback response
-        return {"response": f"I'm processing your question about '{request.message[:50]}...'. Meanwhile, explore your DoersProfile to see your career potential! 🚀"}
+        logger.error(f"[AIMEE] Chat error: {e}")
+        # Informative fallback response
+        return {"response": f"I'm having a brief moment! 🤔 Your question about '{request.message[:30]}...' is important. Try refreshing, or explore your DoersProfile while I reconnect! 🚀"}
 
 # ============================================
-# AIMEE TEXT-TO-SPEECH APIs
+# AIMEE TEXT-TO-SPEECH APIs 
 # ============================================
 
 from aimee_voice import aimee_voice

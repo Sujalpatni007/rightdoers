@@ -152,8 +152,8 @@ export default function CentralTalkHub({
         </AnimatePresence>
       </div>
 
-      {/* Side Quick Access Buttons (smaller, for advanced users) */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-2">
+      {/* Side Quick Access Buttons (HIDDEN FOR NOW) */}
+      {/* <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-2">
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -163,7 +163,7 @@ export default function CentralTalkHub({
         >
           <Volume2 className="w-5 h-5 text-white" />
         </motion.button>
-      </div>
+      </div> */}
     </>
   );
 }

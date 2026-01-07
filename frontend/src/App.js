@@ -147,9 +147,9 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    const redirectPath = user.role === "employer" ? "/employer" : 
-                         user.role === "admin" ? "/government" : 
-                         user.role === "consumer" ? "/services" : "/dashboard";
+    const redirectPath = user.role === "employer" ? "/employer" :
+      user.role === "admin" ? "/government" :
+        user.role === "consumer" ? "/services" : "/dashboard";
     return <Navigate to={redirectPath} replace />;
   }
 
@@ -180,7 +180,7 @@ function AppContent() {
       <Route path="/" element={<SplashScreen />} />
       <Route path="/welcome" element={<LandingPage />} />
       <Route path="/auth" element={<AuthPage />} />
-      
+
       {/* Candidate/Talent Flow */}
       <Route path="/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
       <Route path="/psychometric" element={<ProtectedRoute><PsychometricTest /></ProtectedRoute>} />
@@ -205,7 +205,7 @@ function AppContent() {
       <Route path="/office" element={<FounderDashboard />} />
       <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
       <Route path="/learn" element={<ProtectedRoute><LearnPage /></ProtectedRoute>} />
-      
+
       {/* Nuclear Engineering Talent Pipeline Flow */}
       <Route path="/amazing-people" element={<ProtectedRoute><AmazingPeoplePage /></ProtectedRoute>} />
       <Route path="/self-rating" element={<ProtectedRoute><SelfRatingPage /></ProtectedRoute>} />
@@ -218,121 +218,121 @@ function AppContent() {
       <Route path="/progress-dashboard" element={<ProtectedRoute><ProgressDashboard /></ProtectedRoute>} />
       <Route path="/rewards" element={<ProtectedRoute><RewardsPage /></ProtectedRoute>} />
       <Route path="/course/nuclear-science" element={<NuclearCoursePage />} />
-      
+
       {/* Consumer Flow */}
       <Route path="/services" element={<ConsumerLanding />} />
       <Route path="/providers/:category" element={<ServiceProviders />} />
-      
+
       {/* Corporate/PowerMech Flow */}
       <Route path="/corporate" element={<CorporateDashboard />} />
       <Route path="/corporate/pipeline-builder" element={<PipelineBuilder />} />
-      
+
       {/* World Wheel & Work Wheel */}
       <Route path="/world-wheel" element={<WorldWheelPage />} />
       <Route path="/work-wheel" element={<WorkWheelPage />} />
-      
+
       {/* Government Programs */}
       <Route path="/karnataka-model" element={<KarnatakaModelPage />} />
       <Route path="/karnataka-schools" element={<KarnatakaSchoolsDashboard />} />
-      
+
       {/* AI Agents Hub */}
       <Route path="/agents" element={<AgentHubPage />} />
-      
+
       {/* D-COIN Ecosystem Routes */}
       <Route path="/clubs" element={<ProtectedRoute><CapabilityClubsPage /></ProtectedRoute>} />
       <Route path="/gigs" element={<ProtectedRoute><GigMarketplacePage /></ProtectedRoute>} />
       <Route path="/ecoin" element={<ProtectedRoute><EcoinWalletPage /></ProtectedRoute>} />
       <Route path="/dcoin" element={<ProtectedRoute><EcoinWalletPage /></ProtectedRoute>} />
       <Route path="/dream-siip" element={<DoersDreamSIIPPage />} />
-      
+
       {/* DOERS ONE Family Dashboard */}
       <Route path="/family" element={<DoersOneFamily />} />
       <Route path="/doers-one" element={<DoersOneFamily />} />
-      
+
       {/* Profile Comparison - DoersScore Battle */}
       <Route path="/compare" element={<ProfileComparison />} />
       <Route path="/battle" element={<ProfileComparison />} />
-      
+
       {/* Division Director Dashboards */}
       <Route path="/divisions" element={<DivisionDashboards />} />
       <Route path="/divisions/:divisionId" element={<DivisionDashboards />} />
       <Route path="/director" element={<DivisionDashboards />} />
-      
+
       {/* Streak System - Content + Campaign */}
       <Route path="/streaks" element={<StreakSystem />} />
       <Route path="/streak" element={<StreakSystem />} />
-      
+
       {/* Proven Profiles - Success Stories */}
       <Route path="/proven-profiles" element={<ProvenProfiles />} />
       <Route path="/success-stories" element={<ProvenProfiles />} />
       <Route path="/anushree" element={<ProvenProfiles />} />
-      
+
       {/* Jobs4Me - AI Job Matching */}
       <Route path="/jobs4me" element={<Jobs4Me />} />
       <Route path="/job-match" element={<Jobs4Me />} />
       <Route path="/ai-jobs" element={<Jobs4Me />} />
-      
+
       {/* Pricing & Subscription */}
       <Route path="/pricing" element={<PricingPage />} />
       <Route path="/subscribe" element={<PricingPage />} />
       <Route path="/plans" element={<PricingPage />} />
-      
+
       {/* DOER Tier Dashboards */}
       <Route path="/kidz" element={<DoerKidzDashboard />} />
       <Route path="/doer-kidz" element={<DoerKidzDashboard />} />
       <Route path="/teens" element={<DoerTeensDashboard />} />
       <Route path="/doer-teens" element={<DoerTeensDashboard />} />
-      
+
       {/* Content Command Centre - GTM Content Factory */}
       <Route path="/content" element={<ContentCommandCentre />} />
       <Route path="/content-command" element={<ContentCommandCentre />} />
       <Route path="/content-factory" element={<ContentCommandCentre />} />
       <Route path="/reel-creator" element={<ContentCommandCentre />} />
-      
+
       {/* Gemma Offline AI - For Rural India */}
       <Route path="/gemma" element={<GemmaOffline />} />
       <Route path="/offline-ai" element={<GemmaOffline />} />
       <Route path="/rural" element={<GemmaOffline />} />
-      
+
       {/* WhatsApp NDA Signing - DOERS LEGAL AI */}
       <Route path="/whatsapp" element={<WhatsAppSigning />} />
       <Route path="/whatsapp-signing" element={<WhatsAppSigning />} />
       <Route path="/nda-signing" element={<WhatsAppSigning />} />
-      
+
       {/* Captain Command Centre - 7 Business Verticals */}
       <Route path="/command-centre" element={<CaptainCommandCentre />} />
       <Route path="/captain" element={<CaptainCommandCentre />} />
       <Route path="/verticals" element={<CaptainCommandCentre />} />
       <Route path="/hq" element={<CaptainCommandCentre />} />
-      
+
       {/* Mission Board - Dubai Launch Tracker */}
       <Route path="/mission-board" element={<MissionBoard />} />
       <Route path="/launch" element={<MissionBoard />} />
       <Route path="/dubai" element={<MissionBoard />} />
-      
+
       {/* Launch Announcement Page */}
       <Route path="/launch-announcement" element={<LaunchAnnouncement />} />
       <Route path="/announcement" element={<LaunchAnnouncement />} />
       <Route path="/happy-new-year" element={<LaunchAnnouncement />} />
       <Route path="/2026" element={<LaunchAnnouncement />} />
-      
+
       {/* Multi-Lingual Launch Announcement */}
       <Route path="/announce/:lang" element={<LaunchAnnouncementMultiLang />} />
       <Route path="/announce" element={<LaunchAnnouncementMultiLang />} />
-      
+
       {/* Employer Flow */}
       <Route path="/employer" element={<ProtectedRoute allowedRoles={["employer"]}><EmployerDashboard /></ProtectedRoute>} />
       <Route path="/employer/post" element={<ProtectedRoute allowedRoles={["employer"]}><PostJobPage /></ProtectedRoute>} />
       <Route path="/employer/applicants/:jobId" element={<ProtectedRoute allowedRoles={["employer"]}><ApplicantsPage /></ProtectedRoute>} />
-      
+
       {/* Government Flow */}
       <Route path="/government" element={<ProtectedRoute allowedRoles={["admin"]}><GovernmentDashboard /></ProtectedRoute>} />
       <Route path="/government/district/:districtId" element={<ProtectedRoute allowedRoles={["admin"]}><DistrictDashboard /></ProtectedRoute>} />
-      
+
       {/* Junicorn NET Flow */}
       <Route path="/junicorn" element={<JunicornLanding />} />
       <Route path="/junicorn/apply" element={<ProtectedRoute><JunicornApply /></ProtectedRoute>} />
-      
+
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
@@ -348,7 +348,7 @@ function AppWithVoice() {
   const [showVoice, setShowVoice] = useState(false);
   const [showAIMEE, setShowAIMEE] = useState(false);
   const [hasNotification, setHasNotification] = useState(false);
-  
+
   // Initialize push notifications on mount
   useEffect(() => {
     const initNotifications = async () => {
@@ -358,37 +358,37 @@ function AppWithVoice() {
         missionNotifier.start(60000); // Check every minute
       }
     };
-    
+
     initNotifications();
-    
+
     return () => {
       missionNotifier.stop();
     };
   }, []);
-  
+
   return (
     <>
       <AppContent />
-      
+
       {/* Central Talk Hub - Main CTA at bottom center */}
-      <CentralTalkHub 
+      <CentralTalkHub
         onOpenAIMEE={() => setShowAIMEE(true)}
         onOpenVoice={() => setShowVoice(true)}
         hasNewNotification={hasNotification}
       />
-      
+
       {/* AIMEE Chat Panel */}
-      <AIMEEChat 
-        isOpen={showAIMEE} 
-        onClose={() => setShowAIMEE(false)} 
+      <AIMEEChat
+        isOpen={showAIMEE}
+        onClose={() => setShowAIMEE(false)}
       />
-      
-      {/* Voice Assistant Panel */}
-      <VoiceAssistant 
+
+      {/* Voice Assistant Panel - HIDDEN FOR NOW */}
+      {/* <VoiceAssistant 
         isOpen={showVoice} 
         onClose={() => setShowVoice(false)} 
         position="bottom-right"
-      />
+      /> */}
     </>
   );
 }
