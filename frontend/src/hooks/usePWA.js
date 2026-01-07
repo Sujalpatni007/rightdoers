@@ -29,9 +29,9 @@ export function usePWA() {
       const isIOS = window.navigator.standalone === true;
       setIsInstalled(isStandalone || isIOS);
     };
-    
+
     checkInstalled();
-    
+
     window.matchMedia('(display-mode: standalone)').addEventListener('change', checkInstalled);
     return () => {
       window.matchMedia('(display-mode: standalone)').removeEventListener('change', checkInstalled);
@@ -43,7 +43,7 @@ export function usePWA() {
     const handleOnline = () => {
       setIsOnline(true);
       console.log('[HI AI-APP] Network: Online');
-      
+
       // Trigger background sync
       if (swRegistration && 'sync' in swRegistration) {
         swRegistration.sync.register('sync-gemma-conversations').catch(err => {
@@ -51,7 +51,7 @@ export function usePWA() {
         });
       }
     };
-    
+
     const handleOffline = () => {
       setIsOnline(false);
       console.log('[HI AI-APP] Network: Offline - Using cached data');
@@ -91,46 +91,11 @@ export function usePWA() {
     };
   }, []);
 
-  // Register service worker
+  // Service Worker registration disabled for Vercel deployment
+  // PWA features are not needed for web-only deployment
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/service-worker.js')
-        .then((registration) => {
-          console.log('[HI AI-APP] Service Worker registered:', registration.scope);
-          setSwRegistration(registration);
-          
-          // Check for updates
-          registration.addEventListener('updatefound', () => {
-            const newWorker = registration.installing;
-            if (newWorker) {
-              newWorker.addEventListener('statechange', () => {
-                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                  setUpdateAvailable(true);
-                  console.log('[HI AI-APP] Update available');
-                }
-              });
-            }
-          });
-          
-          // Get SW version
-          if (registration.active) {
-            const messageChannel = new MessageChannel();
-            messageChannel.port1.onmessage = (event) => {
-              setSwVersion(event.data.version);
-            };
-            registration.active.postMessage({ type: 'GET_VERSION' }, [messageChannel.port2]);
-          }
-        })
-        .catch((error) => {
-          console.error('[HI AI-APP] Service Worker registration failed:', error);
-        });
-
-      // Handle controller change
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        console.log('[HI AI-APP] New service worker activated');
-      });
-    }
+    // Service worker disabled - no registration
+    console.log('[HI AI-APP] Service Worker disabled for web deployment');
   }, []);
 
   // Install app
@@ -144,10 +109,10 @@ export function usePWA() {
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       console.log('[HI AI-APP] Install prompt outcome:', outcome);
-      
+
       setDeferredPrompt(null);
       setIsInstallable(false);
-      
+
       return outcome === 'accepted';
     } catch (error) {
       console.error('[HI AI-APP] Install error:', error);
@@ -213,7 +178,7 @@ export function usePWA() {
     isInstalled,
     swVersion,
     updateAvailable,
-    
+
     // Actions
     installApp,
     updateApp,
@@ -241,31 +206,31 @@ export function useOfflineStorage() {
 
     request.onupgradeneeded = (event) => {
       const database = event.target.result;
-      
+
       // Store for Gemma conversations
       if (!database.objectStoreNames.contains('gemma_conversations')) {
         const convStore = database.createObjectStore('gemma_conversations', { keyPath: 'id', autoIncrement: true });
         convStore.createIndex('language', 'language', { unique: false });
         convStore.createIndex('timestamp', 'timestamp', { unique: false });
       }
-      
+
       // Store for cached career data
       if (!database.objectStoreNames.contains('career_data')) {
         const careerStore = database.createObjectStore('career_data', { keyPath: 'category' });
         careerStore.createIndex('language', 'language', { unique: false });
       }
-      
+
       // Store for user profile (works offline)
       if (!database.objectStoreNames.contains('user_profile')) {
         database.createObjectStore('user_profile', { keyPath: 'id' });
       }
-      
+
       // Store for pending sync actions
       if (!database.objectStoreNames.contains('pending_sync')) {
         const syncStore = database.createObjectStore('pending_sync', { keyPath: 'id', autoIncrement: true });
         syncStore.createIndex('type', 'type', { unique: false });
       }
-      
+
       console.log('[HI AI-APP] IndexedDB schema upgraded');
     };
 
@@ -279,16 +244,16 @@ export function useOfflineStorage() {
   // Save conversation
   const saveConversation = useCallback(async (conversation) => {
     if (!db) return null;
-    
+
     return new Promise((resolve, reject) => {
       const transaction = db.transaction(['gemma_conversations'], 'readwrite');
       const store = transaction.objectStore('gemma_conversations');
-      
+
       const request = store.add({
         ...conversation,
         timestamp: Date.now()
       });
-      
+
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
     });
@@ -297,11 +262,11 @@ export function useOfflineStorage() {
   // Get conversations by language
   const getConversations = useCallback(async (language = null, limit = 50) => {
     if (!db) return [];
-    
+
     return new Promise((resolve, reject) => {
       const transaction = db.transaction(['gemma_conversations'], 'readonly');
       const store = transaction.objectStore('gemma_conversations');
-      
+
       let request;
       if (language) {
         const index = store.index('language');
@@ -309,7 +274,7 @@ export function useOfflineStorage() {
       } else {
         request = store.getAll(null, limit);
       }
-      
+
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
     });
@@ -318,18 +283,18 @@ export function useOfflineStorage() {
   // Save career data for offline use
   const saveCareerData = useCallback(async (category, language, data) => {
     if (!db) return null;
-    
+
     return new Promise((resolve, reject) => {
       const transaction = db.transaction(['career_data'], 'readwrite');
       const store = transaction.objectStore('career_data');
-      
+
       const request = store.put({
         category: `${category}_${language}`,
         language,
         data,
         cached_at: Date.now()
       });
-      
+
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
     });
@@ -338,13 +303,13 @@ export function useOfflineStorage() {
   // Get career data
   const getCareerData = useCallback(async (category, language) => {
     if (!db) return null;
-    
+
     return new Promise((resolve, reject) => {
       const transaction = db.transaction(['career_data'], 'readonly');
       const store = transaction.objectStore('career_data');
-      
+
       const request = store.get(`${category}_${language}`);
-      
+
       request.onsuccess = () => resolve(request.result?.data || null);
       request.onerror = () => reject(request.error);
     });
@@ -353,16 +318,16 @@ export function useOfflineStorage() {
   // Add action to sync queue
   const addToSyncQueue = useCallback(async (action) => {
     if (!db) return null;
-    
+
     return new Promise((resolve, reject) => {
       const transaction = db.transaction(['pending_sync'], 'readwrite');
       const store = transaction.objectStore('pending_sync');
-      
+
       const request = store.add({
         ...action,
         created_at: Date.now()
       });
-      
+
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
     });
@@ -371,16 +336,16 @@ export function useOfflineStorage() {
   // Process sync queue
   const processSyncQueue = useCallback(async () => {
     if (!db) return [];
-    
+
     return new Promise((resolve, reject) => {
       const transaction = db.transaction(['pending_sync'], 'readwrite');
       const store = transaction.objectStore('pending_sync');
-      
+
       const request = store.getAll();
-      
+
       request.onsuccess = async () => {
         const actions = request.result;
-        
+
         // Process each action
         for (const action of actions) {
           try {
@@ -390,7 +355,7 @@ export function useOfflineStorage() {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(action.body)
             });
-            
+
             if (response.ok) {
               // Remove from queue
               store.delete(action.id);
@@ -399,10 +364,10 @@ export function useOfflineStorage() {
             console.log('[HI AI-APP] Sync action failed, will retry:', action.id);
           }
         }
-        
+
         resolve(actions);
       };
-      
+
       request.onerror = () => reject(request.error);
     });
   }, [db]);

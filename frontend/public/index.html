@@ -57,20 +57,6 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
 
-    <!-- Service Worker Registration -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function () {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(function (registration) {
-                        console.log('HI AI-APP: ServiceWorker registered', registration.scope);
-                    })
-                    .catch(function (error) {
-                        console.log('HI AI-APP: ServiceWorker registration failed', error);
-                    });
-            });
-        }
-    </script>
 
     <!-- Block any Emergent badge injection (cleanup from platform) -->
     <script>
