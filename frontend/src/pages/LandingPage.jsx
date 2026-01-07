@@ -189,19 +189,19 @@ export default function LandingPage() {
             transition={{ delay: 0.45 }}
           >
             <Card
-              className="bg-gradient-to-r from-blue-600/40 to-cyan-600/30 border-blue-500/50 cursor-pointer hover:border-blue-400/70 transition-all shadow-lg shadow-blue-500/20"
+              className="bg-gradient-to-r from-[#0a1628]/90 to-[#1a2744]/80 border-[#00ff88]/50 cursor-pointer hover:border-[#00ff88]/80 transition-all shadow-lg shadow-[#00ff88]/20"
               onClick={() => navigate('/karnataka-model')}
               data-testid="talent-pipeline-govt-btn"
             >
               <CardContent className="p-4 flex items-center gap-4">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center shadow-lg">
-                  <GraduationCap className="w-7 h-7 text-white" />
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#00ff88]/30 to-[#00ff88]/10 border border-[#00ff88]/30 flex items-center justify-center shadow-lg">
+                  <GraduationCap className="w-7 h-7 text-[#00ff88]" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-white font-bold text-lg">Talent Pipeline Program</p>
-                  <p className="text-blue-200/70 text-xs">Government Initiative • Skill India</p>
+                  <p className="text-[#00ff88] font-bold text-lg font-mono">Talent Pipeline Program</p>
+                  <p className="text-white/50 text-xs">Government Initiative • Skill India</p>
                 </div>
-                <Badge className="bg-blue-500/40 text-white border-0 font-bold">
+                <Badge className="bg-[#00ff88]/30 text-[#00ff88] border-0 font-bold">
                   🏛️ GOVT
                 </Badge>
               </CardContent>
@@ -267,19 +267,19 @@ export default function LandingPage() {
             transition={{ delay: 0.6 }}
           >
             <Card
-              className="bg-gradient-to-r from-[#0a1628]/90 to-[#1a2744]/80 border-[#00ff88]/50 cursor-pointer hover:border-[#00ff88]/80 transition-all shadow-lg shadow-[#00ff88]/20"
+              className="bg-gradient-to-r from-blue-600/40 to-cyan-600/30 border-blue-500/50 cursor-pointer hover:border-blue-400/70 transition-all shadow-lg shadow-blue-500/20"
               onClick={() => navigate('/command-centre')}
               data-testid="captain-command-btn"
             >
               <CardContent className="p-4 flex items-center gap-4">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#00ff88]/30 to-[#00ff88]/10 border border-[#00ff88]/30 flex items-center justify-center shadow-lg">
-                  <Award className="w-7 h-7 text-[#00ff88]" />
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center shadow-lg">
+                  <Award className="w-7 h-7 text-white" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-[#00ff88] font-bold text-lg font-mono">Captain Command Centre</p>
-                  <p className="text-white/50 text-xs">7 Verticals • AI Onboarding</p>
+                  <p className="text-white font-bold text-lg">Captain Command Centre</p>
+                  <p className="text-blue-200/70 text-xs">7 Verticals • AI Onboarding</p>
                 </div>
-                <Badge className="bg-[#00ff88]/30 text-[#00ff88] border-0 font-mono">
+                <Badge className="bg-blue-500/40 text-white border-0">
                   🎖️ HQ
                 </Badge>
               </CardContent>
