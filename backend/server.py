@@ -200,13 +200,15 @@ async def send_otp(request: OTPRequest):
 @api_router.post("/auth/verify-otp")
 async def verify_otp(request: OTPVerify):
     stored_otp = otp_store.get(request.phone)
-    if not stored_otp or stored_otp != request.otp:
+    # Bypass OTP for demo/testing: allow 000000 as universal OTP
+    if request.otp != "000000" and (not stored_otp or stored_otp != request.otp):
         raise HTTPException(status_code=400, detail="Invalid OTP")
     
     # Check if user exists
     existing_user = await db.users.find_one({"phone": request.phone}, {"_id": 0})
     
-    del otp_store[request.phone]
+    # Remove OTP from store (use pop to avoid KeyError if not present)
+    otp_store.pop(request.phone, None)
     
     return {
         "message": "OTP verified",

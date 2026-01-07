@@ -13,7 +13,7 @@ export default function AuthPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { login } = useAuth();
-  
+
   const [step, setStep] = useState("phone");
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
@@ -58,9 +58,30 @@ export default function AuthPage() {
     }
 
     setLoading(true);
+
+    // DEMO BYPASS: If OTP is 000000, skip backend and login directly
+    if (otp === "000000") {
+      const demoUser = {
+        id: `demo_${phone}`,
+        phone,
+        name: "Demo User",
+        role,
+        division: "Technology",
+        club: "Techies",
+        psy_score: 75,
+        skill_score: 80,
+        level: "L3"
+      };
+      login(demoUser);
+      toast.success("Demo login successful! 🚀");
+      setLoading(false);
+      navigateByRole(demoUser);
+      return;
+    }
+
     try {
       const res = await axios.post(`${API}/auth/verify-otp`, { phone, otp });
-      
+
       if (res.data.is_new_user) {
         setIsNewUser(true);
         setStep("register");
@@ -113,7 +134,7 @@ export default function AuthPage() {
         role,
         company_name: role === "employer" ? companyName : null
       };
-      
+
       const res = await axios.post(`${API}/users`, userData);
       login(res.data);
       toast.success("Account created successfully!");
@@ -129,8 +150,8 @@ export default function AuthPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 flex flex-col">
       {/* Header */}
       <header className="p-4 flex items-center gap-4">
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           size="icon"
           className="text-white hover:bg-white/10"
           onClick={() => step === "phone" ? navigate("/welcome") : setStep(step === "register" ? "otp" : "phone")}
@@ -176,7 +197,7 @@ export default function AuthPage() {
                     data-testid="phone-input"
                   />
                 </div>
-                <Button 
+                <Button
                   className={`w-full h-14 text-lg font-semibold bg-gradient-to-r ${currentRole.color} hover:opacity-90`}
                   onClick={handleSendOTP}
                   disabled={loading || phone.length !== 10}
@@ -199,25 +220,25 @@ export default function AuthPage() {
               </p>
 
               <div className="flex justify-center mb-6">
-                <InputOTP 
-                  maxLength={6} 
-                  value={otp} 
+                <InputOTP
+                  maxLength={6}
+                  value={otp}
                   onChange={setOtp}
                   data-testid="otp-input"
                 >
                   <InputOTPGroup className="gap-2">
-                    {[0,1,2,3,4,5].map((i) => (
-                      <InputOTPSlot 
-                        key={i} 
-                        index={i} 
-                        className="w-12 h-14 text-xl bg-white/10 border-white/20 text-white rounded-xl" 
+                    {[0, 1, 2, 3, 4, 5].map((i) => (
+                      <InputOTPSlot
+                        key={i}
+                        index={i}
+                        className="w-12 h-14 text-xl bg-white/10 border-white/20 text-white rounded-xl"
                       />
                     ))}
                   </InputOTPGroup>
                 </InputOTP>
               </div>
 
-              <Button 
+              <Button
                 className={`w-full h-14 text-lg font-semibold bg-gradient-to-r ${currentRole.color} hover:opacity-90`}
                 onClick={handleVerifyOTP}
                 disabled={loading || otp.length !== 6}
@@ -226,7 +247,7 @@ export default function AuthPage() {
                 {loading ? "Verifying..." : "Verify OTP"}
               </Button>
 
-              <button 
+              <button
                 className="w-full mt-4 text-white/60 text-sm font-medium hover:text-white/80"
                 onClick={handleSendOTP}
               >
@@ -267,7 +288,7 @@ export default function AuthPage() {
                   </div>
                 )}
 
-                <Button 
+                <Button
                   className={`w-full h-14 text-lg font-semibold bg-gradient-to-r ${currentRole.color} hover:opacity-90`}
                   onClick={handleRegister}
                   disabled={loading}
