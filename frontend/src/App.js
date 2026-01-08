@@ -383,12 +383,12 @@ function AppWithVoice() {
         onClose={() => setShowAIMEE(false)}
       />
 
-      {/* Voice Assistant Panel - HIDDEN FOR NOW */}
-      {/* <VoiceAssistant 
-        isOpen={showVoice} 
-        onClose={() => setShowVoice(false)} 
+      {/* Voice Assistant Panel - Web Speech API + Gemini */}
+      <VoiceAssistant
+        isOpen={showVoice}
+        onClose={() => setShowVoice(false)}
         position="bottom-right"
-      /> */}
+      />
     </>
   );
 }

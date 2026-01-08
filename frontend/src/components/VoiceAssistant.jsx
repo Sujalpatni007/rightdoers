@@ -28,10 +28,10 @@ const VOICE_EXAMPLES = [
   { text: "What is my Doer score?", icon: HelpCircle, category: "Question" }
 ];
 
-export default function VoiceAssistant({ 
-  onClose, 
+export default function VoiceAssistant({
+  onClose,
   isOpen = false,
-  position = "bottom-right" // bottom-right, bottom-center, floating
+  position = "bottom-right"
 }) {
   const navigate = useNavigate();
   const [isListening, setIsListening] = useState(false);
@@ -40,177 +40,178 @@ export default function VoiceAssistant({
   const [response, setResponse] = useState("");
   const [isAvailable, setIsAvailable] = useState(null);
   const [showExamples, setShowExamples] = useState(true);
-  
-  const mediaRecorderRef = useRef(null);
-  const audioChunksRef = useRef([]);
-  const streamRef = useRef(null);
 
-  // Check Voice AI availability
+  const recognitionRef = useRef(null);
+
+  // Check if Web Speech API is available
   useEffect(() => {
-    checkAvailability();
-  }, []);
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    setIsAvailable(!!SpeechRecognition);
 
-  const checkAvailability = async () => {
-    try {
-      const res = await axios.get(`${API}/voice/status`);
-      setIsAvailable(res.data.available);
-    } catch (error) {
-      setIsAvailable(false);
-    }
-  };
+    if (SpeechRecognition) {
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.lang = 'en-US';
+      recognitionRef.current.interimResults = false;
+      recognitionRef.current.continuous = false;
 
-  // Start recording
-  const startListening = useCallback(async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        audio: {
-          channelCount: 1,
-          sampleRate: 16000
-        } 
-      });
-      
-      streamRef.current = stream;
-      audioChunksRef.current = [];
-      
-      const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4'
-      });
-      
-      mediaRecorderRef.current = mediaRecorder;
-      
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          audioChunksRef.current.push(event.data);
+      recognitionRef.current.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        console.log("[Voice AI] Transcript:", transcript);
+        setTranscription(transcript);
+        setIsListening(false);
+        processWithGemini(transcript);
+      };
+
+      recognitionRef.current.onerror = (event) => {
+        console.error("[Voice AI] Recognition error:", event.error);
+        setIsListening(false);
+        setIsProcessing(false);
+        if (event.error === 'not-allowed') {
+          toast.error("Microphone access denied. Please allow microphone in browser settings.");
+        } else {
+          toast.error(`Voice recognition error: ${event.error}`);
         }
       };
-      
-      mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-        await processAudio(audioBlob);
+
+      recognitionRef.current.onend = () => {
+        console.log("[Voice AI] Recognition ended");
+        if (isListening) {
+          setIsListening(false);
+        }
       };
-      
-      mediaRecorder.start();
-      setIsListening(true);
+    }
+
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.abort();
+      }
+    };
+  }, []);
+
+  // Start listening with Web Speech API
+  const startListening = useCallback(async () => {
+    if (!recognitionRef.current) {
+      toast.error("Speech recognition not supported in this browser");
+      return;
+    }
+
+    try {
+      // Request microphone permission first
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+
+      console.log("[Voice AI] Starting to listen...");
       setTranscription("");
       setResponse("");
       setShowExamples(false);
-      
+      setIsListening(true);
+
+      recognitionRef.current.start();
+      toast.info("🎙️ Listening... Speak now!");
+
     } catch (error) {
-      console.error("Microphone error:", error);
+      console.error("[Voice AI] Microphone error:", error);
       toast.error("Could not access microphone. Please check permissions.");
     }
   }, []);
 
-  // Stop recording
+  // Stop listening
   const stopListening = useCallback(() => {
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-      mediaRecorderRef.current.stop();
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
     }
-    
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
-    }
-    
     setIsListening(false);
-    setIsProcessing(true);
   }, []);
 
-  // Process audio with backend
-  const processAudio = async (audioBlob) => {
+  // Process transcript with Gemini via backend
+  const processWithGemini = async (transcript) => {
+    console.log("[Voice AI] Sending to Gemini:", transcript);
+    setIsProcessing(true);
+
     try {
-      const formData = new FormData();
-      formData.append('file', audioBlob, 'voice_command.webm');
-      
-      const res = await axios.post(`${API}/voice/command`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+      const res = await axios.post(`${API}/aimee/chat-simple`, {
+        message: transcript,
+        context: []
       });
-      
-      const data = res.data;
-      
-      if (data.success) {
-        setTranscription(data.transcription?.text || "");
-        setResponse(data.response_text || "");
-        
-        // Speak the response
-        speakResponse(data.response_text);
-        
-        // Execute suggested action
-        if (data.suggested_action) {
-          setTimeout(() => {
-            executeAction(data.suggested_action);
-          }, 1500);
-        }
-      } else {
-        setResponse(data.response_text || "I couldn't understand that.");
-        toast.error(data.response_text);
-      }
-      
+
+      const geminiResponse = res.data.response;
+      console.log("[Voice AI] Gemini response:", geminiResponse);
+      setResponse(geminiResponse);
+
+      // Speak the response
+      speakResponse(geminiResponse);
+
+      // Check for navigation commands
+      handleNavigationCommand(transcript, geminiResponse);
+
     } catch (error) {
-      console.error("Voice processing error:", error);
-      setResponse("Sorry, there was an error processing your voice command.");
-      toast.error("Voice processing failed");
+      console.error("[Voice AI] Gemini error:", error);
+      const fallbackMsg = "I couldn't process that right now. Please try again.";
+      setResponse(fallbackMsg);
+      speakResponse(fallbackMsg);
     } finally {
       setIsProcessing(false);
     }
   };
 
-  // Text-to-speech response
+  // Text-to-Speech response
   const speakResponse = (text) => {
     if ('speechSynthesis' in window && text) {
+      // Cancel any ongoing speech
+      speechSynthesis.cancel();
+
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.rate = 1.0;
       utterance.pitch = 1.0;
+      utterance.volume = 1.0;
+
+      // Try to use a female voice for AIMEE
+      const voices = speechSynthesis.getVoices();
+      const femaleVoice = voices.find(v => v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Victoria'));
+      if (femaleVoice) {
+        utterance.voice = femaleVoice;
+      }
+
+      console.log("[Voice AI] Speaking response...");
       speechSynthesis.speak(utterance);
     }
   };
 
-  // Execute navigation/action
-  const executeAction = (action) => {
-    if (!action) return;
-    
-    if (action.startsWith("NAVIGATE:")) {
-      const path = action.replace("NAVIGATE:", "");
-      navigate(path);
-      if (onClose) onClose();
-    } else if (action.startsWith("SEARCH:")) {
-      const query = action.replace("SEARCH:", "");
-      navigate(`/jobs4me?q=${encodeURIComponent(query)}`);
-      if (onClose) onClose();
-    } else if (action === "ACTION:logout") {
-      localStorage.clear();
-      navigate("/");
-      if (onClose) onClose();
+  // Handle navigation commands in transcript
+  const handleNavigationCommand = (transcript, response) => {
+    const lowerTranscript = transcript.toLowerCase();
+
+    const navCommands = {
+      'go to pricing': '/pricing',
+      'show my profile': '/profile',
+      'show profile': '/profile',
+      'open dashboard': '/dashboard',
+      'go to dashboard': '/dashboard',
+      'show jobs': '/jobs4me',
+      'find jobs': '/jobs4me',
+      'start assessment': '/psychometric',
+      'take assessment': '/psychometric'
+    };
+
+    for (const [command, path] of Object.entries(navCommands)) {
+      if (lowerTranscript.includes(command)) {
+        setTimeout(() => {
+          navigate(path);
+          if (onClose) onClose();
+        }, 2000);
+        break;
+      }
     }
   };
 
   // Handle example click
   const handleExampleClick = async (example) => {
     setShowExamples(false);
-    setIsProcessing(true);
     setTranscription(example.text);
-    
-    try {
-      const res = await axios.post(`${API}/voice/parse-text?text=${encodeURIComponent(example.text)}`);
-      const data = res.data;
-      
-      setResponse(data.response_text || "");
-      speakResponse(data.response_text);
-      
-      if (data.suggested_action) {
-        setTimeout(() => {
-          executeAction(data.suggested_action);
-        }, 1500);
-      }
-    } catch (error) {
-      toast.error("Failed to process command");
-    } finally {
-      setIsProcessing(false);
-    }
+    processWithGemini(example.text);
   };
 
   if (!isOpen) return null;
 
-  // Position classes
   const positionClasses = {
     "bottom-right": "fixed bottom-24 right-4",
     "bottom-center": "fixed bottom-24 left-1/2 -translate-x-1/2",
@@ -237,7 +238,7 @@ export default function VoiceAssistant({
                 <div>
                   <h3 className="text-white font-bold text-sm">Voice AI</h3>
                   <Badge className={`${isAvailable ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'} border-0 text-[10px]`}>
-                    {isAvailable ? 'Ready' : 'Unavailable'}
+                    {isAvailable ? 'Ready' : 'Not Supported'}
                   </Badge>
                 </div>
               </div>
@@ -266,7 +267,7 @@ export default function VoiceAssistant({
                   {response && (
                     <div className="bg-purple-500/10 rounded-lg p-3">
                       <p className="text-purple-400 text-xs mb-1 flex items-center gap-1">
-                        <Volume2 className="w-3 h-3" /> Response:
+                        <Volume2 className="w-3 h-3" /> AIMEE:
                       </p>
                       <p className="text-white text-sm">{response}</p>
                     </div>
@@ -324,7 +325,7 @@ export default function VoiceAssistant({
               {isProcessing && (
                 <div className="flex flex-col items-center py-4">
                   <Loader2 className="w-12 h-12 text-purple-400 animate-spin mb-2" />
-                  <p className="text-white text-sm">Processing...</p>
+                  <p className="text-white text-sm">Thinking...</p>
                 </div>
               )}
 
@@ -332,11 +333,10 @@ export default function VoiceAssistant({
               <Button
                 onClick={isListening ? stopListening : startListening}
                 disabled={isProcessing || !isAvailable}
-                className={`w-full h-14 text-lg font-bold ${
-                  isListening
+                className={`w-full h-14 text-lg font-bold ${isListening
                     ? 'bg-red-500 hover:bg-red-600'
                     : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
-                }`}
+                  }`}
                 data-testid="voice-mic-btn"
               >
                 {isProcessing ? (
@@ -354,10 +354,10 @@ export default function VoiceAssistant({
                 )}
               </Button>
 
-              {/* 8 T's Badge */}
+              {/* Powered by badge */}
               <div className="text-center">
                 <Badge className="bg-white/10 text-white/60 border-0 text-[10px]">
-                  💬 TALK - Part of 8 T's Workflow
+                  🎙️ Powered by Web Speech + Gemini AI
                 </Badge>
               </div>
             </div>

@@ -152,7 +152,7 @@ export default function CentralTalkHub({
         </AnimatePresence>
       </div>
 
-      {/* Side Quick Access Buttons (HIDDEN FOR NOW) */}
+      {/* Side Quick Access Button - HIDDEN (use Ask AIMEE hub instead) */}
       {/* <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-2">
         <motion.button
           whileHover={{ scale: 1.1 }}
