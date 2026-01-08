@@ -90,18 +90,37 @@ export default function VoiceAssistant({
       };
 
       recognition.onerror = (event) => {
-        console.error("❌ [AIMEE] Error:", event.error);
+        console.error("❌ [AIMEE] Recognition error:", event.error);
         isRecognitionActiveRef.current = false;
         setIsListening(false);
         setIsProcessing(false);
 
-        const errorMsgs = {
-          'not-allowed': "Mic blocked. Allow in settings.",
-          'no-speech': "Didn't hear anything. Try again.",
-          'network': "Network issue. Check connection.",
-          'audio-capture': "No mic found."
-        };
-        setErrorMessage(errorMsgs[event.error] || `Error: ${event.error}`);
+        let errorMsg = "";
+        switch (event.error) {
+          case 'not-allowed':
+            errorMsg = "Mic blocked. Click lock icon in address bar to allow.";
+            break;
+          case 'no-speech':
+            errorMsg = "Didn't hear anything. Tap mic and speak clearly.";
+            // Auto-retry after no-speech
+            setTimeout(() => setErrorMessage(""), 2000);
+            break;
+          case 'network':
+            // Web Speech API network issue - common on non-HTTPS
+            console.warn("🌐 [AIMEE] Speech recognition network error - this can happen on non-HTTPS sites or due to temporary Google service issues");
+            errorMsg = "Voice service unavailable. Try again or type your question.";
+            toast.warning("Voice recognition needs a stable connection. Try again!");
+            break;
+          case 'audio-capture':
+            errorMsg = "No microphone detected. Check your audio devices.";
+            break;
+          case 'aborted':
+            // User or system aborted - no error message needed
+            return;
+          default:
+            errorMsg = `Voice error: ${event.error}. Try again.`;
+        }
+        setErrorMessage(errorMsg);
       };
 
       recognition.onend = () => {
