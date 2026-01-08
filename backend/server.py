@@ -1040,68 +1040,113 @@ async def parse_voice_text(text: str):
 class AIMEEChatSimpleRequest(BaseModel):
     message: str
     context: List[Dict[str, str]] = Field(default_factory=list)
+    is_voice: bool = False  # Flag for voice requests
 
 @api_router.post("/aimee/chat-simple")
 async def aimee_chat_simple(request: AIMEEChatSimpleRequest):
     """
-    Simple chat with AIMEE AI Assistant (no user context required)
-    Uses Google Gemini for career guidance conversations
+    Simple chat with AIMEE AI Assistant - Voice-optimized
+    Returns both displayText (for UI) and spokenText (for TTS)
     """
     try:
         # Check if Gemini is available
         if not HAS_GEMINI or not GOOGLE_API_KEY:
             logger.warning("[AIMEE] Gemini not available - using fallback response")
-            return {"response": "I'm AIMEE, your career assistant! While AI is being configured, you can explore your DoersProfile, check Jobs4Me for opportunities, or view Proven Profiles for inspiration. How can I help you today? 🚀"}
+            return {
+                "response": "I'm AIMEE! Check out Jobs4Me or your DoersProfile.",
+                "displayText": "I'm AIMEE! Explore Jobs4Me for opportunities or complete your DoersProfile.",
+                "spokenText": "I'm AIMEE! How can I help you today?",
+                "followUp": "What would you like to explore?"
+            }
         
-        # Build system prompt for AIMEE
-        system_prompt = """You are AIMEE (AI-Mentored Intelligent Employment Engine), a friendly and knowledgeable AI career transformation assistant for the Right Doers platform.
+        # Voice-optimized system prompt for concise responses
+        system_prompt = """You are AIMEE, a friendly AI career assistant.
 
-Your expertise includes:
-- Career guidance and pathway recommendations
-- Skill assessment interpretation (DoersScore™, 6D Assessment)
-- Job matching and industry insights
-- Learning recommendations
-- Motivational support
+RESPOND IN THIS EXACT JSON FORMAT (no markdown, no backticks):
+{"displayText": "your 2-3 sentence answer", "spokenText": "1 short sentence version", "followUp": "follow-up question"}
 
-Personality:
-- Warm, encouraging, and professional
-- Use emojis sparingly but effectively
-- Give concise, actionable advice
-- Reference the 5E Journey model (Explore, Educate, Employ, Enterprise, Excel) when relevant
+Rules:
+- displayText: 2-3 short sentences. Be helpful and specific.
+- spokenText: 1 sentence ONLY. Natural speech, no emojis/markdown.
+- followUp: One short question to continue conversation.
 
-Always encourage users to:
-- Complete their DoersProfile
-- Explore Jobs4Me for matched opportunities
-- Track daily progress with the Streak System
-- Share their Talent Card with the world
+Example:
+{"displayText": "Python, Machine Learning, and Data Science are top AI skills. Start with Python basics.", "spokenText": "Python and Machine Learning are the top AI skills to learn.", "followUp": "Want me to suggest some free courses?"}
 
-Keep responses concise (under 200 words) and end with a helpful suggestion or question."""
+Your expertise: Careers, jobs, skills, DoersProfile, Jobs4Me platform."""
 
         # Build conversation history for context
         history = []
-        for msg in request.context[-6:]:  # Last 6 messages for context
+        for msg in request.context[-4:]:  # Last 4 messages only for speed
             role = "user" if msg.get("role") == "user" else "model"
             history.append({"role": role, "parts": [msg.get("content", "")]})
         
         # Initialize Gemini model and chat
         model = genai.GenerativeModel(
             model_name='gemini-2.5-flash',
-            system_instruction=system_prompt
+            system_instruction=system_prompt,
+            generation_config={
+                "temperature": 0.7,
+                "max_output_tokens": 350,  # Enough for complete JSON
+            }
         )
         
         chat = model.start_chat(history=history)
         
         # Send message and get response
         response = chat.send_message(request.message)
-        response_text = response.text
+        response_text = response.text.strip()
         
-        logger.info(f"[AIMEE] Generated response for: {request.message[:50]}...")
-        return {"response": response_text}
+        # Try to parse JSON response
+        try:
+            # Clean up response if needed
+            if response_text.startswith("```json"):
+                response_text = response_text[7:]
+            if response_text.startswith("```"):
+                response_text = response_text[3:]
+            if response_text.endswith("```"):
+                response_text = response_text[:-3]
+            response_text = response_text.strip()
+            
+            import json
+            parsed = json.loads(response_text)
+            
+            display_text = parsed.get("displayText", response_text)
+            spoken_text = parsed.get("spokenText", display_text[:100])
+            follow_up = parsed.get("followUp", "What else would you like to know?")
+            
+            # Clean spoken text - remove emojis and markdown
+            import re
+            spoken_text = re.sub(r'[*_#`]', '', spoken_text)  # Remove markdown
+            spoken_text = re.sub(r'[\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF\U0001F700-\U0001F77F\U0001F780-\U0001F7FF\U0001F800-\U0001F8FF\U0001F900-\U0001F9FF\U0001FA00-\U0001FA6F\U0001FA70-\U0001FAFF\U00002702-\U000027B0\U000024C2-\U0001F251]+', '', spoken_text)
+            
+            logger.info(f"[AIMEE] Voice response for: {request.message[:30]}...")
+            return {
+                "response": display_text,  # Backward compatible
+                "displayText": display_text,
+                "spokenText": spoken_text.strip(),
+                "followUp": follow_up
+            }
+            
+        except json.JSONDecodeError:
+            # Fallback if JSON parsing fails
+            logger.warning(f"[AIMEE] JSON parse failed, using raw response")
+            short_response = response_text[:200] if len(response_text) > 200 else response_text
+            return {
+                "response": short_response,
+                "displayText": short_response,
+                "spokenText": short_response[:80] + "..." if len(short_response) > 80 else short_response,
+                "followUp": "Anything else you'd like to know?"
+            }
         
     except Exception as e:
         logger.error(f"[AIMEE] Chat error: {e}")
-        # Informative fallback response
-        return {"response": f"I'm having a brief moment! 🤔 Your question about '{request.message[:30]}...' is important. Try refreshing, or explore your DoersProfile while I reconnect! 🚀"}
+        return {
+            "response": "Let me try that again. Ask me anything about careers!",
+            "displayText": "I had a brief hiccup. Try asking again!",
+            "spokenText": "Sorry, let me try that again.",
+            "followUp": "What would you like to know?"
+        }
 
 # ============================================
 # AIMEE TEXT-TO-SPEECH APIs 
